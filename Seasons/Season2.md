@@ -388,6 +388,8 @@ With ```git log``` we see this commit:
     - Date:   Thu Jan 26 09:21:52 2023 +0100
     - Test cases did not work on steve's local database, switching to user factory per his advice
     - Checking it with ```git show f7c903a54cacc4b8f27e00dbf5b0eae4c16c3bb4```, we get creds for greg, which we can use for ssh...
+        - greg@intentions.htb : Gr3g1sTh3B3stDev3l0per!1998!
+            - ls, cat user.txt
     
 ## Root flag
 For greg to root:
@@ -452,8 +454,17 @@ print(current_read)
 
 Running it on the box we get the ssh key and login as root. 
 # Week 4 - sau (Easy)
-## Reco
+Foothold: This basket is powered by “you can google it”. Look up for any flaws this software had in the past and test it from your side.
 
+User: After you find the flaw, see what other places you can reach. Repeat the googling and get initial access.
+
+Root: Your tipical PE, pretty straight forward.
+
+## Reco
+- nmap
+    - 22 SSH
+    - 80 HTTP (filtered)
+    - 55555 Unknown 
 ## Weaponisation
 
 ## Exploitation

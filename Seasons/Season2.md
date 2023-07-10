@@ -3,7 +3,9 @@
 * [W1 - Sandworm (Medium)](#Week-1---Sandworm-(Medium))
 * [W2 - Pilgrimage (Easy)](#Week-2---Pilgrimage-(Easy))
 * [W3 - Intentions (hard)](#Week-3---Intentions-(Hard))
-* [W4 - sau (Easy)](#Week-4---sau-(Easy))
+* [W4 - Sau (Easy)](#Week-4---Sau-(Easy))
+* [W5 - RegistryTwo (Insane)](#Week-5---RegistryTwo-(Insane))
+* [W6 - Authority (Medium)](#Week-6---Authority-(Medium))
 # Week 1 - Sandworm (Medium)
 // 1 - random name
 // 2 - {{7*7}} name
@@ -388,8 +390,6 @@ With ```git log``` we see this commit:
     - Date:   Thu Jan 26 09:21:52 2023 +0100
     - Test cases did not work on steve's local database, switching to user factory per his advice
     - Checking it with ```git show f7c903a54cacc4b8f27e00dbf5b0eae4c16c3bb4```, we get creds for greg, which we can use for ssh...
-        - greg@intentions.htb : Gr3g1sTh3B3stDev3l0per!1998!
-            - ls, cat user.txt
     
 ## Root flag
 For greg to root:
@@ -458,21 +458,54 @@ Foothold: This basket is powered by “you can google it”. Look up for any fla
 
 User: After you find the flaw, see what other places you can reach. Repeat the googling and get initial access.
 
-Root: Your tipical PE, pretty straight forward.
+Root: Your tipical PE, pretty straight forward.Foothold: This basket is powered by “you can google it”. Look up for any flaws this software had in the past and test it from your side.
 
+User: After you find the flaw, see what other places you can reach. Repeat the googling and get initial access.
+
+Root: Your tipical PE, pretty straight forward.
 ## Reco
 - nmap
     - 22 SSH
     - 80 HTTP (filtered)
-    - 55555 Unknown 
+    - 55555 Unknown
+- explore Website (http://10.10.11.224:55555)
+    - storing Baskets
+    - footer: ![](https://hackmd.io/_uploads/Syj9YVFK3.png)
+
 ## Weaponisation
+- request-basket v1.2.1 is vuln to SSRF
+    - [CVE-2023-27163](https://feedly.com/cve/CVE-2023-27163)
+        - via component `/api/baskets/{name}` or `/baskets/{name}`
+            - we can craft API request to access network resources
+- dirbuster
+    - /xd /amanda /
 
 ## Exploitation
-    
+- [exploit for the CVE](https://notes.sjtu.edu.cn/s/MUUhEymt7)
+    - 1. vector: payload for BURP:
+        >  {
+        >   "forward_url": "http://127.0.0.1:80/test",
+        >   "proxy_response": false,
+        >   "insecure_tls": false,
+        >   "expand_path": true,
+        >   "capacity": 250
+        > }
+        - we obtained the token 
+            - `v_NX9ZFTRBBSu9A2YFT5855erQ3hoLeE7oBTzlF_GegQ`
+
 ## User flag
     
 ## Root flag
 
-
-
-
+# Week 5 - RegistryTwo (Insane)
+## Reco
+## Weaponisation
+## Exploitation
+## User flag
+## Root flag
+# Week 6 - Authority (Medium)
+## Reco
+## Weaponisation
+## Exploitation
+## User flag
+## Root flag

@@ -1,11 +1,11 @@
 # LIST OF MACHINES
 🚀*list of Season II HackTheBox write-ups*🚀
-* [W1 - Sandworm (Medium)](#Week-1---Sandworm-(Medium))
-* [W2 - Pilgrimage (Easy)](#Week-2---Pilgrimage-(Easy))
-* [W3 - Intentions (hard)](#Week-3---Intentions-(Hard))
-* [W4 - Sau (Easy)](#Week-4---Sau-(Easy))
-* [W5 - RegistryTwo (Insane)](#Week-5---RegistryTwo-(Insane))
-* [W6 - Authority (Medium)](#Week-6---Authority-(Medium))
+* [W1 - Sandworm (Medium)](#week-1---sandworm-(medium))
+* [W2 - Pilgrimage (Easy)](#week-2---pilgrimage-(easy))
+* [W3 - Intentions (hard)](#week-3---intentions-(hard))
+* [W4 - Sau (Easy)](#week-4---sau-(easy))
+* [W5 - RegistryTwo (Insane)](#week-5---registrytwo-(insane))
+* [W6 - Authority (Medium)](#week-6---authority-(medium))
 # Week 1 - Sandworm (Medium)
 // 1 - random name
 // 2 - {{7*7}} name

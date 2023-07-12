@@ -1,11 +1,11 @@
 # LIST OF MACHINES
 🚀*list of Season II HackTheBox write-ups*🚀
-* [W1 - Sandworm (Medium)](#Week-1---Sandworm-(Medium))
-* [W2 - Pilgrimage (Easy)](#Week-2---Pilgrimage-(Easy))
-* [W3 - Intentions (hard)](#Week-3---Intentions-(Hard))
-* [W4 - Sau (Easy)](#Week-4---Sau-(Easy))
-* [W5 - RegistryTwo (Insane)](#Week-5---RegistryTwo-(Insane))
-* [W6 - Authority (Medium)](#Week-6---Authority-(Medium))
+* [W1 - Sandworm (Medium)](#week-1---sandworm-(medium))
+* [W2 - Pilgrimage (Easy)](#week-2---pilgrimage-(easy))
+* [W3 - Intentions (hard)](#week-3---intentions-(hard))
+* [W4 - Sau (Easy)](#week-4---sau-(easy))
+* [W5 - RegistryTwo (Insane)](#week-5---registrytwo-(insane))
+* [W6 - Authority (Medium)](#week-6---authority-(medium))
 # Week 1 - Sandworm (Medium)
 // 1 - random name
 // 2 - {{7*7}} name
@@ -454,18 +454,19 @@ print(current_read)
 
 Running it on the box we get the ssh key and login as root. 
 # Week 4 - sau (Easy)
-https://pwnme.in/sau-hackthebox/
-
 Foothold: This basket is powered by “you can google it”. Look up for any flaws this software had in the past and test it from your side.
 
 User: After you find the flaw, see what other places you can reach. Repeat the googling and get initial access.
 
 Root: Your tipical PE, pretty straight forward.Foothold: This basket is powered by “you can google it”. Look up for any flaws this software had in the past and test it from your side.
+
+User: After you find the flaw, see what other places you can reach. Repeat the googling and get initial access.
+
+Root: Your tipical PE, pretty straight forward.
 ## Reco
-- nmap -sVC <ip> --min-rate=500
+- nmap
     - 22 SSH
     - 80 HTTP (filtered)
-    - 8000, 8080, 9000 HTTP (SimpleHTTPServer)
     - 55555 Unknown
 - explore Website (http://10.10.11.224:55555)
     - storing Baskets
@@ -476,8 +477,8 @@ Root: Your tipical PE, pretty straight forward.Foothold: This basket is powered 
     - [CVE-2023-27163](https://feedly.com/cve/CVE-2023-27163)
         - via component `/api/baskets/{name}` or `/baskets/{name}`
             - we can craft API request to access network resources
-- ports 8000, 8080, 9000 run SimpleHTTPServer 0.6 (Python 3.8.10)
-    - [Path Traversal](https://security.snyk.io/vuln/SNYK-JS-SIMPLEHTTPSERVER-72649)
+- dirbuster
+    - /xd /amanda /
 
 ## Exploitation
 - [exploit for the CVE](https://notes.sjtu.edu.cn/s/MUUhEymt7)
@@ -508,4 +509,3 @@ Root: Your tipical PE, pretty straight forward.Foothold: This basket is powered 
 ## Exploitation
 ## User flag
 ## Root flag
-

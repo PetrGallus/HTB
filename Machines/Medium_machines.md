@@ -84,8 +84,90 @@
                 - `root:unCR4ckaBL3Pa$$w0rd`
 3. SSH login as a root to obtain root flag
 
-
-
+## Download
+### Reco
+- `sudo nmap -sVC <IP>`
+    - ![](https://hackmd.io/_uploads/SkZBpNRo3.png)
+    - 22 SSH
+    - 80 HTTP
+        - redirect -> add download.htb to /etc/hosts
+- website analysis
+    - website for uploading && downloading large files
+    - upload subsite
+        - download.htb/files/upload
+    - login && register subsite
+        - downlaod.htb/auth/login
+        - download.htb/auth/register
+### Weaponisation
+1. while trying to upload a file with BurpSuite, I found out tha it is an **Express** based website
+        - upload the file -> we obtain unique UID and link
+            ![](https://hackmd.io/_uploads/H1ZfZSRo3.png)
+            - click "Copy Link" button -> small popup window followed by an alert
+                - it is a file called copy.js (contains the code for the function, nothing vulnerable)
+            - there is also a JWT token withing the download + a .sig cooke
+                ![](https://hackmd.io/_uploads/HyJBZrAj3.png)
+                - decoded token: 
+                `{"flashes":{"info":[],"error":[],"success":[]}}`
+    - Download feature
+        - redirects us to the link:
+            - `http://download.htb/files/download/0623ba64-6749-48a4-9a08-a58658b74852`
+                - this could be used to download other files...
+                - uploads are probably stored within a /downloads or /uploads folder on the machine
+                    - basic LFI with some Express file names...
+                        - `..%2fapp.js` worked...
+                       ![](https://hackmd.io/_uploads/HJMYk8Cjn.png)
+                             - there is package.json as part of the folders too:
+ `{
+  "name": "download.htb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec ts-node --files ./src/app.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "wesley",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.13.0",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cookie-session": "^2.0.44",
+    "@types/express": "^4.17.17",
+    "@types/express-fileupload": "^1.4.1",
+    "@types/node": "^18.15.12",
+    "@types/nunjucks": "^3.2.2",
+    "nodemon": "^2.0.22",
+    "nunjucks": "^3.2.4",
+    "prisma": "^4.13.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}`
+                - AUTHOR: **WESLEY**
+2. enumerating LOGIN 
+    - create a test user && login -> download_session cookie has some more information (decoded): 
+    `{"flashes":{"info":[],"error":[],"success":[]},"user":{"id":16,"username":"test123"}}`
+    - .sig token is also different
+        - signature of a cookie, changes by the extension
+3. VULN for COOKIE on websites running Express
+    - [cookie-monster](https://github.com/DigitalInterruption/cookie-monster)
+    - [nodeJS Express](https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/nodejs-express)
+### Exploitation
+1. Blind injection - Cookie monster Brute Force
+Lets sum up all facts we obtained:
+    - **.sig** ... key for the token structure, needed fot Cookie Monster
+    - User is **wesley**, hashes are UNsalted and used directly for auth -> brute forcing could be a way
+    - there is **SQL query** that is somehow injectable
+    - **cookies are not validated** any way -> it checks whether a `true` condition is returned from `findFirst` from the `prisma` API module...Blind Injection by redirect could be possibility
 
 
 

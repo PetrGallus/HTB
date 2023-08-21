@@ -88,8 +88,18 @@
     -  lim8en1 (option #8)
     -  23+who
 
-
-
+# Cybermonday
+## Reco
+- `nmap -sVC 10.10.11.228`
+    - add cybermonday.htb to /etc/hosts...
+        - sudo nano /etc/hosts
+- FUZZING
+    - `wfuzz -c -w /usr/share/wordlists/wfuzz/general/common.txt --hc 400,301 -H 'Host:cybermonday.htb/FUZZ' http://cybermonday.htb`
+        - nothing found
+    - `wfuzz -c -w /usr/share/wordlists/wfuzz/general/common.txt --hc 400,301 -H 'Host:FUZZ.cybermonday.htb' http://cybermonday.htb`
+        - nothing found
+    - `gobuster dir -w /usr/share/wordlists/dirb/common.txt -u http://cybermonday.htb -t 100`
+        - nothing found
 
 
 

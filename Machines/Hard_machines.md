@@ -100,7 +100,28 @@
         - nothing found
     - `gobuster dir -w /usr/share/wordlists/dirb/common.txt -u http://cybermonday.htb -t 100`
         - nothing found
-
+- Website debugging
+    - while checkning the website, it automatically opens the debig interface (probably checking if I try to cause SQL errors)...
+        - 2 ways to cause this:
+            - re-login with an existing user
+            - change the user information in the profile
+    ![](https://hackmd.io/_uploads/rk4NbE7ah.png)
+    - on the left, there is a mention about existing **GIT**
+        ![](https://hackmd.io/_uploads/ByzuW4ma3.png)
+        - `cybermonday.htb/assets../.git/`
+    - download the git using `git-dumper`
+        - looking at the source code, there is an except:
+            - `["_token","password","password_confirmation"]`
+                - all parameters passed are saved by `$user->update($data);` then it saves information to the DB
+    - from source code or debug on website we can see that the user´s model information looks like this:
+        - {
+            "id": 4,
+            "username": "tester",
+            "email": "test@gmail.com",
+            "isAdmin": "false",
+            "created_at": "2023-08-22T10:17:23.0000000Z",
+            "updated_at": "2023-08-22T10:17:23.0000000Z",
+        }
 
 
 

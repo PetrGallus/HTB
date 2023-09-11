@@ -1,19 +1,15 @@
-# Basics
+# Metasploit
 
+msfconsole
 
+search exploit \<service>
 
-## Nmap
+use <#>      // or use \<path>
 
-![](<.gitbook/assets/image (2).png>)
+set RHOSTS \<IP>&#x20;
 
-## Attacking network services
+set LHOST tun0
 
-![](<.gitbook/assets/image (3).png>)
+check
 
-![](<.gitbook/assets/image (4).png>)
-
-![](<.gitbook/assets/image (5).png>)
-
-![](<.gitbook/assets/image (6).png>)
-
-![](<.gitbook/assets/image (7).png>)
+exploit  OR  run

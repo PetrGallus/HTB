@@ -20,5 +20,8 @@ config files are calles tnsnames.ora and listener.ora, located in ORACLE\_HOME/n
 
 Enumerate the Oracle DB and submit HASH of PW of the user DBSNMP
 
-**sudo nmap -p1521 -sV 10.129.215.73 --open**
+1.  Obtain SID of the DB using nmap => "XE"
+
+    `sudo nmap -p1521 -sV 10.129.205.19 --open --script oracle-sid-brute`
+2.
 

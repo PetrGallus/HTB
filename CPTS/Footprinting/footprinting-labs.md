@@ -140,3 +140,17 @@ Searching the alex Windows machine -> c:/users/alex/devshare/important.txt => **
 ### Questions
 
 1. **Enumerate the server carefully and find the username "HTB" and its password. Then, submit HTB's password as the answer.**
+
+**`sudo nmap -sVC 10.129.251.207`**
+
+* 22 SSH
+* 110 POP3 - Dovecot pop3d
+* 143 IMAP - Dovecot imapd (Ubuntu)
+* 993 IMAPS?
+* 995 POP3S?
+* CONCLUSION -> looks like we wanna use what we learned from IMAP/POP3 module...
+
+**`openssl s_client -connect 10.129.251.207:pop3s`**
+
+
+

@@ -1,0 +1,177 @@
+# Information gathering
+
+Information Gathering
+
+![](<.gitbook/assets/image (10).png>)
+
+
+
+## Passive Info Gathering
+
+### WHOIS
+
+* TCP-based transaction-oriented query/response protocol defined in RFC 3912
+* \-p 43
+* \*1970 by Elizabeth Feinler + team on Stanford Uni
+* ICANN requires that accredited registrars enter these info
+* Usage:
+  * export TARGET="facebook.com"         // assign target to an env variable
+  * whois $TARGET
+
+#### Questions:
+
+1.  Perform a WHOIS lookup against the paypal.com domain. What is the registrar Internet Assigned Numbers Authority (IANA) ID number?
+
+    **`export TARGET="paypal.com"`**
+
+    **`whois $TARGET`**
+2.  What is the admin email contact for the tesla.com domain (also in-scope for the Tesla bug bounty program)?
+
+    **`export TARGET="tesla.com"`**
+
+    **`whois $TARGET`**
+
+### DNS
+
+* Domain Name System
+* Usage:
+  * `export TARGET="facebook.com"`
+  * `nslookup $TARGET`
+  * `nslookup -query=A $TARGET`
+  * `dig <URL> @<IP>`
+
+#### Questions
+
+1.  Which IP address maps to inlanefreight.com?
+
+    **`export TARGET="inlanefreight.com"`**
+
+    **`nslookup $TARGET`**
+
+![](<.gitbook/assets/image (2).png>)
+
+2. Which subdomain is returned when querying the PTR record for 173.0.87.51?
+
+**`nslookup -query=PTR 173.0.87.51`**
+
+![](<.gitbook/assets/image (3).png>)
+
+3. What is the first mailserver returned when querying the MX records for paypal.com?
+
+**`export TARGET="paypal.com"`**
+
+**`nslookup -query=MX $TARGET`**
+
+![](<.gitbook/assets/image (4).png>)
+
+
+
+### Passive subdomain Enumeration
+
+* VirusTotal -> Relations
+*   Certifications ->&#x20;
+
+    ```
+    https://censys.io
+
+    https://crt.sh
+    ```
+* Automating the enum -> TheHarvester
+
+### Passive infrastructure Identification
+
+* Netcraft
+* Wayback machine
+* Tool -> waybackurls (go install github.com/tomnomnom/waybackurls@latest)
+
+## Active Info Gathering
+
+### Active infrastructure identification
+
+* HTTP headers -> **`curl -I "http://${TARGET}"`**
+* **`whatweb -a3 https://www.facebook.com -v`**
+* Tool -> **Wappalyzer**
+* Tool -> **WafW00f** (sudo apt install wafw00f -y) (wafw00f -v https://www.tesla.com)
+* Tool -> Aquatone (sudo apt install golang chromium-driver) (go get github.com/michenriksen/aquatone) (export PATH="$PATH":"$HOME/go/bin") (cat facebook\_aquatone.txt | aquatone -out ./aquatone -screenshot-timeout 1000)
+
+#### Questions
+
+1. What Apache version is running on app.inlanefreight.local? (Format: 0.0.0)
+
+**`nmap -sV -p80 10.129.26.247`**
+
+2. Which CMS is used on app.inlanefreight.local? (Format: word)
+
+**`nmap -sC -p80 10.129.26.247`**
+
+![](.gitbook/assets/image.png)
+
+3. On which operating system is the dev.inlanefreight.local webserver running on? (Format: word)
+
+**`export TARGET="dev.inlanefreight.local"`**
+
+**`curl -I "http://${TARGET}"`**
+
+![](<.gitbook/assets/image (1).png>)
+
+### Active subdomain Enumeration
+
+* ZoneTransfers -> [https://hackertarget.com/zone-transfer/](https://hackertarget.com/zone-transfer/)
+* nslookup -type=NS zonetransfer.me
+* nslookup -type=any -query=AXFR zonetransfer.me nsztm1.digi.ninja
+* Gobuster - DNS
+  * export TARGET="facebook.com"
+  * export NS="d.ns.facebook.com"
+  * export WORDLIST="numbers.txt"
+  * gobuster dns -q -r "${NS}" -d "${TARGET}" -w "${WORDLIST}" -p ./patterns.txt -o "gobuster\_${TARGET}.txt"
+
+#### Questions
+
+1. Submit the FQDN of the nameserver for the "inlanefreight.htb" domain as the answer.
+
+**`dig NS inlanefreight.htb @10.129.146.220`**
+
+2. Identify how many zones exist on the target nameserver. Submit the number of found zones as the answer.
+
+**`dig axfr inlanefreight.htb @10.129.146.220`**
+
+3. Find and submit the contents of the TXT record as the answer.
+
+// add root.inlanefreight to /etc/hosts...
+
+**`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
+
+![](<.gitbook/assets/image (6).png>)
+
+4. What is the FQDN of the IP address 10.10.34.136?
+
+**`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
+
+![](<.gitbook/assets/image (5).png>)
+
+5. What FQDN is assigned to the IP address 10.10.1.5? Submit the FQDN as the answer.
+
+**`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
+
+![](<.gitbook/assets/image (8).png>)
+
+6. Which IP address is assigned to the "us.inlanefreight.htb" subdomain. Submit the IP address as the answer.
+
+**`dig @10.129.146.220 NS a us.inlanefreight.htb`**
+
+![](<.gitbook/assets/image (9).png>)
+
+6. Submit the number of all "A" records from all zones as the answer.
+
+**`dig @10.129.128.199 AXFR a inlanefreight.htb`**
+
+**`dig @10.129.128.199 AXFR a internal.inlanefreight.htb`**
+
+**19 + 7 records ... 27**
+
+### Virtual Hosts
+
+### Crawling
+
+
+

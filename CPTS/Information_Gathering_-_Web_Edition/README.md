@@ -48,13 +48,13 @@ Information Gathering
 
     **`nslookup $TARGET`**
 
-![](<.gitbook/assets/image (2).png>)
+![](<.gitbook/assets/image (2) (1).png>)
 
 2. Which subdomain is returned when querying the PTR record for 173.0.87.51?
 
 **`nslookup -query=PTR 173.0.87.51`**
 
-![](<.gitbook/assets/image (3).png>)
+![](<.gitbook/assets/image (3) (1).png>)
 
 3. What is the first mailserver returned when querying the MX records for paypal.com?
 
@@ -62,7 +62,7 @@ Information Gathering
 
 **`nslookup -query=MX $TARGET`**
 
-![](<.gitbook/assets/image (4).png>)
+![](<.gitbook/assets/image (4) (1).png>)
 
 
 
@@ -104,7 +104,7 @@ Information Gathering
 
 **`nmap -sC -p80 10.129.26.247`**
 
-![](.gitbook/assets/image.png)
+![](<.gitbook/assets/image (5).png>)
 
 3. On which operating system is the dev.inlanefreight.local webserver running on? (Format: word)
 
@@ -112,7 +112,7 @@ Information Gathering
 
 **`curl -I "http://${TARGET}"`**
 
-![](<.gitbook/assets/image (1).png>)
+![](<.gitbook/assets/image (1) (1).png>)
 
 ### Active subdomain Enumeration
 
@@ -147,7 +147,7 @@ Information Gathering
 
 **`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
 
-![](<.gitbook/assets/image (5).png>)
+![](<.gitbook/assets/image (5) (1).png>)
 
 5. What FQDN is assigned to the IP address 10.10.1.5? Submit the FQDN as the answer.
 
@@ -171,7 +171,65 @@ Information Gathering
 
 ### Virtual Hosts
 
+`ffuf -w /usr/share/SecLists/Discovery/DNS/namelist.txt -u http://10.129.137.129 -H "HOST: FUZZ.inlanefreight.htb" -fs 612`
+
+![](<.gitbook/assets/image (4).png>)
+
+![](.gitbook/assets/image.png)
+
+![](<.gitbook/assets/image (1).png>)
+
+![](<.gitbook/assets/image (2).png>)
+
+![](<.gitbook/assets/image (3).png>)
+
 ### Crawling
 
+What is the registrar IANA ID number for the githubapp.com domain?
 
+`whois githubapp.com`
+
+
+
+What is the last mailserver returned when querying the MX records for githubapp.com?
+
+`export TARGET="githubapp.com"`
+
+`nslookup -query=MX $TARGET`
+
+
+
+Perform active infrastructure identification against the host https://i.imgur.com. What server name is returned for the host?
+
+
+
+## Skills Assessment
+
+
+
+### Questions
+
+What is the registrar IANA ID number for the githubapp.com domain?
+
+`whois githubapp.com`
+
+
+
+What is the last mailserver returned when querying the MX records for githubapp.com?
+
+`export TARGET="githubapp.com"`
+
+`nslookup -query=MX $TARGET`
+
+
+
+Perform active infrastructure identification against the host https://i.imgur.com. What server name is returned for the host?
+
+`curl -I 'https://i.imgur.com/'`
+
+
+
+Perform subdomain enumeration against the target githubapp.com. Which subdomain has the word 'triage' in the name?
+
+[https://crt.sh/?q=githubapp.com](https://crt.sh/?q=githubapp.com)
 

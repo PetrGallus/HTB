@@ -1,15 +1,1 @@
-# Metasploit
-
-msfconsole
-
-search exploit \<service>
-
-use <#>      // or use \<path>
-
-set RHOSTS \<IP>&#x20;
-
-set LHOST tun0
-
-check
-
-exploit  OR  run
+Notes that have been written while going through PENTEST job role learning path as a prep for CPTS exam

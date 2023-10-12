@@ -86,7 +86,7 @@ ftp 10.129.72.126
 
 **`showmount -e 10.129.169.252`**
 
-* ![](<.gitbook/assets/image (12) (1).png>)
+* ![](<.gitbook/assets/image (12) (1) (1).png>)
 
 `sudo nmap 10.129.169.252 --script nfs* -p111,2049 -sV`
 
@@ -117,7 +117,7 @@ ls -la => many tickets, but only one with some data
 
 We successfully connected using RDp to alex Windows machine, it contains MSQL Server Management Studio 18, but we dont have access to it...lets find the PW for su user to get access into DB with PW
 
-![](<.gitbook/assets/image (13) (1).png>)![](<.gitbook/assets/image (14) (1).png>)
+![](<.gitbook/assets/image (13) (1) (1).png>)![](<.gitbook/assets/image (14) (1) (1).png>)
 
 Searching the alex Windows machine -> c:/users/alex/devshare/important.txt => **`sa:87N1ns@slls83`**
 
@@ -154,13 +154,13 @@ Searching the alex Windows machine -> c:/users/alex/devshare/important.txt => **
 
 **`onesixtyone -c /usr/share/SecLists/Discovery/SNMP/snmp.txt 10.129.251.207`**
 
-\=> ![](<.gitbook/assets/image (14).png>)
+\=> ![](<.gitbook/assets/image (14) (1).png>)
 
 \=> we obtained the hostname \[XXX], lets dive deeper
 
 **`braa XXX@10.129.251.207:.1.3.6.*`**
 
-\=> ![](<.gitbook/assets/image (1) (1) (1).png>)![](<.gitbook/assets/image (2) (1) (1).png>)
+\=> ![](<.gitbook/assets/image (1) (1) (1) (1).png>)![](<.gitbook/assets/image (2) (1) (1) (1).png>)
 
 \=> we obtained the credentials of a user "tom" - lets try these
 

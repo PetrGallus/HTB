@@ -160,7 +160,7 @@ Searching the alex Windows machine -> c:/users/alex/devshare/important.txt => **
 
 **`braa XXX@10.129.251.207:.1.3.6.*`**
 
-\=> ![](<.gitbook/assets/image (1) (1).png>)![](<.gitbook/assets/image (2) (1).png>)
+\=> ![](<.gitbook/assets/image (1) (1) (1).png>)![](<.gitbook/assets/image (2) (1) (1).png>)
 
 \=> we obtained the credentials of a user "tom" - lets try these
 

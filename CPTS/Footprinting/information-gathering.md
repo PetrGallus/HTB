@@ -1,44 +1,41 @@
 # Information gathering
 
-Information Gathering
-
-![](<.gitbook/assets/image (10).png>)
-
-
-
 ## Passive Info Gathering
 
-### WHOIS
+## WHOIS
 
 * TCP-based transaction-oriented query/response protocol defined in RFC 3912
 * \-p 43
 * \*1970 by Elizabeth Feinler + team on Stanford Uni
 * ICANN requires that accredited registrars enter these info
 * Usage:
-  * export TARGET="facebook.com"         // assign target to an env variable
+  * export TARGET="facebook.com" // assign target to an env variable
   * whois $TARGET
 
-#### Questions:
+### Questions
 
-1.  Perform a WHOIS lookup against the paypal.com domain. What is the registrar Internet Assigned Numbers Authority (IANA) ID number?
+*   Perform a WHOIS lookup against the paypal.com domain. What is the registrar Internet Assigned Numbers Authority (IANA) ID number?
 
     **`export TARGET="paypal.com"`**
 
     **`whois $TARGET`**
-2.  What is the admin email contact for the tesla.com domain (also in-scope for the Tesla bug bounty program)?
+*   What is the admin email contact for the tesla.com domain (also in-scope for the Tesla bug bounty program)?
 
     **`export TARGET="tesla.com"`**
 
     **`whois $TARGET`**
 
-### DNS
+## DNS
 
 * Domain Name System
-* Usage:
-  * `export TARGET="facebook.com"`
-  * `nslookup $TARGET`
-  * `nslookup -query=A $TARGET`
-  * `dig <URL> @<IP>`
+*   Usage:
+
+    * `export TARGET="facebook.com"`
+    * `nslookup $TARGET`
+    * `nslookup -query=A $TARGET`
+    * `dig <URL> @<IP>`
+
+
 
 #### Questions
 
@@ -48,13 +45,13 @@ Information Gathering
 
     **`nslookup $TARGET`**
 
-![](<.gitbook/assets/image (2).png>)
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 2. Which subdomain is returned when querying the PTR record for 173.0.87.51?
 
 **`nslookup -query=PTR 173.0.87.51`**
 
-![](<.gitbook/assets/image (3).png>)
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. What is the first mailserver returned when querying the MX records for paypal.com?
 
@@ -62,11 +59,9 @@ Information Gathering
 
 **`nslookup -query=MX $TARGET`**
 
-![](<.gitbook/assets/image (4).png>)
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-
-
-### Passive subdomain Enumeration
+## Passive subdomain Enumeration
 
 * VirusTotal -> Relations
 *   Certifications ->&#x20;
@@ -78,7 +73,7 @@ Information Gathering
     ```
 * Automating the enum -> TheHarvester
 
-### Passive infrastructure Identification
+## Passive infrastructure Identification
 
 * Netcraft
 * Wayback machine
@@ -104,7 +99,7 @@ Information Gathering
 
 **`nmap -sC -p80 10.129.26.247`**
 
-![](.gitbook/assets/image.png)
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. On which operating system is the dev.inlanefreight.local webserver running on? (Format: word)
 
@@ -112,7 +107,7 @@ Information Gathering
 
 **`curl -I "http://${TARGET}"`**
 
-![](<.gitbook/assets/image (1).png>)
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Active subdomain Enumeration
 
@@ -141,27 +136,27 @@ Information Gathering
 
 **`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
 
-![](<.gitbook/assets/image (6).png>)
+<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 4. What is the FQDN of the IP address 10.10.34.136?
 
 **`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
 
-![](<.gitbook/assets/image (5).png>)
+<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 5. What FQDN is assigned to the IP address 10.10.1.5? Submit the FQDN as the answer.
 
 **`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
 
-![](<.gitbook/assets/image (8).png>)
+<figure><img src=".gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 6. Which IP address is assigned to the "us.inlanefreight.htb" subdomain. Submit the IP address as the answer.
 
 **`dig @10.129.146.220 NS a us.inlanefreight.htb`**
 
-![](<.gitbook/assets/image (9).png>)
+<figure><img src=".gitbook/assets/image (8) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-6. Submit the number of all "A" records from all zones as the answer.
+7. Submit the number of all "A" records from all zones as the answer.
 
 **`dig @10.129.128.199 AXFR a inlanefreight.htb`**
 
@@ -171,7 +166,62 @@ Information Gathering
 
 ### Virtual Hosts
 
+`ffuf -w /usr/share/SecLists/Discovery/DNS/namelist.txt -u http://10.129.137.129 -H "HOST: FUZZ.inlanefreight.htb" -fs 612`
+
+<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (13) (1).png" alt=""><figcaption></figcaption></figure>
+
 ### Crawling
 
+What is the registrar IANA ID number for the githubapp.com domain?
+
+`whois githubapp.com`
 
 
+
+What is the last mailserver returned when querying the MX records for githubapp.com?
+
+`export TARGET="githubapp.com"`
+
+`nslookup -query=MX $TARGET`
+
+
+
+Perform active infrastructure identification against the host https://i.imgur.com. What server name is returned for the host?
+
+
+
+## Skills Assessment
+
+
+
+### Questions
+
+What is the registrar IANA ID number for the githubapp.com domain?
+
+`whois githubapp.com`
+
+
+
+What is the last mailserver returned when querying the MX records for githubapp.com?
+
+`export TARGET="githubapp.com"`
+
+`nslookup -query=MX $TARGET`
+
+
+
+Perform active infrastructure identification against the host https://i.imgur.com. What server name is returned for the host?
+
+`curl -I 'https://i.imgur.com/'`
+
+Perform subdomain enumeration against the target githubapp.com. Which subdomain has the word 'triage' in the name?
+
+[https://crt.sh/?q=githubapp.com](https://crt.sh/?q=githubapp.com)

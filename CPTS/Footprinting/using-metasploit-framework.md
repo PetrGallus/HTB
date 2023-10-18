@@ -164,7 +164,7 @@ msf -> `db_nmap -sV -p- -T5 -A 10.129.203.65`
 
 msf -> `hosts`
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 msf -> `services`
 

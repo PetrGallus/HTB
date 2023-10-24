@@ -169,5 +169,25 @@ Lets sum up all facts we obtained:
     - there is **SQL query** that is somehow injectable
     - **cookies are not validated** any way -> it checks whether a `true` condition is returned from `findFirst` from the `prisma` API module...Blind Injection by redirect could be possibility
 
-
+## Manager
+### Reco
+nmap -sVC 10.10.11.236 -Pn
+    - 53 DOMAIN (Simple DNS Plus)
+    - 80 HTTP (MS IIS httpd 10.0)
+    - 88 KERBEROS-SEC
+    - 135 MSRPC
+    - 139 NETBIOS-SSN
+    - 389 LDAP
+        - ssl-cert: dc01.manager.htb
+    - 445 MS-DS?
+    - 464 KPASSWD5?
+    - 593 NCACN_HTTP (RMS win RPC over HTTP 1.0)
+    - 636 SSL/LDAP
+        - DNS: dc01.manager.htb
+    - 1433 MS-SQL-S 
+        - MSSQL Server 2019
+    - 3269 LDAP
+    - 3269 SSL/LDAP
+    - active SMB2
+        - sec-mode: 311 (message signing enabled and required)
 

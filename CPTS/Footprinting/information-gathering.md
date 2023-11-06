@@ -51,7 +51,7 @@
 
 **`nslookup -query=PTR 173.0.87.51`**
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. What is the first mailserver returned when querying the MX records for paypal.com?
 
@@ -59,7 +59,7 @@
 
 **`nslookup -query=MX $TARGET`**
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Passive subdomain Enumeration
 
@@ -99,7 +99,7 @@
 
 **`nmap -sC -p80 10.129.26.247`**
 
-<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. On which operating system is the dev.inlanefreight.local webserver running on? (Format: word)
 
@@ -107,7 +107,7 @@
 
 **`curl -I "http://${TARGET}"`**
 
-<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Active subdomain Enumeration
 

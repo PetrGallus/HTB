@@ -229,4 +229,7 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 ### User flag
 
+* Craft the pdf file with base64 encoded command for cat of user.txt...
+*
+
 ### Root flag

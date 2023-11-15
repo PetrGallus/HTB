@@ -88,3 +88,28 @@
 * Linpeas
   * lim8en1 (option #8)
   * 23+who
+
+## Napper
+
+### Reco
+
+#### nmap
+
+* 80 HTTP
+  * redirect to app.napper.htb
+    * sudo nano /etc/hosts
+* 443 HTTPS
+  * organizationName = MLopsHub (CA, USA)
+  * http-generator = Hugo 0.112.3
+  * http-methods => potentially risky methods: TRACE
+* Host script results: clock-skew: -ls
+
+#### dirb
+
+### Weaponisation
+
+* Website is running HUGO framework w older version
+  * VULN: **CVE-2020-26284**
+
+{% embed url="https://github.com/gohugoio/hugo/security/advisories/GHSA-8j34-9876-pvfq" %}
+

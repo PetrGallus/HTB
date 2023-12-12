@@ -10,3 +10,4 @@
 * [Shells & Payloads](shells-and-payloads.md)
 * [PW Attacks](pw-attacks.md)
 * [Using Web Proxies](using-web-proxies.md)
+* [Attacking WebApps with FFUFF](attacking-webapps-with-ffuff.md)

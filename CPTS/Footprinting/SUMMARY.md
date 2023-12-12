@@ -9,3 +9,4 @@
 * [Using Metasploit Framework](using-metasploit-framework.md)
 * [Shells & Payloads](shells-and-payloads.md)
 * [PW Attacks](pw-attacks.md)
+* [Using Web Proxies](using-web-proxies.md)

@@ -51,7 +51,7 @@
 
 **`nslookup -query=PTR 173.0.87.51`**
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. What is the first mailserver returned when querying the MX records for paypal.com?
 
@@ -59,7 +59,7 @@
 
 **`nslookup -query=MX $TARGET`**
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Passive subdomain Enumeration
 

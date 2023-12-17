@@ -6,7 +6,7 @@
 
 `ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://94.237.57.242:47977/FUZZ`
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Page Fuzzing
 
@@ -17,7 +17,7 @@
 
 `ffuf -w /usr/share/wordlists/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://159.65.81.48:32733/blog/FUZZ.php`
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * visit website
   * [http://94.237.51.68:46904/blog/XXXX.php](http://94.237.51.68:46904/blog/home.php)
@@ -29,7 +29,7 @@
 
 `ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://94.237.57.242:45177/forum/FUZZ -recursion -recursion-depth 1 -e .php -v`
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 * visit website to obtain flag
 

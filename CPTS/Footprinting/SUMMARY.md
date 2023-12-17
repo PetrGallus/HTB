@@ -13,3 +13,4 @@
 * [Attacking WebApps with FFUFF](attacking-webapps-with-ffuff.md)
 * [Login Brute Forcing](login-brute-forcing.md)
 * [Attacking Common Services](attacking-common-services.md)
+* [SQLMAP Essentials](sqlmap-essentials.md)

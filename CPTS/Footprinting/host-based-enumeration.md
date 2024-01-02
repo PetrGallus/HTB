@@ -18,7 +18,7 @@ sudo nmap -sVC -p21 -A 10.129.124.136 //
 
 smbclient -L //10.129.45.189
 
-![](<.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 smbclient //10.129.45.189/sambashare
 
@@ -106,7 +106,7 @@ cat var/nfs/flag.txt
 
 converting IP <-> URL
 
-![](<.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 NDS is mainly UNENCRYPTED -> devices on local WLAN and ISP can hack in and spy on DNS queries
 
@@ -555,7 +555,7 @@ updated to support newer techs like IPv6 and SSL/TLS
 
 config files are calles tnsnames.ora and listener.ora, located in ORACLE\_HOME/network/admin
 
-![](<.gitbook/assets/image (8) (1) (1) (1) (1) (1) (1).png>)
+![](<.gitbook/assets/image (8) (1) (1) (1) (1) (1) (1) (1).png>)
 
 
 
@@ -590,7 +590,7 @@ Enumerate the Oracle DB and submit HASH of PW of the user DBSNMP
 
     **`sudo nmap -sU -p 623 10.129.165.205 --script ipmi-version`**
 
-    \=> ![](<.gitbook/assets/image (9) (1) (1) (1) (1).png>)
+    \=> ![](<.gitbook/assets/image (9) (1) (1) (1) (1) (1).png>)
 
     METASPLOIT
 
@@ -608,7 +608,7 @@ Enumerate the Oracle DB and submit HASH of PW of the user DBSNMP
 
     **`run`**
 
-    \=>![](<.gitbook/assets/image (10) (1) (1) (1) (1).png>)
+    \=>![](<.gitbook/assets/image (10) (1) (1) (1) (1) (1).png>)
 2.  What is the account's cleartext password?
 
     we obtained HASH of the password, let´s crack it to obtain cleartext PW from that
@@ -623,5 +623,5 @@ Enumerate the Oracle DB and submit HASH of PW of the user DBSNMP
 
     **`run`**
 
-    \=> ![](<.gitbook/assets/image (11) (1) (1) (1) (1).png>)
+    \=> ![](<.gitbook/assets/image (11) (1) (1) (1) (1) (1).png>)
 

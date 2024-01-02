@@ -6,7 +6,7 @@
 
 Malicious link in a spear-phishing -> LINK file -> executed on machine -> WMIC tool execudes also the JS code -> JS code downloads payloads by abusing the Bitsadmin tool
 
-<figure><img src=".gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (16) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Questions
 

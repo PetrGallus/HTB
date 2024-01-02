@@ -15,3 +15,4 @@
 * [Attacking Common Services](attacking-common-services.md)
 * [SQLMAP Essentials](sqlmap-essentials.md)
 * [SQL Injection Fundamentals](sql-injection-fundamentals.md)
+* [Cross-site scripting (XSS)](cross-site-scripting-xss.md)

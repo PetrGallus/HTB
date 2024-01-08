@@ -36,7 +36,7 @@ This type of vulnerability exists when you can use Javascript code to alter a Do
 
 Automated Discovery
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `python xsstrike.py -u “http://SERVER_IP:PORT/index.php?task=test"`
 
@@ -46,7 +46,7 @@ Long story short, I might need to do some more python classes at some point. Pyt
 
 **Utilize some of the techniques mentioned in this section to identify the vulnerable input parameter found in the above server. What is the name of the vulnerable parameter?**
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 **What type of XSS vuln is it?**
 

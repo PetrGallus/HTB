@@ -16,3 +16,4 @@
 * [SQLMAP Essentials](sqlmap-essentials.md)
 * [SQL Injection Fundamentals](sql-injection-fundamentals.md)
 * [Cross-site scripting (XSS)](cross-site-scripting-xss.md)
+* [Pivoting, Tunneling and Port forwarding](pivoting-tunneling-and-port-forwarding.md)

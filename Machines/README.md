@@ -209,7 +209,7 @@ nmap -sVC 10.10.11.236 -Pn - 53 DOMAIN (Simple DNS Plus) - 80 HTTP (MS IIS httpd
   * hex: **41 -> 00**
   *
 
-      <figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 upload file & go to generated URL with removed .pdf extension (onlyhttp://......./shell.php)
 
@@ -254,9 +254,9 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Website
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
 
 ### Weaponisation
 
@@ -268,7 +268,7 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Upload page
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
 
 #### dirb
 
@@ -300,7 +300,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
     * redirect to: 10.10.11.241:8080/uploads/shell.phar
       * we have browser Reverse shell
 
-    <figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
 
 #### Reverse Shell crafting
 
@@ -335,7 +335,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
         * we obtained root privileges
 * cat /etc/shadow
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Decode the PW hash
 
@@ -352,7 +352,7 @@ ssh drwilliams@10.10.11.241
 
 `drwilliams:qwe123!@#`
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
 
 * there are .eps attachments
 * drbrown says sth about GhostScript

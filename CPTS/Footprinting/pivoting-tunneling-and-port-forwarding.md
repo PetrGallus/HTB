@@ -37,6 +37,32 @@ Port forwarding&#x20;
 
 <figure><img src=".gitbook/assets/image (166).png" alt=""><figcaption></figcaption></figure>
 
+**You have successfully captured credentials to an external facing Web Server. Connect to the target and list the network interfaces. How many network interfaces does the target web server have? (Including the loopback interface)**
+
+`ssh ubuntu@10.129.187.139`
+
+* PW: HTB\_@cademy\_stdnt!
+
+`ifconfig`
+
+**Apply the concepts taught in this section to pivot to the internal network and use RDP (credentials: victor:pass@123) to take control of the Windows target on 172.16.5.19. Submit the contents of Flag.txt located on the Desktop.**
+
+tail -4 /etc/proxychains.conf
+
+proxychains msfconsole
+
+search rdp\_scanner
+
+use 0
+
+options
+
+set
+
+set
+
+<figure><img src=".gitbook/assets/image (167).png" alt=""><figcaption></figcaption></figure>
+
 
 
 ### Remote/Reverse port FW w SSH

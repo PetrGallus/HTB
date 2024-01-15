@@ -574,3 +574,55 @@ dirb http://surveillance.htb/
 `cd /root && cat root.txt`
 
 <mark style="color:red;">**PWNED <3**</mark>\
+
+
+
+
+## Monitored
+
+### Reco
+
+#### nmap
+
+`nmap -sVC 10.10.11.248`
+
+* 22 SSH
+* 80 HTTP -> redirect: nagios.monitored.htb
+* 389 LDAP (OpenLDAP v2.2.X-2.3.X)
+* 443 SSL
+
+<figure><img src=".gitbook/assets/image (93).png" alt=""><figcaption></figcaption></figure>
+
+/etc/hosts
+
+* sudo nano /etc/hosts
+
+website
+
+<figure><img src=".gitbook/assets/image (94).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (95).png" alt=""><figcaption></figcaption></figure>
+
+* Default credentials
+  * root:nagiosxi
+    * not working
+  * root:welcome
+    * not working
+
+### Weaponisation
+
+
+
+snmpwalk
+
+sudo apt install snmp
+
+<figure><img src=".gitbook/assets/image (96).png" alt=""><figcaption></figcaption></figure>
+
+* svc:
+
+### Exploitation
+
+### User flag
+
+### Root flag

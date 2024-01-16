@@ -749,7 +749,7 @@ else:
 
 `cat /etc/passwd`
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 `cd /tmp`&#x20;
 
@@ -759,7 +759,7 @@ else:
 
 `cat AdminuserLoginData.xml`
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Obtained info:
 

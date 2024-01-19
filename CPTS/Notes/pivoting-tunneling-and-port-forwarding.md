@@ -53,7 +53,7 @@ Port forwarding&#x20;
 
 `tail -4 /etc/proxychains.conf`
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 `proxychains xfreerdp /v:172.16.5.19 /u:victor /p:pass@123`
 

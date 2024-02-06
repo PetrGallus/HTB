@@ -137,16 +137,16 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
 
     * Apache2 Default Page
 
-    <figure><img src=".gitbook/assets/image (73).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (74).png" alt=""><figcaption></figcaption></figure>
 
 
 *   port 3000
 
     * 200 not found, redirect to .
 
-    <figure><img src=".gitbook/assets/image (74).png" alt=""><figcaption></figcaption></figure>
-
     <figure><img src=".gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
+
+    <figure><img src=".gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -157,11 +157,11 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
     * add to hosts
       * `sudo nano /etc/hosts`
 
-<figure><img src=".gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (77).png" alt=""><figcaption></figcaption></figure>
 
 * we accessed the website
 
-<figure><img src=".gitbook/assets/image (77).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (78).png" alt=""><figcaption></figcaption></figure>
 
 *   lets dir bust ouija.htb website...
 
@@ -169,7 +169,7 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
       * /admin
       * /css /img /js /lib
 
-    <figure><img src=".gitbook/assets/image (78).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (79).png" alt=""><figcaption></figcaption></figure>
 
 
 * access to subpages
@@ -189,17 +189,17 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
   * tracking script -> gitea.ouija.htb/leila/....
     * `src="`**`http://gitea.ouija.htb/leila/ouija-htb/js/tracking.js?_=0183747482`**`"`
 
-<figure><img src=".gitbook/assets/image (79).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (80).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
 * add gitea.ouija.htb to hosts...
 
-<figure><img src=".gitbook/assets/image (80).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (81).png" alt=""><figcaption></figcaption></figure>
 
 * access gitea repo
 
-<figure><img src=".gitbook/assets/image (81).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (82).png" alt=""><figcaption></figcaption></figure>
 
 * `git clone http://gitea.ouija.htb/leila/ouija-htb.git`
   * instructions:
@@ -208,7 +208,7 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
         * [CVE-2023-25725](https://www.cvedetails.com/cve/CVE-2023-25725/)
           * we can bypass access control because HTTP/1 headers are inadvertently lost in some situations (request smuggling)
 
-<figure><img src=".gitbook/assets/image (83).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (84).png" alt=""><figcaption></figcaption></figure>
 
 * PoCs
   * alexOarga/CVE-2021-40346: CVE-2021-40346 - HaProxy HTTP request smuggling through integer overflow\
@@ -224,26 +224,26 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
 
 #### Content
 
-<figure><img src=".gitbook/assets/image (84).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (85).png" alt=""><figcaption></figcaption></figure>
 
 * init.sh
   * beginning of api config... (Front Jailor 3000 End)
     *
 
-        <figure><img src=".gitbook/assets/image (85).png" alt=""><figcaption></figcaption></figure>
+        <figure><img src=".gitbook/assets/image (86).png" alt=""><figcaption></figcaption></figure>
 
 
 * app.js
   * sub-base 64+16 ... identification header, sha256, ihash header...
     *
 
-        <figure><img src=".gitbook/assets/image (86).png" alt=""><figcaption></figcaption></figure>
+        <figure><img src=".gitbook/assets/image (87).png" alt=""><figcaption></figcaption></figure>
 
 
 
 #### LFI 1
 
-<figure><img src=".gitbook/assets/image (87).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (88).png" alt=""><figcaption></figcaption></figure>
 
 * crafted python script for that...
   * lfi.py
@@ -300,7 +300,7 @@ print (output)
 * output
   *
 
-      <figure><img src=".gitbook/assets/image (88).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src=".gitbook/assets/image (89).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -320,12 +320,12 @@ print (output)
 
 #### LFI 2
 
-<figure><img src=".gitbook/assets/image (89).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (90).png" alt=""><figcaption></figcaption></figure>
 
 * .config/bin/process\_informations/self/root/etc/passwd&#x20;
 * .config/bin/process\_informations/self/root/home/leila/.ssh/id\_rsa
 
-<figure><img src=".gitbook/assets/image (90).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (91).png" alt=""><figcaption></figcaption></figure>
 
 * **obtained ir\_rsa of user leila**
   * path of injection: ......./home/leila/.ssh/id\_rsa

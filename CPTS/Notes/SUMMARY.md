@@ -1,6 +1,7 @@
 # Table of contents
 
-* [Metasploit](README.md)
+* [ANSWERS](README.md)
+* [Metasploit](<README (1).md>)
 * [Host Based Enumeration](host-based-enumeration.md)
 * [Footprinting Labs](footprinting-labs.md)
 * [Information gathering](information-gathering.md)

@@ -35,13 +35,27 @@
 
 ### Attacking SMB
 
+
+
 `smbclient -L //10.129.205.248/`
 
 `smbmap -H 10.129.205.248`
 
 <figure><img src=".gitbook/assets/image (65).png" alt=""><figcaption></figcaption></figure>
 
+* GGJ
 
+`smbclient -H //10.129.205.248 -r GGJ`
+
+<figure><img src=".gitbook/assets/image (343).png" alt=""><figcaption></figcaption></figure>
+
+* cant obtain it
+
+`poetry run crackmapexec smb 10.129.203.6 -u jason -p pws.list --local-auth`
+
+* obtain pws.list from resources...
+
+<figure><img src=".gitbook/assets/image (345).png" alt=""><figcaption></figcaption></figure>
 
 ## SQL Databases
 

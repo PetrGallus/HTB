@@ -749,7 +749,7 @@ else:
 
 `cat /etc/passwd`
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cd /tmp`&#x20;
 
@@ -759,7 +759,7 @@ else:
 
 `cat AdminuserLoginData.xml`
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Obtained info:
 
@@ -775,7 +775,7 @@ requirePasswordChange="Y"
 
 {% embed url="https://hashes.com/en/tools/hash_identifier" %}
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 OK - it could be SHA1, but nothing valuable
 
@@ -793,7 +793,7 @@ OK - it could be SHA1, but nothing valuable
 
 **OK, some SHA is stored in c6650.dat file**
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `admin$"`**`$SHA$d$uP0_QaVBpDWFeo8-dRzDqRwXQ2I=`**
 
@@ -880,7 +880,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `python3 hashcsript.py`
 
-<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `su root`
 
@@ -898,16 +898,16 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 * nmap -sVC \<IP>
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 Website
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * sudo nano /etc/hosts
   * \<IP> crafty.htb
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 * subpages
   * /coming-soon
@@ -919,7 +919,7 @@ Website
 
 *
 
-    <figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -930,7 +930,7 @@ Website
 * extended nmap for higher ports
 * `nmap -sVC 10.10.11.249 -p0-65535`
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 * minecraft 1.16.5 Crafty server, Microsoft...
 

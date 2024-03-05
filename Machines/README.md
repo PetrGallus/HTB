@@ -1,4 +1,4 @@
-# ℹ readme.md
+# ℹ️ readme.md
 
 ## List of PWNED HTB machines
 
@@ -13,4 +13,5 @@
 |      [Codify](easy\_machines.md#codify)      | [Surveillance](medium\_machines.md#surveillance) |                                    |                                        |
 |   [Devvortex](easy\_machines.md#devvortex)   |    [Monitored](medium\_machines.md#monitored)    |                                    |                                        |
 |     [Bizness](easy\_machines.md#bizness)     |          [POV](medium\_machines.md#pov)          |                                    |                                        |
+|                  Perfection                  |                        Jab                       |                                    |                                        |
 

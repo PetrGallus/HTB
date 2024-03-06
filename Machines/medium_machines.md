@@ -254,9 +254,9 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Website
 
-<figure><img src=".gitbook/assets/image (11) (1) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1) (1) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (12) (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (12) (1) (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
 
 ### Weaponisation
 
@@ -268,7 +268,7 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Upload page
 
-<figure><img src=".gitbook/assets/image (13) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (13) (1) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
 
 #### dirb
 
@@ -300,7 +300,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
     * redirect to: 10.10.11.241:8080/uploads/shell.phar
       * we have browser Reverse shell
 
-    <figure><img src=".gitbook/assets/image (14) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (14) (1) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
 
 #### Reverse Shell crafting
 
@@ -335,7 +335,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
         * we obtained root privileges
 * cat /etc/shadow
 
-<figure><img src=".gitbook/assets/image (16) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (16) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Decode the PW hash
 
@@ -352,7 +352,7 @@ ssh drwilliams@10.10.11.241
 
 `drwilliams:qwe123!@#`
 
-<figure><img src=".gitbook/assets/image (15) (1) (1).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (15) (1) (1) (1).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
 
 * there are .eps attachments
 * drbrown says sth about GhostScript
@@ -379,11 +379,11 @@ ssh drwilliams@10.10.11.241
 * upload it via email attachment (.eps file) answering to drbrown email...
   * phishing
 
-<figure><img src=".gitbook/assets/image (18) (1).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (18) (1) (1).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
 
 * we successfully served nc.exe to our http.server
 
-<figure><img src=".gitbook/assets/image (20) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (20) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 2. OBTAIN REVERSE SHELL
 
@@ -402,14 +402,14 @@ ssh drwilliams@10.10.11.241
 
 * we have a reverse shell to user DRBROWN
 
-<figure><img src=".gitbook/assets/image (22) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (22) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### drbrown credentials
 
 * `dir`
 * `type ghostscript.bat`
 
-<figure><img src=".gitbook/assets/image (24).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (24) (1).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
 
 #### connect via RDP
 
@@ -419,7 +419,7 @@ REMINNA&#x20;
 * IP: 10.10.11.241
 * PW: chr!$br0wn
 
-<figure><img src=".gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (26) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
@@ -794,7 +794,7 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
 
 `cat root.txt`
 
-<figure><img src=".gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (23) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## POV
 

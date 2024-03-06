@@ -423,7 +423,7 @@ print (output)
       * name: joomla\_db
       * **root:H0lOgrams4reTakIng0Ver754!**
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * OK, we obtained access to DB, but first we have to gain backend access...
 
@@ -448,7 +448,7 @@ cd dist
     * dlanor@office.htb
     * dmichael@office.htb
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -482,6 +482,42 @@ get GPT.INI
 
 * lets list these shares
   *
+
+### User flag
+
+### Root flag
+
+## Analysis
+
+### Reco
+
+#### nmap
+
+* nothing much than the expected ones on Windows machine
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+#### website
+
+* page with no subpages, no text, no versions...
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+#### fuzzing
+
+* some subpages found, but all of them are 403 (forbidden access)
+* FFUF, DIRB
+
+#### kerbrute
+
+* `./kerbrute_linux_amd64 userenum --dc analysis.htb -d analysis.htb /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt`
+* some usernames found, could be useful for Weaponisation
+
+
+
+### Weaponisation
+
+### Exploitation
 
 ### User flag
 

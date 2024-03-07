@@ -423,7 +423,7 @@ print (output)
       * name: joomla\_db
       * **root:H0lOgrams4reTakIng0Ver754!**
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * OK, we obtained access to DB, but first we have to gain backend access...
 
@@ -501,7 +501,7 @@ get GPT.INI
 
 * page with no subpages, no text, no versions...
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### fuzzing
 
@@ -510,14 +510,14 @@ get GPT.INI
 * did it one more time, found a subdomain
   * **internal**.analysis.htb
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### kerbrute
 
 * `./kerbrute_linux_amd64 userenum --dc analysis.htb -d analysis.htb /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt`
 * some usernames found, could be useful for Weaponisation
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 * `nano usernames.txt`
 
@@ -857,4 +857,8 @@ func main() {
 <figure><img src=".gitbook/assets/image (25).png" alt=""><figcaption></figcaption></figure>
 
 * now we should obtain the ADMIN shell in our msfconsole
-  * DOESNT WORK ALREADY - WAS PROBABLY PATCHED
+  * shell
+    * `cd Users/Administrator/Desktop`
+    * `type root.txt`
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>

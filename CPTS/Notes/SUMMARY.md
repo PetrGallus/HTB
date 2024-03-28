@@ -19,3 +19,4 @@
 * [Cross-site scripting (XSS)](cross-site-scripting-xss.md)
 * [Pivoting, Tunneling and Port forwarding](pivoting-tunneling-and-port-forwarding.md)
 * [File Inclusion](file-inclusion.md)
+* [Active Directory (AD) Enumeration & Attacks](active-directory-ad-enumeration-and-attacks.md)

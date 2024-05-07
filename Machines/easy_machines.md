@@ -749,7 +749,7 @@ else:
 
 `cat /etc/passwd`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cd /tmp`&#x20;
 
@@ -759,7 +759,7 @@ else:
 
 `cat AdminuserLoginData.xml`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Obtained info:
 
@@ -902,12 +902,12 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 Website
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * sudo nano /etc/hosts
   * \<IP> crafty.htb
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * subpages
   * /coming-soon
@@ -1040,7 +1040,7 @@ Finding vulnerability for PE
 * Server: WEBrick/1.7.0 (Ruby/3.0.2/2021-07-07)
   * F12 -> Network -> document
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Hosts
 
@@ -1060,7 +1060,7 @@ sudo nano /etc/hosts
     * get '/admin' do "Hello World" end
   * same output for any subpage it doesnt know
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -1131,3 +1131,71 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
   * susan´s PW
 * `cd /root`
 * `cat root.txt`
+
+## Mailing
+
+### Reco
+
+#### nmap
+
+* 25 SMTP - mailing.htb, AUTH LOGIN PLAIN
+* 80 HTTP - redirect mailing.htb
+* 110 POP3
+* 135 MSRPC
+* 139 Netbios-SSN
+* 143 IMAP
+* 445 Microsoft-DS?
+* 465 SSL/SMTP
+* 587 SMTP
+* 993 SSL/IMAP
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+#### hosts
+
+`sudo nano /etc/hosts`
+
+
+
+#### dirb
+
+`dirb http://mailing.htb`
+
+
+
+#### website
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+* "Powered by hMailServer"
+  * opensource mail server for Win, AGLPv3 licence
+  * VULN, CVE:&#x20;
+    * HMS 5.6.9B2587 was hacked on 10-11.06.2022
+      * MySQL 8.0.29
+      * The server was legally protected by RDPGuard and SpamAssassinInBox. They broke only from Czech IP addresses, because RDPGuard managed to block about 30 such IP addresses. Most likely they had some kind of vulnerability in the HMS. During the day, more than 10,000 empty letters were sent to the post server. This is definitely some kind of bug in the HMS software. Since all letters were received to a mailbox that does not exist at all in the domain (test@nameofdomain in zone RU). Moreover, all of them were not recorded in the domain folder, but simply in the DATA folder. How could this happen in general, that mail messages were not written to the domain folder?
+      * My main question was the following: why were letters written during this hacker attack not in the domain folder (.\DATA\mydomain.ru), but simply in the DATA (.\DATA) folder.
+      * Emails come in via SMTP -> DATA folder. Emails in delivery queue -> DATA folder. Emails delivered to accounts -> Domain folder.
+      *
+* we can download a file called "instructions.pdf"
+  * [http://mailing.htb/download.php?file=instructions.pdf](http://mailing.htb/download.php?file=instructions.pdf)
+  * instructions to connect to mail server
+    * Linux - Thunderbird
+      * sudo apt install thunderbird
+      * thunderbird &
+    * Connectivity setup
+      * sudo nano /etc/hosts
+      * 192.168.0.105 mailing.htb
+      * ping -c1 mailing.htb
+      * Thunderbird settings
+        * set up existing mail
+        * user@mailing.htb
+    * First email
+      * MAYA - username
+
+### Weaponisation
+
+### Exploitation
+
+### User flag
+
+### Root flag

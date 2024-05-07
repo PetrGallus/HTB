@@ -1113,7 +1113,7 @@ Impacket & RS
 
 #### website
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 * try default credentials for OpenPLC
   * openplc:openplc
@@ -1162,7 +1162,7 @@ Impacket & RS
 * Compile & Start PLC
   * we obtained revshell, easily
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 

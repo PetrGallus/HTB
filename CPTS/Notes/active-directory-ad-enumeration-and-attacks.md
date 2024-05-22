@@ -182,3 +182,49 @@ account operators
 
 ### DCSync
 
+## Stacking The Deck
+
+### Privileged Access
+
+Once we gain a foothold in the domain, our goal shifts to advancing our position further by moving laterally or vertically to obtain access to other hosts, and eventually achieve domain compromise or some other goal, depending on the aim of the assessment. To achieve this, there are several ways we can move laterally. Typically, if we take over an account with local admin rights over a host, or set of hosts, we can perform a Pass-the-Hash attack to authenticate via the SMB protocol.
+
+But what if we don't yet have local admin rights on any hosts in the domain?
+
+There are several other ways we can move around a Windows domain:
+
+```
+Remote Desktop Protocol (RDP) - is a remote access/management protocol that gives us GUI access to a target host
+
+PowerShell Remoting - also referred to as PSRemoting or Windows Remote Management (WinRM) access, is a remote access protocol that allows us to run commands or enter an interactive command-line session on a remote host using PowerShell
+
+MSSQL Server - an account with sysadmin privileges on an SQL Server instance can log into the instance remotely and execute queries against the database. This access can be used to run operating system commands in the context of the SQL Server service account through various methods
+```
+
+We can enumerate this access in various ways. The easiest, once again, is via BloodHound, as the following edges exist to show us what types of remote access privileges a given user has:
+
+```
+CanRDP
+CanPSRemote
+SQLAdmin
+```
+
+We can also enumerate these privileges using tools such as PowerView and even built-in tools.
+
+#### Questions
+
+What other user in the domain has CanPSRemote rights to a host?
+
+
+
+What host can this user access via WinRM? (just the computer name)
+
+
+
+Leverage SQLAdmin rights to authenticate to the ACADEMY-EA-DB01 host (172.16.5.150). Submit the contents of the flag at C:\Users\damundsen\Desktop\flag.txt.
+
+### Kerberos "Double Hop" Problem
+
+### Bleeding Edge Vulns
+
+### Misc Misconfiguration
+

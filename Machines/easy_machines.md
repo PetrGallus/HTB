@@ -1199,3 +1199,28 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 ### User flag
 
 ### Root flag
+
+## BoardLight
+
+### Reco
+
+#### nmap
+
+`nmap -sVC 10.10.11.11`&#x20;
+
+* 22 SSH
+* 80 HTTP (without redirect)
+
+#### dirb
+
+* nothing valuable found
+
+
+
+### Weaponisation
+
+### Exploitation
+
+### User flag
+
+### Root flag

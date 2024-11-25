@@ -1,7 +1,14 @@
 # Table of contents
 
 * [ℹ️ readme.md](README.md)
-* [Easy\_machines](easy\_machines.md)
-* [Medium\_machines](medium\_machines.md)
-* [Hard\_machines](hard\_machines.md)
-* [Insane\_machines](insane\_machines.md)
+
+## Sherlocks
+
+* [Malware Analysis](sherlocks/malware-analysis.md)
+
+## Machines
+
+* [Easy\_machines](machines/easy_machines.md)
+* [Medium\_machines](machines/medium_machines.md)
+* [Hard\_machines](machines/hard_machines.md)
+* [Insane\_machines](machines/insane_machines.md)

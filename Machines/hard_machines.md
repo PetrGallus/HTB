@@ -7,7 +7,7 @@
 #### Reco
 
 * NMAP
-  * `nmap -sVC 10.10.11.225` ![](https://hackmd.io/\_uploads/SkEh6Mdi2.png)
+  * `nmap -sVC 10.10.11.225` ![](https://hackmd.io/_uploads/SkEh6Mdi2.png)
     * 22 SSH
     * 25 filtered SMTP
     * 80 HTTP (redirect gofer.htb)
@@ -19,41 +19,41 @@
   * "We are team of talented designers making websites with **BOOTSTRAP**"
     * BootstrapMade
   * images are stored in /assets/img/portfolio
-  * contact form could have some weakness ![](https://hackmd.io/\_uploads/B1wqpMdih.png)
+  * contact form could have some weakness ![](https://hackmd.io/_uploads/B1wqpMdih.png)
 
 #### Weaponisation
 
 * SMB
   * using nmap we found samba, lets scan it
-    * `smbmap -H 10.10.11.225 -u " "` ![](https://hackmd.io/\_uploads/r1R21Qdjn.png)
+    * `smbmap -H 10.10.11.225 -u " "` ![](https://hackmd.io/_uploads/r1R21Qdjn.png)
       * we have "read only" permissions to disk **SHARES**
   * let´s look inside shares disk
-    * `smbclient -N //10.10.11.225/shares` ![](https://hackmd.io/\_uploads/H1GPe7dsn.png)
+    * `smbclient -N //10.10.11.225/shares` ![](https://hackmd.io/_uploads/H1GPe7dsn.png)
   * analyze obtained backedup **email**
-    * ![](https://hackmd.io/\_uploads/HJCFlXusn.png)
+    * ![](https://hackmd.io/_uploads/HJCFlXusn.png)
       * email addresses: jdavis@gofer.htb, tbuckley@gofer.htb
       * they are sending important documents internally by mail
         * using .odt format (Libreoffice, not Office Word)
       * there is a proxy
 * Dir scan
   * `dirsearch -u http://gofer.htb/`
-    * we can access gofer.htb/assets ![](https://hackmd.io/\_uploads/BJumDXOs2.png)
+    * we can access gofer.htb/assets ![](https://hackmd.io/_uploads/BJumDXOs2.png)
   * /assets
     * style.css, main.js
       * template Maxim v4.9.1
     * php-email-form/validate.js
-      * PHP Email Form Validation v3.5 ![](https://hackmd.io/\_uploads/H1zvwm\_oh.png)
+      * PHP Email Form Validation v3.5 ![](https://hackmd.io/_uploads/H1zvwm_oh.png)
 * Proxy
   * let´s find the proxy
     * `ffuf -w /usr/share/wordlists/wfuzz/general/common.txt -u "http://gofer.htb" -H "Host: FUZZ.gofer.htb" -fw 20`
-      * **proxy.gofer.htb** -> add it to /etc/hosts ![](https://hackmd.io/\_uploads/H13NMXujn.png)
+      * **proxy.gofer.htb** -> add it to /etc/hosts ![](https://hackmd.io/_uploads/H13NMXujn.png)
 
 #### Exploitation
 
 * **SSRF**
   * when accessing proxy.gofer.htb, there is a login pop-up window
     * Lets try the POST request for the index.php
-      * `curl -X POST http://proxy.gofer.htb/index.php` ![](https://hackmd.io/\_uploads/Sy35nT9sn.png)
+      * `curl -X POST http://proxy.gofer.htb/index.php` ![](https://hackmd.io/_uploads/Sy35nT9sn.png)
         * passed without credentials, but nothing more...
     * there could be a SSRF vuln
       * URL parameter can be specified like this:
@@ -218,7 +218,7 @@ $y$j9T$Kg/bsxGg3rtmr7d.HkQ0N/$14XejevAukcx9oDmYsXF967olH7um9buAQ3wSGdOCy8
   * Critical vulnerability in HAProxy | JFrog Security Research Team\
     [https://jfrog.com/blog/critical-vulnerability-in-haproxy-cve-2021-40346-integer-overflow-enables-http-smuggling/](https://jfrog.com/blog/critical-vulnerability-in-haproxy-cve-2021-40346-integer-overflow-enables-http-smuggling/)
   * Client-Side Desync - PortSwigger - YouTube\
-    [https://www.youtube.com/watch?v=6wVb6KSmras\&ab\_channel=Txhaka](https://www.youtube.com/watch?v=6wVb6KSmras\&ab\_channel=Txhaka)
+    [https://www.youtube.com/watch?v=6wVb6KSmras\&ab\_channel=Txhaka](https://www.youtube.com/watch?v=6wVb6KSmras\&ab_channel=Txhaka)
 
 ### Exploitation
 
@@ -423,7 +423,7 @@ print (output)
       * name: joomla\_db
       * **root:H0lOgrams4reTakIng0Ver754!**
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * OK, we obtained access to DB, but first we have to gain backend access...
 
@@ -448,7 +448,7 @@ cd dist
     * dlanor@office.htb
     * dmichael@office.htb
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -474,9 +474,9 @@ cd <folder>
 get GPT.INI
 ```
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -501,7 +501,7 @@ get GPT.INI
 
 * page with no subpages, no text, no versions...
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### fuzzing
 
@@ -510,18 +510,18 @@ get GPT.INI
 * did it one more time, found a subdomain
   * **internal**.analysis.htb
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### kerbrute
 
 * `./kerbrute_linux_amd64 userenum --dc analysis.htb -d analysis.htb /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt`
 * some usernames found, could be useful for Weaponisation
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * `nano usernames.txt`
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Weaponisation
 
@@ -533,7 +533,7 @@ get GPT.INI
     * /dashboard
     * /employees
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -541,7 +541,7 @@ get GPT.INI
   * /users
     * /list
 
-<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 * /dashboard
   * /index
@@ -554,18 +554,18 @@ get GPT.INI
 * /employees
   * /login
 
-<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 #### LDAP Injection
 
 * we cant really read the content of subpages (LFI), but we can try to make it work via LDAP injection...
 * What is it?
-  * LDAP Injection is an attack used to exploit web based applications that construct LDAP statements based on user input. When an application fails to properly sanitize user input, it’s possible to modify LDAP statements using a local proxy. This could result in the execution of arbitrary commands such as granting permissions to unauthorized queries, and content modification inside the LDAP tree. The same advanced exploitation techniques available in [SQL Injection](https://owasp.org/www-community/attacks/SQL\_Injection) can be similarly applied in LDAP Injection.
-* [http://internal.analysis.htb/users/list.php?name=\*](http://internal.analysis.htb/users/list.php?name=\*)
+  * LDAP Injection is an attack used to exploit web based applications that construct LDAP statements based on user input. When an application fails to properly sanitize user input, it’s possible to modify LDAP statements using a local proxy. This could result in the execution of arbitrary commands such as granting permissions to unauthorized queries, and content modification inside the LDAP tree. The same advanced exploitation techniques available in [SQL Injection](https://owasp.org/www-community/attacks/SQL_Injection) can be similarly applied in LDAP Injection.
+* [http://internal.analysis.htb/users/list.php?name=\*](http://internal.analysis.htb/users/list.php?name=*)
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 * OK, we obtained the username "technician"
   * lets obtain his PW to login
@@ -648,7 +648,7 @@ func main() {
 
 * interation goes into loop because of \* char
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 * lets add the obtained string to the script and do the second iteration
   * `baseURL := "http://internal.analysis.htb/users/list.php?name=`_`)(%26(objectClass=user)(description=97NTtl`_`{found_char}{FUZZ}*)"`
@@ -731,20 +731,20 @@ func main() {
 * it finds our PW
   * **`97NTtl*4QP96Bv`**
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Lets check if it is correct...
   * nano PW.txt
     * **`97NTtl*4QP96Bv`**
   * `./kerbrute_linux_amd64 bruteuser --dc analysis.htb -d analysis.htb PW.txt technician`
 
-<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
 
 *   Login into
 
     * technician@analysis.htb:97NTtl\*4QP96Bv
 
-    <figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### Exploitation
 
@@ -861,7 +861,7 @@ func main() {
     * `cd Users/Administrator/Desktop`
     * `type root.txt`
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Freelancer
 

@@ -5,6 +5,7 @@
 ## Sherlocks
 
 * [Malware Analysis](sherlocks/malware-analysis.md)
+* [DFIR](sherlocks/dfir.md)
 
 ## Machines
 
